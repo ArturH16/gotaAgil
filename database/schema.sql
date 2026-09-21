@@ -1,11 +1,11 @@
 CREATE TABLE tb_admin(
-    id_admin INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY
+    id_admin INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     nome VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL,
     senha_hash VARCHAR(60) NOT NULL,
     cpf VARCHAR(14) NOT NULL,
-    CONSTRAINT uq_tb_admin_cpf cpf UNIQUE(cpf),
-    CONSTRAINT uq_tb_admin email UNIQUE (email)
+    CONSTRAINT uq_tb_admin_cpf UNIQUE(cpf),
+    CONSTRAINT uq_tb_admin_email UNIQUE (email)
 );
 
 CREATE TABLE tb_hemocentro (
@@ -25,7 +25,7 @@ CREATE TABLE tb_hemocentro (
     bairro VARCHAR(255) NOT NULL,
     CONSTRAINT uq_tb_hemocentro_codigo_cnes UNIQUE (codigo_cnes),
     CONSTRAINT uq_tb_hemocentro_cnpj UNIQUE (cnpj),
-    CONSTRAINT ck_tb_hemocentro_status CHECK (status IN ('pendente','aprovado','recusado'))
+    CONSTRAINT ck_tb_hemocentro_status CHECK (status IN ('pendente','aprovado','recusado')),
     CONSTRAINT fk_tb_hemocentro_tb_admin FOREIGN KEY (id_admin) REFERENCES
     tb_admin(id_admin)
     );
@@ -43,7 +43,7 @@ CREATE TABLE tb_campanha(
     tipo_sanguineo_necessario VARCHAR(3) NOT NULL,
     urgencia VARCHAR(10) NOT NULL,
     id_hemocentro INT NOT NULL,
-    CONSTRAINT ck_tb_campanha_tipo_sanguineo_necessario CHECK (tipo_sanguineo_necessario IN ('A+','A-','B+','B-','AB+','AB-','O+','O-'))
+    CONSTRAINT ck_tb_campanha_tipo_sanguineo_necessario CHECK (tipo_sanguineo_necessario IN ('A+','A-','B+','B-','AB+','AB-','O+','O-')),
     CONSTRAINT fk_tb_campanha_tb_hemocentro FOREIGN KEY (id_hemocentro) REFERENCES tb_hemocentro(id_hemocentro)
 );
 CREATE TABLE tb_doador (
