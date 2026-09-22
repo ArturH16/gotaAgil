@@ -9,6 +9,7 @@ const cadastroRouter = require("./routes/cadastro")
     app.engine("handlebars",engine())
     app.set("view engine","handlebars")
     app.set("views",path.join(__dirname,"views"))
+app.use("/images",express.static(path.join(__dirname,"..","images")))
     
 
 //Rotas
