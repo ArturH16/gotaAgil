@@ -47,7 +47,7 @@ nav {
     border-radius: 6px;
 }
 
-#escolhaCadastro {
+#escolhaCadastro, #escolhaLogin{
     display: flex;            
     gap: 12px;
     margin-top: 20px;
