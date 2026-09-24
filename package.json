@@ -12,6 +12,6 @@
   "dependencies": {
     "dotenv": "^18.0.3",
     "express": "^5.2.1",
-    "handlebars": "^4.7.9"
+    "express-handlebars": "^8.0.1"
   }
 }

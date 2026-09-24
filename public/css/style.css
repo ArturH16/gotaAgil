@@ -1,0 +1,62 @@
+@charset "UTF-8";
+* {
+    padding: 0px;
+    margin: 0px;
+}
+
+footer {
+    background-color: rgb(197, 49, 49);
+    color: white;
+    padding: 10px;
+    text-align: center;
+}
+nav {
+    margin: 20px;
+    padding: 20px;
+    background-color: rgb(217, 201, 201);
+
+}
+
+#logoNav {
+    width: 10%;
+}
+#boxCadastroGeral {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 50px auto;  
+    max-width: 600px;    
+    width: 90%;            
+    background-color: #F1F3F1;
+    border-radius: 12px;      
+    padding: 40px 20px;
+}
+
+#logoCadastroGeral {
+    width: 40%;
+    margin-bottom: 40px;
+}
+
+.btn-escolha {
+    padding: 10px;
+    margin-left: 10px;
+    text-decoration: none;
+    color: white;
+    background-color: #CA4325;
+    border-radius: 6px;
+}
+
+#escolhaCadastro, #escolhaLogin{
+    display: flex;            
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.campos {
+    margin: 3px;
+}
+
+select {
+    margin: 3px;
+}
