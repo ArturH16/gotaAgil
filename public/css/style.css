@@ -195,3 +195,124 @@ li::before {
     text-align: center;
 }
 
+.navLinksLogado {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.navLinksLogado a {
+    color: #CA4325;
+}
+
+#boasVindas {
+    text-align: center;
+    padding: 40px 20px 20px;
+}
+
+#boasVindas h1 {
+    font-size: 1.8rem;
+    color: #2B2B2B;
+}
+
+#boasVindas p {
+    color: #555;
+    margin-top: 8px;
+}
+
+#listaCampanhas {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 24px;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.cardCampanha {
+    background-color: #FFFFFF;
+    border: 1px solid #eee;
+    border-radius: 12px;
+    padding: 0;
+    overflow: hidden;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    border-left: 4px solid #C14025;
+}
+.cardCampanhaImagem {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: contain;
+    background-color: #F5F5F5; /* preenche o espaço que sobrar */
+    display: block;
+}
+
+.cardCampanhaConteudo {
+    padding: 20px;
+}
+
+.cardCampanha.urgencia-alta {
+    border-left-color: #C14025;
+}
+.cardCampanha.urgencia-media {
+    border-left-color: #E8A33D;
+}
+.cardCampanha.urgencia-baixa {
+    border-left-color: #6B9E78;
+}
+
+.cardCampanhaTopo {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.badgeUrgencia, .badgeTipoSanguineo {
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 20px;
+}
+
+.badgeUrgencia {
+    background-color: #FBEAE5;
+}
+.urgencia {
+    background-color: #C14025;
+}
+.moderada {
+    background-color: #E8A33D;
+}
+
+.regular {
+    background-color: #6B9E78;
+}
+
+.badgeTipoSanguineo {
+    background-color: #2B2B2B;
+    color: #FFFFFF;
+}
+
+.cardCampanhaHemocentro {
+    color: #555;
+    font-size: 0.9rem;
+    margin-top: 4px;
+}
+
+.cardCampanhaData {
+    color: #888;
+    font-size: 0.85rem;
+    margin-top: 4px;
+    margin-bottom: 16px;
+}
+
+.btn-interesse {
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    padding: 10px;
+    background-color: #C14025;
+    color: #FFFFFF;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: 600;
+}
