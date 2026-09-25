@@ -9,6 +9,9 @@ body, header, button, a {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
+html {
+  scroll-behavior: smooth;
+}
 footer {
     background-color: rgb(197, 49, 49);
     color: white;
