@@ -1,8 +1,7 @@
 const filtroEstado = document.getElementById("estadoSelect")
 const cardsEstado = document.querySelectorAll(".cardHemocentro")
-
-filtroEstado.addEventListener("change", function() {
-    const estadoSelecionado = this.value
+function filtrarEstado() {
+    const estadoSelecionado = filtroEstado.value
     cardsEstado.forEach(estado => {
         const cardEstado = estado.getAttribute("data-estado")
 
@@ -12,4 +11,8 @@ filtroEstado.addEventListener("change", function() {
             estado.style.display = "none"
         }
     })
-})
+}
+
+filtroEstado.addEventListener("change",filtrarEstado)
+
+filtrarEstado()
