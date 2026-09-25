@@ -23,7 +23,7 @@ nav {
     margin: 20px;
     padding: .8rem 2rem;
     background-color:#FFFFFF;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05)
+    box-shadow: 12px 11px 12px 0px rgba(0, 0, 0, 0.05);
 
 }
 .acoesUsuario {
@@ -87,4 +87,59 @@ nav a {
 
 select {
     margin: 3px;
+}
+
+.secoesOffWhite {
+    background-color: #FAFAFA;
+}
+
+#white {
+    background-color: #FFFFFF;
+}
+
+#hemocentrosParceiros {
+    padding: 60px 20px;
+    text-align: center;
+}
+
+.filtroEstado {
+    margin-bottom: 30px;
+}
+
+.filtroEstado select {
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    margin-left: 8px;
+}
+
+.gridHemocentros {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 24px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.cardHemocentro {
+    background-color: #FFFFFF;
+    border: 1px solid #eee;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    transition: transform 0.2s ease;
+}
+
+.cardHemocentro:hover {
+    transform: translateY(-4px);
+}
+
+.cardHemocentroIcone {
+    font-size: 2rem;
+    margin-bottom: 12px;
+}
+
+.cardHemocentroLocal {
+    color: #555;
+    font-size: 0.9rem;
 }
