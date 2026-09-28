@@ -316,3 +316,88 @@ li::before {
     border-radius: 6px;
     font-weight: 600;
 }
+.interesse {
+    background-color: #059669 !important;
+
+}
+
+#detalheCampanha {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.voltar {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #C14025;
+    text-decoration: none;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.detalheGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    align-items: start;
+}
+
+.detalheImagem {
+    width: 100%;
+    border-radius: 12px;
+    background-color: #F5F5F5;
+    object-fit: contain;
+    display: block;
+}
+
+.detalheInfo h1 {
+    font-size: 1.8rem;
+    color: #2B2B2B;
+    margin: 12px 0;
+}
+
+.detalheDescricao {
+    color: #555;
+    line-height: 1.5;
+    margin-bottom: 20px;
+}
+
+.detalheLista {
+    margin-bottom: 24px;
+}
+
+.detalheLista dt {
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #888;
+    margin-top: 14px;
+}
+
+.detalheLista dd {
+    color: #2B2B2B;
+    margin-top: 2px;
+}
+
+.detalheLista dd span {
+    display: block;
+}
+
+.detalheInfo .btn-interesse {
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.btn-interesse:disabled {
+    background-color: #BDBDBD;
+    cursor: not-allowed;
+}
+
+@media (max-width: 700px) {
+    .detalheGrid {
+        grid-template-columns: 1fr;
+    }
+}

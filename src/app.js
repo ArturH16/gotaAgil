@@ -7,6 +7,7 @@ const cadastroRouter = require("./routes/cadastro")
 const loginRouter = require("./routes/login")
 const homeRouter = require("./routes/home")
 const usuarioRouter = require("./routes/usuario")
+const detalhesCampanhaRouter  = require("./routes/detalhesCampanha")
 //Configurações Padrões
     //Template Engine
     app.engine("handlebars",engine({defaultLayout: "main",
@@ -24,6 +25,7 @@ app.use(express.static("public"))
     app.use("/login",loginRouter)
     app.use("/home",homeRouter)
     app.use("/usuario",usuarioRouter)
+    app.use("/detalhesCampanha",detalhesCampanhaRouter)
 
 
     app.listen(PORT,()=> {
