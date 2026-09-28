@@ -165,7 +165,7 @@ li::before {
     transition: transform 0.2s ease;
 }
 
-.cardHemocentro:hover, .cardsIdeais:hover {
+.cardHemocentro:hover, .cardsIdeais:hover, .cardCampanha:hover {
     transform: translateY(-4px);
 }
 
