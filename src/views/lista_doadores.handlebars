@@ -1,0 +1,41 @@
+<div class="detalheCampanha">
+    <a href="/hemocentro" class="voltar" title="Voltar">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+        <span>Voltar</span>
+    </a>
+
+    <div class="detalheGrid">
+        <img src="{{campanha.imagem}}" alt="{{campanha.titulo}}" class="detalheImagem">
+
+        <div class="detalheInfo">
+            <div class="cardCampanhaTopo">
+                <span class="badgeUrgencia">{{campanha.urgencia}}</span>
+                <span class="badgeTipoSanguineo">{{campanha.tipoSanguineo}}</span>
+            </div>
+
+            <h1>{{campanha.titulo}}</h1>
+
+            <div class="acoesCampanha">
+                <a href="/hemocentro/campanha/{{campanha.id}}/editar" class="btn-secundario btnEditar">Editar campanha</a>
+                <button class="btn-secundario btnEncerrar">Encerrar campanha</button>
+            </div>
+
+            <div class="listaInteressados">
+                <h2>{{campanha.interessados.length}} interessados</h2>
+
+                {{#if campanha.interessados.length}}
+                    {{#each campanha.interessados}}
+                        <div class="cardCampanhaCompacto">
+                            <div>
+                                <h3>{{this.nome}}</h3>
+                                <p>{{this.email}}</p>
+                            </div>
+                        </div>
+                    {{/each}}
+                {{else}}
+                    <p class="listaVazia">Nenhum interessado até o momento.</p>
+                {{/if}}
+            </div>
+        </div>
+    </div>
+</div>
