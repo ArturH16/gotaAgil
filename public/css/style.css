@@ -650,3 +650,7 @@ select {
     margin: 10px 0 6px;
     font-size: 1rem;
 }
+
+.cardCampanhaHemocentro .cardCampanhaImagem {
+    border-radius: 10px;
+}
