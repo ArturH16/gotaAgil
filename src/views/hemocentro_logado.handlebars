@@ -1,0 +1,53 @@
+<div id="homeHemocentro">
+    <section id="boasVindas">
+        <h1>{{hemocentro.nome}}</h1>
+        <p class="statusHemocentro {{#if hemocentro.aprovado}}aprovado{{else}}pendente{{/if}}">
+            {{#if hemocentro.aprovado}}✓ Cadastro aprovado{{else}}⏳ Aguardando validação{{/if}}
+        </p>
+    </section>
+
+    <section id="minhasCampanhas">
+        <div class="campanhasCabecalho">
+            <h2>Minhas Campanhas</h2>
+            <a href="/hemocentro/campanha/nova" class="btn-interesse btnNovaCampanha">+ Nova campanha</a>
+        </div>
+
+        <div class="filtroStatus">
+            <button class="filtroBtn ativo" data-status="todas">Todas</button>
+            <button class="filtroBtn" data-status="ativa">Ativas</button>
+            <button class="filtroBtn" data-status="encerrada">Encerradas</button>
+        </div>
+
+        <div class="listaCampanhasHemocentro">
+            <div class="cardCampanhaHemocentro" data-status="ativa">
+                <div class="cardCampanhaTopo">
+                    <span class="badgeUrgencia">Urgente</span>
+                    <span class="badgeTipoSanguineo">O-</span>
+                </div>
+                <h3>Campanha Emergencial de Verão</h3>
+                <p class="cardCampanhaData">Encerra em 12/10/2026 · 8 interessados</p>
+                <a href="/hemocentro/campanha/1" class="linkSecundario">Ver detalhes</a>
+            </div>
+
+            <div class="cardCampanhaHemocentro" data-status="ativa">
+                <div class="cardCampanhaTopo">
+                    <span class="badgeUrgencia">Moderada</span>
+                    <span class="badgeTipoSanguineo">A+</span>
+                </div>
+                <h3>Reposição de Estoque Regular</h3>
+                <p class="cardCampanhaData">Encerra em 20/10/2026 · 3 interessados</p>
+                <a href="/hemocentro/campanha/2" class="linkSecundario">Ver detalhes</a>
+            </div>
+
+            <div class="cardCampanhaHemocentro encerrada" data-status="encerrada">
+                <div class="cardCampanhaTopo">
+                    <span class="badgeEncerrado">Encerrada</span>
+                    <span class="badgeTipoSanguineo">O+</span>
+                </div>
+                <h3>Doação Preventiva Setembro</h3>
+                <p class="cardCampanhaData">Encerrou em 05/09/2026 · 15 interessados</p>
+                <a href="/hemocentro/campanha/3" class="linkSecundario">Ver detalhes</a>
+            </div>
+        </div>
+    </section>
+</div>
