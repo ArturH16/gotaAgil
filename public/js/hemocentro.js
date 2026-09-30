@@ -20,10 +20,8 @@ filtroStatus.addEventListener("click", (event) => {
     const botaoClicado = event.target.closest(".filtroBtn")
     
     if (botaoClicado) {
-        // 3. Pega o valor do atributo 'data-status' do botão clicado
         const valorFiltro = botaoClicado.getAttribute("data-status")
         
-        // 4. Executa a função de filtrar com o status correto
         filtrarCampanhas(valorFiltro)
 
         //  Remove a classe 'ativo' dos outros botões e coloca no atual
