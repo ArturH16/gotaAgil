@@ -57,16 +57,23 @@ nav a {
     justify-content: center;
     align-items: center;
     margin: 50px auto;  
-    max-width: 600px;    
+    max-width: 450px;    
     width: 90%;            
     background-color: #F1F3F1;
-    border-radius: 12px;      
-    padding: 40px 20px;
+    border-radius: 24px;      
+    padding: 40px 30px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
+
+
 
 #logoCadastroGeral {
     width: 40%;
     margin-bottom: 40px;
+}
+
+.formCadastro {
+   text-align: justify;
 }
 
 .btn-escolha {
@@ -85,11 +92,12 @@ nav a {
 }
 
 .campos {
-    margin: 3px;
+    margin: 6px;
+    
 }
 
 select {
-    margin: 3px;
+    margin: 12px;
 }
 
 .secoesHome {
@@ -140,13 +148,13 @@ li::before {
 .filtroEstado {
     margin-bottom: 30px;
 }
-
-.filtroEstado select {
+select {
     padding: 8px 12px;
     border-radius: 6px;
     border: 1px solid #ccc;
     margin-left: 8px;
 }
+
 
 .gridHemocentros {
     display: grid;
@@ -400,4 +408,159 @@ li::before {
     .detalheGrid {
         grid-template-columns: 1fr;
     }
+}
+
+#perfilDoador {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+#perfilCabecalho {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 32px;
+}
+
+.avatarIniciais {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background-color: #C14025;
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    font-weight: 700;
+}
+
+#perfilCabecalho h1 {
+    font-size: 1.5rem;
+    color: #2B2B2B;
+}
+
+.perfilTopo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.perfilTopo h2, .perfilCampanhas h2 {
+    font-size: 1.1rem;
+    color: #2B2B2B;
+}
+
+.btn-secundario {
+    background: none;
+    border: 1px solid #C14025;
+    color: #C14025;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.perfilCampo {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    background-color: #FFFFFF;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+}
+
+.perfilCampo label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #888;
+}
+
+.perfilValor {
+    color: #2B2B2B;
+}
+
+.perfilInput {
+    display: none;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1rem;
+}
+
+/* estado "editando" */
+#formPerfil.editando .perfilValor {
+    display: none;
+}
+#formPerfil.editando .perfilInput {
+    display: block;
+}
+
+#btnSalvar {
+    border: none;
+    cursor: pointer;
+    margin-top: 20px;
+    width: 100%;
+}
+
+.linkSecundario {
+    display: inline-block;
+    margin: 16px 0 32px;
+    color: #C14025;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.perfilCampanhas {
+    margin-bottom: 32px;
+}
+
+.cardCampanhaCompacto {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 14px;
+    border: 1px solid #eee;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.cardCampanhaCompacto h3 {
+    font-size: 0.95rem;
+    color: #2B2B2B;
+}
+
+.cardCampanhaCompacto p {
+    font-size: 0.8rem;
+    color: #888;
+    margin-top: 2px;
+}
+
+.cardCampanhaCompacto.encerrado {
+    opacity: 0.6;
+}
+
+.badgeEncerrado {
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 20px;
+    background-color: #EAEAEA;
+    color: #555;
+    white-space: nowrap;
+}
+
+.btn-sair {
+    display: block;
+    text-align: center;
+    color: #C14025;
+    text-decoration: none;
+    font-weight: 600;
+    padding: 12px;
 }

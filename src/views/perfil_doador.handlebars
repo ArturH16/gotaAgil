@@ -1,0 +1,79 @@
+<div id="perfilDoador">
+    <a href="/usuario" class="voltar" title="Voltar">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+        <span>Voltar</span>
+    </a>
+
+    <div id="perfilCabecalho">
+        <div class="avatarIniciais">{{doador.iniciais}}</div>
+        <h1>{{doador.nome}}</h1>
+    </div>
+
+    <form id="formPerfil" method="POST" action="/doador/perfil">
+        <div class="perfilTopo">
+            <h2>Dados de cadastro</h2>
+            <button type="button" id="btnEditar" class="btn-secundario">Editar</button>
+        </div>
+
+        <div class="perfilCampo">
+            <label>Email</label>
+            <span class="perfilValor">{{doador.email}}</span>
+            <input type="email" name="email" value="{{doador.email}}" class="perfilInput" disabled>
+        </div>
+
+        <div class="perfilCampo">
+            <label>Tipo sanguíneo</label>
+            <span class="badgeTipoSanguineo">{{doador.tipoSanguineo}}</span>
+        </div>
+
+        <div class="perfilCampo">
+            <label>CPF</label>
+            <span class="perfilValor">{{doador.cpfMascarado}}</span>
+        </div>
+
+        <div class="perfilCampo">
+            <label>Data de nascimento</label>
+            <span class="perfilValor">{{doador.dataNascimento}}</span>
+        </div>
+
+        <div class="perfilCampo">
+            <label>Peso</label>
+            <span class="perfilValor">{{doador.peso}} kg</span>
+            <input type="number" name="peso" value="{{doador.peso}}" class="perfilInput" disabled>
+        </div>
+
+        <div class="perfilCampo">
+            <label>Cidade / Estado</label>
+            <span class="perfilValor">{{doador.cidade}} - {{doador.estado}}</span>
+            <input type="text" name="cidade" value="{{doador.cidade}}" class="perfilInput" disabled>
+        </div>
+
+        <button type="submit" id="btnSalvar" class="btn-interesse" hidden>Salvar alterações</button>
+    </form>
+
+    <a href="/alterar-senha" class="linkSecundario">Alterar senha</a>
+
+    <div class="perfilCampanhas">
+        <h2>Minhas campanhas de interesse</h2>
+
+        <div class="cardCampanhaCompacto">
+            <span class="badgeUrgencia">Urgente</span>
+            <div>
+                <h3>Campanha Emergencial de Verão</h3>
+                <p>Hemocentro Regional Fortaleza · Encerra em 12/10/2026</p>
+            </div>
+        </div>
+
+        <div class="cardCampanhaCompacto encerrado">
+            <span class="badgeEncerrado">Encerrada</span>
+            <div>
+                <h3>Doação Preventiva Setembro</h3>
+                <p>Hemocentro Central Fortaleza · Encerrou em 05/09/2026</p>
+            </div>
+        </div>
+    </div>
+
+    <a href="/home" class="btn-sair">Sair</a>
+</div>
+
+<script src="/js/perfilDoador.js"></script>
