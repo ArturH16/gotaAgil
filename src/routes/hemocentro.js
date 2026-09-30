@@ -38,4 +38,11 @@ router.get("/listaCampanha", (req, res) => {
     }
     res.render("lista_doadores", dadosCampanha)
 })
+
+router.get("/campanha/nova",(req,res)=> {
+    res.render("criacao_campanhas",{
+        title: "Criação Campanha",
+        loggedInHemocentro: true
+    })
+})
 module.exports = router

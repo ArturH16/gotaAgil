@@ -1,0 +1,63 @@
+<div class="formCampanhaContainer">
+    <a href="/hemocentro" class="voltar" title="Voltar">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+        <span>Voltar</span>
+    </a>
+
+    <h1>Nova Campanha</h1>
+
+    <form method="POST" action="/hemocentro/campanha/nova" enctype="multipart/form-data" class="formCampanha">
+
+        <div class="campoForm">
+            <label for="nome">Nome da campanha</label>
+            <input type="text" id="nome" name="nome" placeholder="Ex: Campanha Emergencial de Verão" required>
+        </div>
+
+        <div class="campoForm">
+            <label for="descricao">Descrição</label>
+            <textarea id="descricao" name="descricao" rows="4" placeholder="Explique o objetivo da campanha, requisitos específicos, etc." required></textarea>
+        </div>
+
+        <div class="campoFormLinha">
+            <div class="campoForm">
+                <label for="tipoSanguineo">Tipo sanguíneo desejado</label>
+                <select id="tipoSanguineo" name="tipoSanguineo" required>
+                    <option value="">Selecione</option>
+                    <option value="A+">A+</option>
+                    <option value="A-">A-</option>
+                    <option value="B+">B+</option>
+                    <option value="B-">B-</option>
+                    <option value="AB+">AB+</option>
+                    <option value="AB-">AB-</option>
+                    <option value="O+">O+</option>
+                    <option value="O-">O-</option>
+                </select>
+            </div>
+
+            <div class="campoForm">
+                <label for="urgencia">Urgência</label>
+                <select id="urgencia" name="urgencia" required>
+                    <option value="">Selecione</option>
+                    <option value="Urgente">Urgente</option>
+                    <option value="Moderada">Moderada</option>
+                    <option value="Regular">Regular</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="campoForm">
+            <label for="dataFechamento">Data de encerramento</label>
+            <input type="date" id="dataFechamento" name="dataFechamento" required>
+        </div>
+
+        <div class="campoForm">
+            <label for="foto">Foto / flyer da campanha</label>
+            <input type="file" id="foto" name="foto" accept="image/*">
+            <img id="previewFoto" class="previewFoto" hidden alt="Pré-visualização da imagem">
+        </div>
+
+        <button type="submit" class="btn-interesse">Criar campanha</button>
+    </form>
+</div>
+
+<script src="/js/criacaoCampanha.js"></script>
