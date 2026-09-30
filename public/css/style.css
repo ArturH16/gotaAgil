@@ -329,7 +329,7 @@ select {
 
 }
 
-#detalheCampanha {
+.detalheCampanha {
     max-width: 1000px;
     margin: 0 auto;
     padding: 20px;
@@ -653,4 +653,41 @@ select {
 
 .cardCampanhaHemocentro .cardCampanhaImagem {
     border-radius: 10px;
+}
+
+.acoesCampanha {
+    display: flex;
+    gap: 10px;
+    margin: 16px 0 24px;
+}
+
+.acoesCampanha .btn-secundario {
+    text-decoration: none;
+    text-align: center;
+    font-size: 1em;
+}
+
+.listaInteressados h2 {
+    font-size: 1rem;
+    color: #2B2B2B;
+    margin-bottom: 12px;
+}
+
+.listaInteressados .cardCampanhaCompacto {
+    padding: 10px 14px;
+    margin-bottom: 8px;
+}
+
+.listaInteressados .cardCampanhaCompacto h3 {
+    font-size: 0.9rem;
+}
+
+.listaInteressados .cardCampanhaCompacto p {
+    font-size: 0.8rem;
+    color: #888;
+}
+
+.listaVazia {
+    color: #888;
+    font-style: italic;
 }
