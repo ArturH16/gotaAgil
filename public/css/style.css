@@ -612,7 +612,7 @@ select {
     padding: 10px 18px;
 }
 
-.filtroStatus {
+#filtroStatus {
     display: flex;
     gap: 10px;
     margin-bottom: 20px;
@@ -635,7 +635,7 @@ select {
     color: #FFFFFF;
 }
 
-.listaCampanhasHemocentro {
+#listaCampanhasHemocentro {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
     gap: 20px;
