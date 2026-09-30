@@ -1,0 +1,32 @@
+.detalheDescricao {
+    color: #555;
+    line-height: 1.5;
+    margin-bottom: 20px;
+}
+
+.detalheLista {
+    margin-bottom: 24px;
+}
+
+.detalheLista dt {
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #888;
+    margin-top: 14px;
+}
+
+.detalheLista dd {
+    color: #2B2B2B;
+    margin-top: 2px;
+}
+
+.detalheLista dd span {
+    display: block;
+}
+
+.detalheInfo .btn-interesse {
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+}

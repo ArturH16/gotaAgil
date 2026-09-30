@@ -12,12 +12,15 @@ body, header, button, a {
 html {
   scroll-behavior: smooth;
 }
+
+/* === Nav e Footer (compartilhados em todas as páginas) === */
 footer {
     background-color: rgb(197, 49, 49);
     color: white;
     padding: 10px;
     text-align: center;
 }
+
 nav {
     display: flex;
     justify-content: space-between;
@@ -25,14 +28,14 @@ nav {
     gap: 10px;
     margin: 20px;
     padding: .8rem 2rem;
-    background-color:#FFFFFF;
+    background-color: #FFFFFF;
     box-shadow: 12px 11px 12px 0px rgba(0, 0, 0, 0.05);
-
 }
+
 .acoesUsuario {
   display: flex;
   align-items: center;
-  gap: 1rem; 
+  gap: 1rem;
   margin-left: auto;
 }
 
@@ -51,21 +54,31 @@ nav a {
     width: auto;
     display: block;
 }
+
+.navLinksLogado {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.navLinksLogado a {
+    color: #CA4325;
+}
+
+/* === Autenticação: usado em escolha, cadastro doador/hemocentro e login === */
 #boxCadastroGeral {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin: 50px auto;  
-    max-width: 450px;    
-    width: 90%;            
+    margin: 50px auto;
+    max-width: 450px;
+    width: 90%;
     background-color: #F1F3F1;
-    border-radius: 24px;      
+    border-radius: 24px;
     padding: 40px 30px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
-
-
 
 #logoCadastroGeral {
     width: 40%;
@@ -85,137 +98,23 @@ nav a {
     border-radius: 6px;
 }
 
-#escolhaCadastro, #escolhaLogin{
-    display: flex;            
+#escolhaCadastro, #escolhaLogin {
+    display: flex;
     gap: 12px;
     margin-top: 20px;
 }
 
 .campos {
     margin: 6px;
-    
 }
 
 select {
     margin: 12px;
 }
 
-.secoesHome {
-  max-width: 700px;
-  margin: 0 auto; 
-  text-align: left;
-  line-height: 1.6;
-}
-
-
-.secoesHome h2, .secoesHome h3 {
-    margin: 7px;
-}
-
-.secoesOffWhite {
-    background-color: #fafafabd;
-}
-
-#white {
-    background-color: #FFFFFF;
-}
-
-ul {
-  list-style: none;
-  padding-left: 0;
-}
-
-li {
-  position: relative;
-  padding-left: 24px;
-  margin-bottom: 12px;
-}
-
-
-li::before {
-  content: "✓";
-  position: absolute;
-  left: 0;
-  color: #059669;
-  font-weight: bold;
-}
-
-#hemocentrosParceiros {
-    padding: 60px 20px;
-    text-align: center;
-}
-
-.filtroEstado {
-    margin-bottom: 30px;
-}
-select {
-    padding: 8px 12px;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-    margin-left: 8px;
-}
-
-
-.gridHemocentros {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 24px;
-    max-width: 900px;
-    margin: 0 auto;
-}
-
-.cardHemocentro {
-    background-color: #FFFFFF;
-    border: 1px solid #eee;
-    border-radius: 12px;
-    padding: 24px;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-    transition: transform 0.2s ease;
-}
-
-.cardHemocentro:hover, .cardsIdeais:hover, .cardCampanha:hover {
-    transform: translateY(-4px);
-}
-
-.cardHemocentroIcone {
-    font-size: 2rem;
-    margin-bottom: 12px;
-}
-
-.cardHemocentroLocal {
-    color: #555;
-    font-size: 0.9rem;
-}
-
-.cardsIdeais {
-    margin-top: 5px;
-    background-color: #FFFFFF;
-    border: 1px solid #eee;
-    border-radius: 12px;
-    padding: 24px;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-    transition: transform 0.2s ease;
-}
-
-
-
-#nossosIdeais h4 {
-    text-align: center;
-}
-
-.navLinksLogado {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.navLinksLogado a {
-    color: #CA4325;
-}
-
+/* === Boas-vindas: usado na home do doador e do hemocentro === */
 #boasVindas {
     text-align: center;
-    padding: 40px 20px 20px;
 }
 
 #boasVindas h1 {
@@ -223,55 +122,26 @@ select {
     color: #2B2B2B;
 }
 
-#boasVindas p {
-    color: #555;
-    margin-top: 8px;
-}
-
-#listaCampanhas {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 24px;
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 20px;
-}
-
-.cardCampanha {
-    background-color: #FFFFFF;
-    border: 1px solid #eee;
-    border-radius: 12px;
-    padding: 0;
-    overflow: hidden;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-    border-left: 4px solid #C14025;
-}
+/* === Cards de campanha: base compartilhada entre doador e hemocentro === */
 .cardCampanhaImagem {
     width: 100%;
     aspect-ratio: 16 / 9;
     object-fit: contain;
-    background-color: #F5F5F5; /* preenche o espaço que sobrar */
+    background-color: #F5F5F5;
     display: block;
-}
-
-.cardCampanhaConteudo {
-    padding: 20px;
-}
-
-.cardCampanha.urgencia-alta {
-    border-left-color: #C14025;
-}
-.cardCampanha.urgencia-media {
-    border-left-color: #E8A33D;
-}
-.cardCampanha.urgencia-baixa {
-    border-left-color: #6B9E78;
 }
 
 .cardCampanhaTopo {
     display: flex;
     justify-content: space-between;
     margin-bottom: 12px;
+}
+
+.cardCampanhaData {
+    color: #888;
+    font-size: 0.85rem;
+    margin-top: 4px;
+    margin-bottom: 16px;
 }
 
 .badgeUrgencia, .badgeTipoSanguineo {
@@ -284,9 +154,11 @@ select {
 .badgeUrgencia {
     background-color: #FBEAE5;
 }
+
 .urgencia {
     background-color: #C14025;
 }
+
 .moderada {
     background-color: #E8A33D;
 }
@@ -300,19 +172,17 @@ select {
     color: #FFFFFF;
 }
 
-.cardCampanhaHemocentro {
+.badgeEncerrado {
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 20px;
+    background-color: #EAEAEA;
     color: #555;
-    font-size: 0.9rem;
-    margin-top: 4px;
+    white-space: nowrap;
 }
 
-.cardCampanhaData {
-    color: #888;
-    font-size: 0.85rem;
-    margin-top: 4px;
-    margin-bottom: 16px;
-}
-
+/* === Botões de ação: usados em cards, detalhe, perfil e formulário de campanha === */
 .btn-interesse {
     display: inline-block;
     width: 100%;
@@ -324,11 +194,27 @@ select {
     border-radius: 6px;
     font-weight: 600;
 }
-.interesse {
-    background-color: #059669 !important;
 
+.btn-interesse:disabled {
+    background-color: #BDBDBD;
+    cursor: not-allowed;
 }
 
+.interesse {
+    background-color: #059669 !important;
+}
+
+.btn-secundario {
+    background: none;
+    border: 1px solid #C14025;
+    color: #C14025;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+/* === Tela de detalhe de campanha: usada por doador e hemocentro === */
 .detalheCampanha {
     max-width: 1000px;
     margin: 0 auto;
@@ -366,161 +252,13 @@ select {
     margin: 12px 0;
 }
 
-.detalheDescricao {
-    color: #555;
-    line-height: 1.5;
-    margin-bottom: 20px;
-}
-
-.detalheLista {
-    margin-bottom: 24px;
-}
-
-.detalheLista dt {
-    font-size: 0.8rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    color: #888;
-    margin-top: 14px;
-}
-
-.detalheLista dd {
-    color: #2B2B2B;
-    margin-top: 2px;
-}
-
-.detalheLista dd span {
-    display: block;
-}
-
-.detalheInfo .btn-interesse {
-    border: none;
-    cursor: pointer;
-    font-size: 1rem;
-}
-
-.btn-interesse:disabled {
-    background-color: #BDBDBD;
-    cursor: not-allowed;
-}
-
 @media (max-width: 700px) {
     .detalheGrid {
         grid-template-columns: 1fr;
     }
 }
 
-#perfilDoador {
-    max-width: 700px;
-    margin: 0 auto;
-    padding: 20px;
-}
-
-#perfilCabecalho {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    margin-bottom: 32px;
-}
-
-.avatarIniciais {
-    width: 64px;
-    height: 64px;
-    border-radius: 50%;
-    background-color: #C14025;
-    color: #FFFFFF;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.4rem;
-    font-weight: 700;
-}
-
-#perfilCabecalho h1 {
-    font-size: 1.5rem;
-    color: #2B2B2B;
-}
-
-.perfilTopo {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 16px;
-}
-
-.perfilTopo h2, .perfilCampanhas h2 {
-    font-size: 1.1rem;
-    color: #2B2B2B;
-}
-
-.btn-secundario {
-    background: none;
-    border: 1px solid #C14025;
-    color: #C14025;
-    padding: 8px 16px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: 600;
-}
-
-.perfilCampo {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    background-color: #FFFFFF;
-    border: 1px solid #eee;
-    border-radius: 8px;
-    padding: 14px 16px;
-    margin-bottom: 10px;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.03);
-}
-
-.perfilCampo label {
-    font-size: 0.8rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    color: #888;
-}
-
-.perfilValor {
-    color: #2B2B2B;
-}
-
-.perfilInput {
-    display: none;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    font-size: 1rem;
-}
-
-/* estado "editando" */
-#formPerfil.editando .perfilValor {
-    display: none;
-}
-#formPerfil.editando .perfilInput {
-    display: block;
-}
-
-#btnSalvar {
-    border: none;
-    cursor: pointer;
-    margin-top: 20px;
-    width: 100%;
-}
-
-.linkSecundario {
-    display: inline-block;
-    margin: 16px 0 32px;
-    color: #C14025;
-    text-decoration: none;
-    font-weight: 600;
-}
-
-.perfilCampanhas {
-    margin-bottom: 32px;
-}
-
+/* === Card compacto: usado no perfil (histórico) e na lista de interessados === */
 .cardCampanhaCompacto {
     display: flex;
     align-items: center;
@@ -542,235 +280,33 @@ select {
     margin-top: 2px;
 }
 
-.cardCampanhaCompacto.encerrado {
-    opacity: 0.6;
+
+
+/* Estilo principal que dá a forma aos inputs */
+.perfilCampo {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    background-color: #FFFFFF;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.03);
 }
 
-.badgeEncerrado {
-    font-size: 0.75rem;
-    font-weight: 700;
-    padding: 4px 10px;
-    border-radius: 20px;
-    background-color: #EAEAEA;
-    color: #555;
-    white-space: nowrap;
+/* Estilização dos menus suspensos (Estado e Tipo Sanguíneo) */
+select {
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    margin-left: 8px;
 }
 
-.btn-sair {
-    display: block;
-    text-align: center;
+.linkSecundario {
+    display: inline-block;
+    margin: 16px 0 32px;
     color: #C14025;
     text-decoration: none;
     font-weight: 600;
-    padding: 12px;
-}
-
-#homeHemocentro {
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 20px;
-}
-
-#boasVindas {
-    text-align: center;
-    padding: 20px;
-}
-
-#boasVindas h1 {
-    font-size: 1.8rem;
-    color: #2B2B2B;
-}
-
-.statusHemocentro {
-    display: inline-block;
-    margin-top: 8px;
-    font-size: 0.85rem;
-    font-weight: 600;
-    padding: 4px 12px;
-    border-radius: 20px;
-}
-
-.statusHemocentro.aprovado {
-    background-color: #E6F4EA;
-    color: #2E7D42;
-}
-
-.statusHemocentro.pendente {
-    background-color: #FDF3E3;
-    color: #B87A1E;
-}
-
-.campanhasCabecalho {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 16px;
-}
-
-.btnNovaCampanha {
-    width: auto;
-    padding: 10px 18px;
-}
-
-#filtroStatus {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
-}
-
-.filtroBtn {
-    background: none;
-    border: 1px solid #ccc;
-    color: #555;
-    padding: 6px 16px;
-    border-radius: 20px;
-    cursor: pointer;
-    font-weight: 600;
-    font-size: 0.85rem;
-}
-
-.filtroBtn.ativo {
-    background-color: #C14025;
-    border-color: #C14025;
-    color: #FFFFFF;
-}
-
-#listaCampanhasHemocentro {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 20px;
-}
-
-
-.cardCampanhaHemocentro.encerrada {
-    opacity: 0.7;
-}
-
-.cardCampanhaHemocentro h3 {
-    margin: 10px 0 6px;
-    font-size: 1rem;
-}
-
-.cardCampanhaHemocentro .cardCampanhaImagem {
-    border-radius: 10px;
-}
-
-.acoesCampanha {
-    display: flex;
-    gap: 10px;
-    margin: 16px 0 24px;
-}
-
-.acoesCampanha .btn-secundario {
-    text-decoration: none;
-    text-align: center;
-    font-size: 1em;
-}
-
-.listaInteressados h2 {
-    font-size: 1rem;
-    color: #2B2B2B;
-    margin-bottom: 12px;
-}
-
-.listaInteressados .cardCampanhaCompacto {
-    padding: 10px 14px;
-    margin-bottom: 8px;
-}
-
-.listaInteressados .cardCampanhaCompacto h3 {
-    font-size: 0.9rem;
-}
-
-.listaInteressados .cardCampanhaCompacto p {
-    font-size: 0.8rem;
-    color: #888;
-}
-
-.listaVazia {
-    color: #888;
-    font-style: italic;
-}
-
-.formCampanhaContainer {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 20px;
-}
-
-.formCampanhaContainer h1 {
-    font-size: 1.6rem;
-    color: #2B2B2B;
-    margin-bottom: 20px;
-}
-
-.formCampanha {
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
-}
-
-.campoForm {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-}
-
-.campoForm label {
-    font-size: 0.85rem;
-    font-weight: 700;
-    color: #555;
-}
-
-.campoForm input,
-.campoForm select,
-.campoForm textarea {
-    padding: 10px 12px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    font-size: 1rem;
-    font-family: inherit;
-}
-
-.campoForm textarea {
-    resize: vertical;
-}
-
-.campoForm input:focus,
-.campoForm select:focus,
-.campoForm textarea:focus {
-    outline: none;
-    border-color: #C14025;
-}
-
-.campoFormLinha {
-    display: flex;
-    gap: 16px;
-}
-
-.campoFormLinha .campoForm {
-    flex: 1;
-}
-
-.previewFoto {
-    margin-top: 10px;
-    max-width: 100%;
-    max-height: 200px;
-    border-radius: 8px;
-    object-fit: contain;
-    background-color: #F5F5F5;
-}
-
-.formCampanha .btn-interesse {
-    border: none;
-    cursor: pointer;
-    font-size: 1rem;
-    margin-top: 8px;
-}
-
-@media (max-width: 600px) {
-    .campoFormLinha {
-        flex-direction: column;
-        gap: 18px;
-    }
 }

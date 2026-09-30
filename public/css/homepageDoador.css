@@ -1,0 +1,55 @@
+#boasVindas {
+    padding: 40px 20px 20px;
+}
+
+#boasVindas p {
+    color: #555;
+    margin-top: 8px;
+}
+
+#listaCampanhas {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 24px;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.cardCampanha {
+    background-color: #FFFFFF;
+    border: 1px solid #eee;
+    border-radius: 12px;
+    padding: 0;
+    overflow: hidden;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    border-left: 4px solid #C14025;
+}
+
+.cardCampanha:hover {
+    transform: translateY(-4px);
+}
+
+.cardCampanhaConteudo {
+    padding: 20px;
+}
+
+.cardCampanha.urgencia-alta {
+    border-left-color: #C14025;
+}
+
+.cardCampanha.urgencia-media {
+    border-left-color: #E8A33D;
+}
+
+.cardCampanha.urgencia-baixa {
+    border-left-color: #6B9E78;
+}
+
+/* Nome do hemocentro dentro do card (renomeada de .cardCampanhaHemocentro
+   pra não colidir com a div wrapper de mesmo nome na home do hemocentro) */
+.cardCampanhaNomeHemocentro {
+    color: #555;
+    font-size: 0.9rem;
+    margin-top: 4px;
+}

@@ -3,7 +3,8 @@ const router = express.Router()
 
 router.get("/",(req,res)=> {
     res.render("homepage", {
-        title: "Gota Ágil"
+        title: "Gota Ágil",
+        cssExtra :"landing"
     })
 })
 

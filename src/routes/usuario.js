@@ -5,7 +5,8 @@ router.get("/", (req, res) => {
     res.render("doador_logado", {
         title: "Início",
         loggedInDoador: true,
-        nomeDoador: "Artur"
+        nomeDoador: "Artur",
+        cssExtra: "homepageDoador"
     })
 })
 
@@ -14,6 +15,7 @@ router.get("/perfil", (req, res) => {
     {
         loggedInDoador: true,
         title: "Meu Perfil",
+        cssExtra: "perfil",
         doador: {
             nome: "Artur Silva",
             iniciais: "AS",

@@ -5,6 +5,7 @@ router.get("/",(req,res)=> {
     const hemocentroMockado = {
         title: "Início",
         loggedInHemocentro: true,
+        cssExtra: "homepageHemocentro",
         hemocentro: {
             nome: "Hemocentro Regional Fortaleza",
             aprovado: false
@@ -34,7 +35,8 @@ router.get("/listaCampanha", (req, res) => {
             ]
         },
         title: "Lista de Interessados",
-        loggedInHemocentro: true
+        loggedInHemocentro: true,
+        cssExtra: "listaInteressados"
     }
     res.render("lista_doadores", dadosCampanha)
 })
@@ -42,7 +44,8 @@ router.get("/listaCampanha", (req, res) => {
 router.get("/campanha/nova",(req,res)=> {
     res.render("criacao_campanhas",{
         title: "Criação Campanha",
-        loggedInHemocentro: true
+        loggedInHemocentro: true,
+        cssExtra: "campanhaNova" 
     })
 })
 module.exports = router

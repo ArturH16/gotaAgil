@@ -15,7 +15,9 @@ router.get("/",(req,res)=> {
     dataFechamento: "12/10/2026",
     encerrada: false
 },
-jaDemonstrouInteresse: true }
+jaDemonstrouInteresse: true,
+title: "Campanha",
+cssExtra: "campanhaDetalhe" }
     res.render("detalhes_campanha",dadosCampanha )
 })
 
