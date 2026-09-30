@@ -641,13 +641,6 @@ select {
     gap: 20px;
 }
 
-.cardCampanhaHemocentro {
-    background-color: #FFFFFF;
-    border: 1px solid #eee;
-    border-radius: 12px;
-    padding: 18px;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-}
 
 .cardCampanhaHemocentro.encerrada {
     opacity: 0.7;
