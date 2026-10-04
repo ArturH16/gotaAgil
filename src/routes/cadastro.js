@@ -9,7 +9,7 @@ const cadastroController = require("../controllers/cadastroController")
 //     })
 // })
 
-router.get("/",cadastroController.cadastrar)
+router.get("/",cadastroController.cadastrarGeral)
 
 // router.get("/doador",(req,res)=> {
 //     res.render("cadastro_doador", {

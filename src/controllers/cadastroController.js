@@ -1,4 +1,4 @@
-function cadastrar(req,res) {
+function cadastrarGeral(req,res) {
     res.render("cadastro", {
         layout: "auth",
         title: "Cadastro"
@@ -20,7 +20,7 @@ function cadastrarHemocentro(req,res) {
 }
 
 module.exports = {
-    cadastrar,
+    cadastrarGeral,
     cadastrarDoador,
     cadastrarHemocentro
 }
