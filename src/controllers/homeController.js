@@ -1,6 +1,7 @@
 function renderizarHome(req,res) {
     res.render("homepage", {
-        title: "Gota Ágil"
+        title: "Gota Ágil",
+        cssExtra: "landing"
     })
 }
 

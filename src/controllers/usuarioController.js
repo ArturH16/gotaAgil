@@ -2,7 +2,8 @@ function logar(req,res) {
     res.render("doador_logado", {
         title: "Início",
         loggedInDoador: true,
-        nomeDoador: "Artur"
+        nomeDoador: "Artur",
+        cssExtra: "homepageDoador"
     })
 }
 
@@ -11,6 +12,7 @@ function mostrarPerfil(req,res) {
     {
         loggedInDoador: true,
         title: "Meu Perfil",
+        cssExtra: "perfil",
         doador: {
             nome: "Artur Silva",
             iniciais: "AS",
@@ -40,7 +42,9 @@ function mostrarCampanha(req,res) {
     dataFechamento: "12/10/2026",
     encerrada: false
 },
-jaDemonstrouInteresse: true }
+jaDemonstrouInteresse: true,
+title: "Campanha",
+cssExtra: "campanhaDetalhe" }
     res.render("detalhes_campanha",dadosCampanha )
 }
 module.exports = {

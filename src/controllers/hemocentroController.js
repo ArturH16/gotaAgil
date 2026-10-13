@@ -2,6 +2,7 @@ function logar(req,res) {
     const hemocentroMockado = {
         title: "Início",
         loggedInHemocentro: true,
+        cssExtra: "homepageHemocentro",
         hemocentro: {
             nome: "Hemocentro Regional Fortaleza",
             aprovado: false
@@ -31,7 +32,8 @@ function listarDoadoresCampanha(req,res) {
             ]
         },
         title: "Lista de Interessados",
-        loggedInHemocentro: true
+        loggedInHemocentro: true,
+        cssExtra: "listaInteressados"
     }
     res.render("lista_doadores", dadosCampanha)
 }
@@ -39,7 +41,8 @@ function listarDoadoresCampanha(req,res) {
 function criarCampanha(req,res) {
      res.render("criacao_campanhas",{
         title: "Criação Campanha",
-        loggedInHemocentro: true
+        loggedInHemocentro: true,
+        cssExtra: "campanhaNova"
     })
 }
 

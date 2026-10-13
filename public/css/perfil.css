@@ -1,0 +1,112 @@
+#perfilDoador {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+#perfilCabecalho {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 32px;
+}
+
+.avatarIniciais {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background-color: #C14025;
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    font-weight: 700;
+}
+
+#perfilCabecalho h1 {
+    font-size: 1.5rem;
+    color: #2B2B2B;
+}
+
+.perfilTopo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.perfilTopo h2, .perfilCampanhas h2 {
+    font-size: 1.1rem;
+    color: #2B2B2B;
+}
+
+.perfilCampo {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    background-color: #FFFFFF;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+}
+
+.perfilCampo label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #888;
+}
+
+.perfilValor {
+    color: #2B2B2B;
+}
+
+.perfilInput {
+    display: none;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1rem;
+}
+
+#formPerfil.editando .perfilValor {
+    display: none;
+}
+#formPerfil.editando .perfilInput {
+    display: block;
+}
+
+#btnSalvar {
+    border: none;
+    cursor: pointer;
+    margin-top: 20px;
+    width: 100%;
+}
+
+.linkSecundario {
+    display: inline-block;
+    margin: 16px 0 32px;
+    color: #C14025;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.perfilCampanhas {
+    margin-bottom: 32px;
+}
+
+.cardCampanhaCompacto.encerrado {
+    opacity: 0.6;
+}
+
+.btn-sair {
+    display: block;
+    text-align: center;
+    color: #C14025;
+    text-decoration: none;
+    font-weight: 600;
+    padding: 12px;
+}
