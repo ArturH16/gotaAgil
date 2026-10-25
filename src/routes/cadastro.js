@@ -18,7 +18,7 @@ router.get("/",cadastroController.cadastrarGeral)
 //     })
 // })
 
-router.get("/doador",cadastroController.cadastrarDoador)
+router.get("/doador",cadastroController.exibirCadastroDoador)
 
 // router.get("/hemocentro",(req,res)=> {
 //     res.render("cadastro_hemocentro", {
@@ -26,6 +26,7 @@ router.get("/doador",cadastroController.cadastrarDoador)
 //         title: "Cadastro Hemocentro"
 //     })
 // })
+router.post("/doador",cadastroController.cadastrarDoador)
 
 router.get("/hemocentro",cadastroController.cadastrarHemocentro)
 
