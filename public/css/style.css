@@ -13,6 +13,12 @@ html {
   scroll-behavior: smooth;
 }
 
+header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
 /* === Nav e Footer (compartilhados em todas as páginas) === */
 footer {
     background-color: rgb(197, 49, 49);
