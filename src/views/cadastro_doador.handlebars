@@ -1,18 +1,26 @@
 <h2 style="margin-bottom: 16px;">Seja bem vindo, novo doador!</h2>
 <form action="/cadastro/doador" style="background-color: white; padding: 20px; border-radius: 6px;" class="formCadastro" method="post">
-    <p><strong>Nome:</strong> <input class="perfilCampo campos" type="text" name="nome" placeholder="Digite seu nome..."></p>
-     <p><strong>Email:</strong> <input class="perfilCampo campos" type="email" name="email" placeholder="Digite seu email..."></p>
-     <p><strong>Senha:</strong> <input class="perfilCampo campos" type="password" name="senha" placeholder="Defina sua senha.."></p> 
+
+     <label for="nome"><strong>Nome:</strong> </label>
+     <input class="perfilCampo campos" type="text" name="nome" placeholder="Digite seu nome..." id="nome" required>
+
+     <label for="email"><strong>Email:</strong> </label>
+     <input class="perfilCampo campos" type="email" name="email" placeholder="Digite seu email..." id="email" required>
+     
+     <label for="senha"><strong>Senha:</strong></label> 
+     <input class="perfilCampo campos" type="password" name="senha" placeholder="Defina sua senha.." id="senha" required> 
 
         
      
-     <p><strong>CPF:</strong> <input class="perfilCampo campos" type="text" name="cpf"></p> 
+     <label for="cpf"><strong>CPF:</strong> </label>
+     <input class="perfilCampo campos" type="text" name="cpf" id="senha" required> 
      
-     <p><strong>Peso:</strong> <input class="perfilCampo campos" type="number" name="peso" placeholder="Seu peso em kg..." step="0.1"></p> 
+     <label for="peso"><strong>Peso:</strong> </label>
+     <input class="perfilCampo campos" type="number" name="peso" placeholder="Seu peso em kg..." step="0.1 " id="peso" required> 
 
-      <p>
-        <strong>Tipo Sanguíneo:</strong> 
-         <select name="tipoSanguineo" id="">
+      
+        <label for="tipoSanguineo"><strong>Tipo Sanguíneo:</strong> </label>
+         <select name="tipoSanguineo" id="tipoSanguineo" required>
             <option value="A+">A+</option>
             <option value="A-">A-</option>
             <option value="B+">B+</option>
@@ -22,11 +30,11 @@
             <option value="O+">O+</option>
             <option value="O-">O-</option>
         </select>
-        </p>
+        
 
-     <p>
-        <strong>Estado:</strong> 
-         <select name="estado" id="" >
+     
+        <label for="estado"><strong>Estado:</strong> </label>
+         <select name="estado" id="estado"required >
             <option value="AC">Acre</option>
             <option value="AP">Amapá</option>
             <option value="AM">Amazonas</option>
@@ -54,11 +62,12 @@
             <option value="RS">Rio Grande do Sul</option>
             <option value="SC">Santa Catarina</option>
          </select>
-     </p>
      
-     <p><strong>Cidade:</strong> <input class="perfilCampo campos" type="text" name="cidade" placeholder="Digite sua cidade..."></p> 
      
-     <p style="margin-bottom: 20px;"><strong>Data de Nascimento:</strong> <input class="perfilCampo campos" type="date" name="dataNascimento"></p>
+     <label for="cidade"><strong>Cidade:</strong> </label><input class="perfilCampo campos" type="text" name="cidade" placeholder="Digite sua cidade..." id="cidade" required> 
+     
+     <label style="margin-bottom: 20px;" for="dataNascimento"><strong>Data de Nascimento:</strong></label> 
+     <input class="perfilCampo campos" type="date" name="dataNascimento" id="dataNascimento" required>
 
      <button style="background-color: #059669; color: white; 
      margin: auto; display: block; padding: 10px; border-radius: 6px" type="submit">Cadastrar-se!</button>
