@@ -18,17 +18,22 @@ function exibirCadastroDoador(req,res) {
 }
 
 async function cadastrarDoador(req,res) {
-    console.log(req.body)
+    const hoje = new Date()
+    const limite = new Date(hoje.getFullYear() - 16, hoje.getMonth(), hoje.getDate())
+    console.log(limite)
+    console.log(req.body.dataNascimento)
     const { nome, email, senha, tipoSanguineo, cpf, peso, cidade, estado, dataNascimento} = req.body
     const nomeNormalizado = (nome || "").trim()
     const emailNormalizado = (email || "").trim().toLowerCase()
     const cpfNormalizado = (cpf || "").replace(/\D/g,"")
+    
 
     const erros = []
     if (!nomeNormalizado) erros.push("Informe o nome.")
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailNormalizado)) erros.push("E-mail inválido.");
     if (!validadorCPF.isValid(cpfNormalizado)) erros.push("CPF inválido.")
     if (!req.body.senha || req.body.senha.length < 8) erros.push("A senha precisa de pelo menos 8 caracteres.")
+    if (new Date(dataNascimento) > limite) erros.push(" Data de nascimento inválida: é preciso ter pelo menos 16 anos.")
 
     if (erros.length) {
         req.body.senha = ""
