@@ -1,11 +1,19 @@
 <h2 style="margin-bottom: 16px;">Seja bem vindo, novo doador!</h2>
+
+{{#if erros}}
+  <ul class="listaErros">
+    {{#each erros}}
+      <li>{{this}}</li>
+    {{/each}}
+  </ul>
+{{/if}}
 <form action="/cadastro/doador" style="background-color: white; padding: 20px; border-radius: 6px;" class="formCadastro" method="post">
 
      <label for="nome"><strong>Nome:</strong> </label>
-     <input class="perfilCampo campos" type="text" name="nome" placeholder="Digite seu nome..." id="nome" required>
+     <input class="perfilCampo campos" type="text" name="nome" placeholder="Digite seu nome..." id="nome" value="{{dados.nome}}" required>
 
      <label for="email"><strong>Email:</strong> </label>
-     <input class="perfilCampo campos" type="email" name="email" placeholder="Digite seu email..." id="email" required>
+     <input class="perfilCampo campos" type="email" name="email" placeholder="Digite seu email..." id="email" value="{{dados.email}}" required>
      
      <label for="senha"><strong>Senha:</strong></label> 
      <input class="perfilCampo campos" type="password" name="senha" placeholder="Defina sua senha.." id="senha" minlength="8" maxlength="16" required> 
@@ -13,10 +21,10 @@
         
      
      <label for="cpf"><strong>CPF:</strong> </label>
-     <input class="perfilCampo campos" type="text" name="cpf" id="senha" required> 
+     <input class="perfilCampo campos" type="text" name="cpf" id="cpf" value="{{dados.cpf}}"  required> 
      
      <label for="peso"><strong>Peso:</strong> </label>
-     <input class="perfilCampo campos" type="number" name="peso" placeholder="Seu peso em kg..." step="0.1 " id="peso" required> 
+     <input class="perfilCampo campos" type="number" name="peso" placeholder="Seu peso em kg..." step="0.1 " id="peso" min="0" value="{{dados.peso}}" required > 
 
       
         <label for="tipoSanguineo"><strong>Tipo Sanguíneo:</strong> </label>
@@ -64,10 +72,10 @@
          </select>
      
      
-     <label for="cidade"><strong>Cidade:</strong> </label><input class="perfilCampo campos" type="text" name="cidade" placeholder="Digite sua cidade..." id="cidade" required> 
+   <label for="cidade"><strong>Cidade:</strong> </label><input class="perfilCampo campos" type="text" name="cidade" placeholder="Digite sua cidade..." id="cidade" value="{{dados.cidade}}" required> 
      
      <label style="margin-bottom: 20px;" for="dataNascimento"><strong>Data de Nascimento:</strong></label> 
-     <input class="perfilCampo campos" type="date" name="dataNascimento" id="dataNascimento" required>
+     <input class="perfilCampo campos" type="date" name="dataNascimento" id="dataNascimento" value="{{dados.dataNascimento}}" required>
 
      <button style="background-color: #059669; color: white; 
      margin: auto; display: block; padding: 10px; border-radius: 6px" type="submit">Cadastrar-se!</button>

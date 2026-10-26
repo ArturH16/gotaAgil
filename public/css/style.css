@@ -109,6 +109,11 @@ nav a {
     margin: 6px 0 0;
 }
 
+.listaErros {
+    color: #C14025;
+    margin: 10px;
+}
+
 .btn-escolha {
     padding: 10px;
     margin-left: 10px;
