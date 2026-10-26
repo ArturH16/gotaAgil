@@ -18,6 +18,7 @@ function exibirCadastroDoador(req,res) {
 }
 
 async function cadastrarDoador(req,res) {
+    console.log(req.body)
     const { nome, email, senha, tipoSanguineo, cpf, peso, cidade, estado, dataNascimento} = req.body
     const nomeNormalizado = (nome || "").trim()
     const emailNormalizado = (email || "").trim().toLowerCase()
@@ -41,14 +42,41 @@ async function cadastrarDoador(req,res) {
 
     try {
         const senhaHash = await bcrypt.hash(senha,10)
-        await doadorDAO.insertDoador({nomeNormalizado,emailNormalizado,senhaHash,tipoSanguineo,cpfNormalizado,peso,cidade,estado,dataNascimento})
+        await doadorDAO.insertDoador({
+            nome: nomeNormalizado,
+            email: emailNormalizado,
+            senhaHash,
+            tipoSanguineo,
+            cpf: cpfNormalizado,
+            peso,
+            cidade,
+            estado,
+            dataNascimento
+        })
         console.log("Dados enviados com sucesso!")
         res.redirect("/login/doador")
     }
     catch (err) {
         console.log(err)
-        res.status(500).send("Erro ao cadastrar");
-    }
+
+        if (err.code === "23505") {
+            const campo = err.constraint?.includes("cpf") ? "CPF" : "E-mail"
+            req.body.senha = ""
+            return res.status(400).render("cadastro_doador", {
+                layout: "auth",
+                erros: [`${campo} já cadastrado.`],
+                dados: req.body,
+                title: "Cadastro Hemocentro"
+            })
+        }
+
+        res.status(500).render("cadastro_doador", {
+            layout: "auth",
+            erros: ["Erro interno. Tente novamente."],
+            dados: req.body,
+            title: "Cadastro Hemocentro"
+        })
+}
 }
 
 function cadastrarHemocentro(req,res) {
