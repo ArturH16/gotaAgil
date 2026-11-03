@@ -34,6 +34,7 @@ async function cadastrarDoador(req,res) {
     if (!validadorCPF.isValid(cpfNormalizado)) erros.push("CPF inválido.")
     if (!req.body.senha || req.body.senha.length < 8) erros.push("A senha precisa de pelo menos 8 caracteres.")
     if (new Date(dataNascimento) > limite) erros.push(" Data de nascimento inválida: é preciso ter pelo menos 16 anos.")
+    if (peso < 50) erros.push("Peso incompatível. Por favor, verificar peso mínimo na home.") 
 
     if (erros.length) {
         req.body.senha = ""
