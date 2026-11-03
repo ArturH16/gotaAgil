@@ -5,6 +5,14 @@ function logarGeral(req,res) {
     })
 }
 
+function exibirLoginDoador(req,res) {
+     res.render("login_doador", {
+        layout: "auth",
+        title: "Login - Doador"
+    })
+
+}
+
 function logarDoador(req,res) {
     res.render("login_doador", {
         layout: "auth",
@@ -20,6 +28,7 @@ function logarHemocentro(req,res) {
 }
 
 module.exports = {
+    exibirLoginDoador,
     logarGeral,
     logarDoador,
     logarHemocentro

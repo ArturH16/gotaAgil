@@ -18,13 +18,15 @@ router.get("/",login.logarGeral)
 //     })
 // })
 
-router.get("/doador",login.logarDoador)
+router.get("/doador",login.exibirLoginDoador)
 // router.get("/hemocentro",(req,res)=> {
 //     res.render("login_hemocentro", {
 //         layout: "auth",
 //         title: "Login - Hemocentro"
 //     })
 // })
+
+router.post("/doador",login.logarDoador)
 
 router.get("/hemocentro",login.logarHemocentro)
 
