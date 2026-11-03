@@ -72,7 +72,7 @@ async function cadastrarDoador(req,res) {
                 layout: "auth",
                 erros: [`${campo} já cadastrado.`],
                 dados: req.body,
-                title: "Cadastro Hemocentro"
+                title: "Cadastro Doador"
             })
         }
 
@@ -80,7 +80,7 @@ async function cadastrarDoador(req,res) {
             layout: "auth",
             erros: ["Erro interno. Tente novamente."],
             dados: req.body,
-            title: "Cadastro Hemocentro"
+            title: "Cadastro Doador"
         })
 }
 }
