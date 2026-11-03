@@ -20,7 +20,7 @@ async function logarDoador(req,res) {
    const {nome,senha} = req.body
     const nomeNormalizado = (nome || "").trim()
     const erros = []
-    if (!nomeNormalizado) erros.push("Informe o email.")
+    if (!nomeNormalizado) erros.push("Informe o nome.")
     if (!senha) erros.push("Informe a senha.")
 
     if (erros.length) {
@@ -34,15 +34,6 @@ async function logarDoador(req,res) {
     }
     try {
         const doador = await doadorDAO.buscarPorNome(nomeNormalizado)
-        const senhaReal = await bcrypt.compare(senha,doador.senha_hash)
-
-        //Sessão no Supabase
-        req.session.userID = doador.id_doador
-        req.session.userName = doador.nome
-        req.session.userType = "doador"
-        return res.redirect("doador_logado")
-    }
-    catch(err) {
         if (!doador) {
             return res.status(400).render("login_doador", {
                 layout: "auth",
@@ -51,9 +42,10 @@ async function logarDoador(req,res) {
                 title: "Login Doador"
 
             })
-        
         }
-        if (!senhaValida) {
+        const senhaReal = await bcrypt.compare(senha,doador.senha_hash)
+        
+        if (!senhaReal) {
             return res.status(400).render("login_doador", {
                 layout: "auth",
                 erros: ["Email ou senha incorretos."],
@@ -61,6 +53,15 @@ async function logarDoador(req,res) {
                 title: "Login Doador"
             })
         }
+
+        //Sessão no Supabase
+        req.session.userID = doador.id_doador
+        req.session.userName = doador.nome
+        req.session.userType = "doador"
+        return res.redirect("/usuario")
+    }
+    catch(err) {
+        
 
         res.status(500).render("cadastro_doador", {
             layout: "auth",
