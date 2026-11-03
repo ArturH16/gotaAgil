@@ -48,7 +48,7 @@ async function logarDoador(req,res) {
         if (!senhaReal) {
             return res.status(400).render("login_doador", {
                 layout: "auth",
-                erros: ["Email ou senha incorretos."],
+                erros: ["Nome ou senha incorretos."],
                 dados: req.body,
                 title: "Login Doador"
             })
