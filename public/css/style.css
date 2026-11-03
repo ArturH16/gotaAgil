@@ -1,9 +1,9 @@
 @charset "UTF-8";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
 * {
     padding: 0px;
     margin: 0px;
 }
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
 
 body, header, button, a {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
@@ -11,6 +11,12 @@ body, header, button, a {
 
 html {
   scroll-behavior: smooth;
+}
+
+header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 }
 
 /* === Nav e Footer (compartilhados em todas as páginas) === */
@@ -86,7 +92,26 @@ nav a {
 }
 
 .formCadastro {
-   text-align: justify;
+    text-align: left;
+}
+
+.formCadastro label {
+    display: block;
+    margin-bottom: 14px;
+    font-weight: 700;
+}
+
+.formCadastro label input,
+.formCadastro label select {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    margin: 6px 0 0;
+}
+
+.listaErros {
+    color: #C14025;
+    margin: 10px;
 }
 
 .btn-escolha {
@@ -108,9 +133,6 @@ nav a {
     margin: 6px;
 }
 
-select {
-    margin: 12px;
-}
 
 /* === Boas-vindas: usado na home do doador e do hemocentro === */
 #boasVindas {
@@ -301,6 +323,10 @@ select {
     border-radius: 6px;
     border: 1px solid #ccc;
     margin-left: 8px;
+    margin: 12px;
+}
+select#tipoSanguineo {
+    width: 76%;
 }
 
 .linkSecundario {
