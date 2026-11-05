@@ -17,10 +17,10 @@ function exibirLoginDoador(req,res) {
 }
 
 async function logarDoador(req,res) {
-   const {nome,senha} = req.body
-    const nomeNormalizado = (nome || "").trim()
+   const {email,senha} = req.body
+    const emailNormalizado = (email || "").trim().toLowerCase()
     const erros = []
-    if (!nomeNormalizado) erros.push("Informe o nome.")
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailNormalizado)) erros.push("E-mail inválido.");
     if (!senha) erros.push("Informe a senha.")
 
     if (erros.length) {
@@ -33,7 +33,7 @@ async function logarDoador(req,res) {
         })
     }
     try {
-        const doador = await doadorDAO.buscarPorNome(nomeNormalizado)
+        const doador = await doadorDAO.buscarPorEmail(emailNormalizado)
         if (!doador) {
             return res.status(400).render("login_doador", {
                 layout: "auth",
@@ -48,7 +48,7 @@ async function logarDoador(req,res) {
         if (!senhaReal) {
             return res.status(400).render("login_doador", {
                 layout: "auth",
-                erros: ["Nome ou senha incorretos."],
+                erros: ["Email ou senha incorretos."],
                 dados: req.body,
                 title: "Login Doador"
             })
