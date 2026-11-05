@@ -20,8 +20,6 @@ function exibirCadastroDoador(req,res) {
 async function cadastrarDoador(req,res) {
     const hoje = new Date()
     const limite = new Date(hoje.getFullYear() - 16, hoje.getMonth(), hoje.getDate())
-    console.log(limite)
-    console.log(req.body.dataNascimento)
     const { nome, email, senha, tipoSanguineo, cpf, peso, cidade, estado, dataNascimento} = req.body
     const nomeNormalizado = (nome || "").trim()
     const emailNormalizado = (email || "").trim().toLowerCase()
