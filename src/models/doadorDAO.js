@@ -14,13 +14,14 @@ class doadorDAO {
       const rows = await pool.query(sql,valores)
         
     }
+    //buscar por email
 
-    static async buscarPorNome(nome_) {
+    static async buscarPorEmail(email_) {
       const sql = `SELECT id_doador, nome, email, senha_hash, tipo_sanguineo, cidade, estado 
                   FROM tb_doador 
-                  WHERE nome = $1`
-      const nome = [nome_]
-      const result = await pool.query(sql, nome)
+                  WHERE email = $1`
+      const email = [email_]
+      const result = await pool.query(sql, email)
       return result.rows[0] || null;
 }
 
