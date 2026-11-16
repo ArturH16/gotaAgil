@@ -78,10 +78,19 @@ function logarHemocentro(req,res) {
         title: "Login  Hemocentro"
     })
 }
+function logout(req, res) {
+    const tipo = req.session.userType
+    req.session.destroy((err) => {
+        if (err) console.error(err)
+        res.clearCookie("connect.sid")
+        res.redirect(tipo ? `/login/${tipo}` : "/")
+    })
+}
 
 module.exports = {
     exibirLoginDoador,
     logarGeral,
     logarDoador,
-    logarHemocentro
+    logarHemocentro,
+    logout
 }

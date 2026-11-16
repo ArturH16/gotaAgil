@@ -13,6 +13,7 @@ const loginRouter = require("./routes/login")
 const homeRouter = require("./routes/home")
 const usuarioRouter = require("./routes/usuario")
 const hemocentroRouter = require("./routes/hemocentro")
+const { exigeLogin } = require("./middlewares/auth")
 //Configurações Padrões
     //Template Engine
     app.engine("handlebars",engine({defaultLayout: "main",
@@ -40,14 +41,23 @@ app.use(session({
         secure: false
     }
 }))
+//logout
+app.post("/logout", loginController.logout)
+app.use((req, res, next) => {
+    res.locals.userName = req.session.userName
+    res.locals.loggedInDoador = req.session.userType === "doador"
+    res.locals.loggedInHemocentro = req.session.userType === "hemocentro"
+    res.locals.loggedInAdmin = req.session.userType === "admin"
+    next()
+})
 
 
 //Rotas
     app.use("/cadastro",cadastroRouter)
     app.use("/login",loginRouter)
     app.use("/home",homeRouter)
-    app.use("/usuario",usuarioRouter)
-    app.use("/hemocentro",hemocentroRouter)
+    app.use("/usuario",exigeLogin("doador"),usuarioRouter)
+    app.use("/hemocentro",exigeLogin("hemocentro"),hemocentroRouter)
 
 
     app.listen(PORT,()=> {
