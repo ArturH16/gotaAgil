@@ -1,3 +1,5 @@
+const doadorDAO = require("../models/doadorDAO")
+
 function logar(req,res) {
     res.render("doador_logado", {
         title: "Início",
@@ -5,25 +7,32 @@ function logar(req,res) {
     })
 }
 
-function mostrarPerfil(req,res) {
-    const usuarioMockado =
-    {
-        loggedInDoador: true,
-        title: "Meu Perfil",
-        cssExtra: "perfil",
-        doador: {
-            nome: "Artur Silva",
-            iniciais: "AS",
-            email: "artur@email.com",
-            tipoSanguineo: "O-",
-            cpfMascarado: "***.***.789-00",
-            dataNascimento: "15/03/2000",
-            peso: 72,
-            cidade: "Fortaleza",
-            estado: "CE"
-        }
+async function mostrarPerfil(req,res) {
+    try {
+    const doador = await doadorDAO.buscarPorId(req.session.userID)
+    if (!doador) {
+        return req.session.destroy(() => res.redirect("/login/doador"))
     }
-    res.render("perfil_doador", usuarioMockado)
+    res.render("perfil_doador", {
+    title: "Meu Perfil",
+    cssExtra: "perfil",
+    doador: {
+        nome: doador.nome,
+        iniciais: doador.nome.split(" ").filter(Boolean).slice(0, 2).map(p => p[0]).join("").toUpperCase(),
+        email: doador.email,
+        tipoSanguineo: doador.tipo_sanguineo,
+        cpfMascarado: `***.***.${doador.cpf.slice(6, 9)}-${doador.cpf.slice(9)}`,
+        dataNascimento: doador.data_nascimento.toLocaleDateString("pt-BR"),
+        peso: doador.peso,
+        cidade: doador.cidade,
+        estado: doador.estado
+    } 
+    }) 
+} catch(err) {
+    console.log(err)
+    res.status(500).send("Erro ao carregar o perfil.")
+}
+
 }
 
 function mostrarCampanha(req,res) {

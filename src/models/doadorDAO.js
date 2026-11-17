@@ -28,7 +28,10 @@ class doadorDAO {
 //buscar por id
 
   static async buscarPorId(id_) {
-    const sql = `SELECT id_doador, nome, tipo_sanguineo,cpf, data_nascimento, peso, cidade, estado`
+    const sql = `SELECT id_doador, nome, email, tipo_sanguineo,cpf, data_nascimento, peso, cidade, estado
+    FROM tb_doador
+    WHERE id_doador = $1`
+    const id = id_
     const {rows } = await pool.query(sql,[id])
     return rows[0] || null
   }
