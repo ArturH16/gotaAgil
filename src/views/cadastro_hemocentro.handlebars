@@ -1,19 +1,19 @@
 <h2 style="margin-bottom: 16px;">Seja bem vindo, Hemocentro!</h2>
-<form action="" style="background-color: white; padding: 20px; border-radius: 6px;">
+<form action="" style="background-color: white; padding: 20px; border-radius: 6px;" class="formCadastro">
     
-    <label for="nome"><strong>Nome:</strong> <input class="perfilCampo" type="text" name="nome" placeholder="Digite seu nome..." id="nome"></label>
+    <label for="nome"><strong>Nome:</strong> <input class="perfilCampo" type="text" name="nome" placeholder="Digite seu nome..." id="nome" required></label>
     
-     <label for="email"><strong>Email:</strong> <input class="perfilCampo" type="email" name="email" placeholder="Digite seu email..." id="email"></label>
+     <label for="email"><strong>Email:</strong> <input class="perfilCampo" type="email" name="email" placeholder="Digite seu email..." id="email" required></label>
 
-     <label for="senhaHash"><strong>Senha:</strong> <input class="perfilCampo" type="password" name="senhaHash" placeholder="Defina sua senha..." id="senhaHash"></label> 
+     <label for="senhaHash"><strong>Senha:</strong> <input class="perfilCampo" type="password" name="senhaHash" placeholder="Defina sua senha..." id="senhaHash" minlength="8" maxlength="16" required></label> 
 
-     <label for="codigoCnes"><strong>Código CNES</strong>: <input class="perfilCampo" type="number" name="codigoCnes" placeholder="Digite o código CNES..." id="codigoCnes"></label>
+     <label for="codigoCnes"><strong>Código CNES</strong>: <input class="perfilCampo" type="number" name="codigoCnes" placeholder="Digite o código CNES..." id="codigoCnes" required></label>
      
-     <label for="cnpj"><strong>CNPJ:</strong> <input class="perfilCampo" type="text" name="cnpj" placeholder="Sem traços e pontos" id="cnpj"></label> 
+     <label for="cnpj"><strong>CNPJ:</strong> <input class="perfilCampo" type="text" name="cnpj" placeholder="Sem traços e pontos" id="cnpj" required></label> 
     
-    <label for="estado">
-        <strong>Estado: </strong>
-         <select name="estado" id="estado">
+    <label for="estado"> 
+        <strong>Estado: </strong> </label>
+         <select name="estado" id="estado" required>
             <option value="AC">Acre</option>
             <option value="AP">Amapá</option>
             <option value="AM">Amazonas</option>
@@ -41,17 +41,44 @@
             <option value="RS">Rio Grande do Sul</option>
             <option value="SC">Santa Catarina</option>
          </select>
-     </label>
+    
 
-     <label for="cidade"><strong>Cidade:</strong> <input class="perfilCampo" type="text" name="cidade" placeholder="Digite sua cidade..." id="cidade"></label> 
+     <label for="cidade"><strong>Cidade:</strong> <input class="perfilCampo" type="text" name="cidade" placeholder="Digite sua cidade..." id="cidade" required></label> 
 
-    <label for="bairro"><strong>Bairro:</strong> <input class="perfilCampo" type="text" name="bairro" placeholder="Digite o bairro..." id="bairro"></label>
+    <label for="bairro"><strong>Bairro:</strong> <input class="perfilCampo" type="text" name="bairro" placeholder="Digite o bairro..." id="bairro" required></label>
 
-     <label for="logradouro"><strong>Logradouro: </strong><input class="perfilCampo" type="text" name="logradouro" placeholder="Digite o logradouro..." id="logradouro"></label>
+     <label for="logradouro"><strong>Logradouro: </strong><input class="perfilCampo" type="text" name="logradouro" placeholder="Digite o logradouro..." id="logradouro" required></label>
      
-     <label for="numero"><strong>Número:</strong> <input class="perfilCampo" type="text" name="numero" placeholder="Digite o número do endereço...." id="numero"></label>
+     <label for="numero"><strong>Número:</strong> <input class="perfilCampo" type="text" name="numero" placeholder="Digite o número do endereço...." id="numero" required></label>
 
-     <p style="margin-bottom: 20px"><strong>CEP:</strong> <input class="perfilCampo" type="text" name="cep" placeholder="Digite o CEP...." id="cep"></label>
+     <label style="margin-bottom: 20px"><strong>CEP:</strong> <input class="perfilCampo" type="text" name="cep" placeholder="Digite o CEP...." id="cep" required></label>
+
+    <div class="secao-contatos">
+        <strong class="titulo-secao">Canais de Atendimento ao Doador:</strong>
+        
+        <div id="lista-contatos">
+            <div class="contato-item">
+                <select name="contatoTipo[]" class="perfilCampo select-tipo" onchange="atualizarCampoContato(this)">
+                    <option value="whatsapp">WhatsApp</option>
+                    <option value="telefone">Telefone Fixo</option>
+                    <option value="0800">0800</option>
+                    <option value="email">E-mail de Atendimento</option>
+                    <option value="instagram">Instagram</option>
+                </select>
+
+                <input class="perfilCampo input-contato" type="tel" name="contatoValor[]" placeholder="(00) 00000-0000" required>
+
+                <button type="button" class="btn-remover oculto" onclick="removerContato(this)" title="Remover contato">
+                    X
+                </button>
+            </div>
+        </div>
+
+        <button type="button" class="btn-adicionar" onclick="adicionarContato()">
+            + Adicionar outro contato
+        </button>
+    </div>
+    
 
      <button style="background-color: #059669; color: white; 
      margin: auto; display: block; padding: 10px; border-radius: 6px" type="submit">Cadastrar-se!</button>
