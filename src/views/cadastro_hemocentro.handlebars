@@ -58,7 +58,7 @@
         
         <div id="lista-contatos">
             <div class="contato-item">
-                <select name="contatoTipo[]" class="perfilCampo select-tipo" onchange="atualizarCampoContato(this)">
+                <select name="contatoTipo[]" class="perfilCampo select-tipo"/>
                     <option value="whatsapp">WhatsApp</option>
                     <option value="telefone">Telefone Fixo</option>
                     <option value="0800">0800</option>
@@ -68,13 +68,13 @@
 
                 <input class="perfilCampo input-contato" type="tel" name="contatoValor[]" placeholder="(00) 00000-0000" required>
 
-                <button type="button" class="btn-remover oculto" onclick="removerContato(this)" title="Remover contato">
+                <button type="button" class="btn-remover oculto" title="Remover contato">
                     X
                 </button>
             </div>
         </div>
 
-        <button type="button" class="btn-adicionar" onclick="adicionarContato()">
+        <button type="button" class="btn-adicionar">
             + Adicionar outro contato
         </button>
     </div>
