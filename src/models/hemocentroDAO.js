@@ -7,6 +7,26 @@ class hemocentroDAO {
         RETURNING id_hemocentro,nome, email,codigo_cnes, cidade, estado`
         const valores = [nome,codigoCnes,senhaHash,email,cnpj,cidade,estado,logradouro,numero,cep,bairro]
         const rows = await pool.query(sql,valores) 
-    } 
+    }
+
+    static async buscarPorEmail(email_) {
+        const sql = `SELECT id_hemocentro, nome,codigo_cnes,email, senha_hash, cidade, estado 
+        FROM tb_doador 
+        WHERE email = $1`
+        const email = email_
+        const result = await pool.query(sql, email)
+      return result.rows[0] || null;
+    }
+
+    static async buscarPorId(id_) {
+        const sql = `SELECT id_hemocentro, nome,codigo_cnes,email,cnpj,cidade, estado,logradouro,numero,cep,bairro
+    FROM tb_doador
+    WHERE id_doador = $1`
+    const id = id_
+    const {rows} = await pool.query(sql,[id])
+    return rows[0] || null
+    }
 
 }
+
+module.exports = hemocentroDAO
