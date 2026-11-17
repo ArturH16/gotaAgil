@@ -83,16 +83,35 @@ async function cadastrarDoador(req,res) {
 }
 }
 
-function cadastrarHemocentro(req,res) {
+function exibirCadastroHemocentro(req,res) {
     res.render("cadastro_hemocentro", {
         layout: "auth",
         title: "Cadastro Hemocentro"
     })
 }
 
+async function cadastrarHemocentro(req,res) {
+    const {nome,email,senhaHash,codigoCnes,cnpj,estado,cidade,bairro,logradouro,numero,cep,contatos} = req.body
+    const nomeNormalizado = (nome || "").trim()
+    const emailNormalizado = (email || "").trim().toLowerCase()
+    const erros = []
+    if (!nomeNormalizado) erros.push("Informe o nome.")
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailNormalizado)) erros.push("E-mail inválido.");
+    if (!req.body.senha || req.body.senha.length < 8) erros.push("A senha precisa de pelo menos 8 caracteres.")
+    if (erros.length) {
+        req.body.senha = ""
+        return res.status(400).render("cadastro_hemocentro", {
+            layout: "auth",
+            erros,
+            dados: req.body,
+            title: "Cadastro Hemocentro"
+        })
+    }
+}
+
 module.exports = {
     cadastrarGeral,
     exibirCadastroDoador,
     cadastrarDoador,
-    cadastrarHemocentro
+    exibirCadastroHemocentro
 }
