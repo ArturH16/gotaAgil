@@ -14,6 +14,7 @@ const homeRouter = require("./routes/home")
 const usuarioRouter = require("./routes/usuario")
 const hemocentroRouter = require("./routes/hemocentro")
 const { exigeLogin } = require("./middlewares/auth")
+const loginController = require("./controllers/loginController")
 //Configurações Padrões
     //Template Engine
     app.engine("handlebars",engine({defaultLayout: "main",
