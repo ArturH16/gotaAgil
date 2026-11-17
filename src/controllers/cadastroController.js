@@ -91,7 +91,13 @@ function exibirCadastroHemocentro(req,res) {
 }
 
 async function cadastrarHemocentro(req,res) {
-    const {nome,email,senhaHash,codigoCnes,cnpj,estado,cidade,bairro,logradouro,numero,cep,contatos} = req.body
+    const {nome,email,senhaHash,codigoCnes,cnpj,estado,cidade,bairro,logradouro,numero,cep,contatoTipo,contatoValor} = req.body
+    const tipos = [].concat(req.body.contatoTipo || [])
+    const valores = [].concat(req.body.contatoValor || [])
+    const contatos = tipos.map((tipo,i) => ( {
+        tipo,
+        valor: (valores[i] || "").trim()
+    }))
     const nomeNormalizado = (nome || "").trim()
     const emailNormalizado = (email || "").trim().toLowerCase()
     const erros = []

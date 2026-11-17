@@ -1,15 +1,23 @@
 <h2 style="margin-bottom: 16px;">Seja bem vindo, Hemocentro!</h2>
+
+{{#if erros}}
+  <ul class="listaErros">
+    {{#each erros}}
+      <li>{{this}}</li>
+    {{/each}}
+  </ul>
+{{/if}}
+
 <form action="/cadastro/hemocentro" style="background-color: white; padding: 20px; border-radius: 6px;" class="formCadastro" method="post">
+    <label for="nome"><strong>Nome:</strong> <input class="perfilCampo" type="text" name="nome" placeholder="Digite seu nome..." id="nome" required value="{{dados.nome}}"></label>
     
-    <label for="nome"><strong>Nome:</strong> <input class="perfilCampo" type="text" name="nome" placeholder="Digite seu nome..." id="nome" required></label>
-    
-     <label for="email"><strong>Email:</strong> <input class="perfilCampo" type="email" name="email" placeholder="Digite seu email..." id="email" required></label>
+     <label for="email"><strong>Email:</strong> <input class="perfilCampo" type="email" name="email" placeholder="Digite seu email..." id="email" required value="{{dados.email}}"></label>
 
      <label for="senhaHash"><strong>Senha:</strong> <input class="perfilCampo" type="password" name="senhaHash" placeholder="Defina sua senha..." id="senhaHash" minlength="8" maxlength="16" required></label> 
 
-     <label for="codigoCnes"><strong>Código CNES</strong>: <input class="perfilCampo" type="number" name="codigoCnes" placeholder="Digite o código CNES..." id="codigoCnes" required></label>
+     <label for="codigoCnes"><strong>Código CNES</strong>: <input class="perfilCampo" type="number" name="codigoCnes" placeholder="Digite o código CNES..." id="codigoCnes" required value="{{dados.codigoCnes}}"></label>
      
-     <label for="cnpj"><strong>CNPJ:</strong> <input class="perfilCampo" type="text" name="cnpj" placeholder="Sem traços e pontos" id="cnpj" required></label> 
+     <label for="cnpj"><strong>CNPJ:</strong> <input class="perfilCampo" type="text" name="cnpj" placeholder="Sem traços e pontos" id="cnpj" required value="{{dados.cnpj}}"></label> 
     
     <label for="estado"> 
         <strong>Estado: </strong> </label>
@@ -43,15 +51,15 @@
          </select>
     
 
-     <label for="cidade"><strong>Cidade:</strong> <input class="perfilCampo" type="text" name="cidade" placeholder="Digite sua cidade..." id="cidade" required></label> 
+     <label for="cidade"><strong>Cidade:</strong> <input class="perfilCampo" type="text" name="cidade" placeholder="Digite sua cidade..." id="cidade" required value="{{dados.cidade}}"></label> 
 
-    <label for="bairro"><strong>Bairro:</strong> <input class="perfilCampo" type="text" name="bairro" placeholder="Digite o bairro..." id="bairro" required></label>
+    <label for="bairro"><strong>Bairro:</strong> <input class="perfilCampo" type="text" name="bairro" placeholder="Digite o bairro..." id="bairro" required value="{{dados.cidade}}"></label>
 
-     <label for="logradouro"><strong>Logradouro: </strong><input class="perfilCampo" type="text" name="logradouro" placeholder="Digite o logradouro..." id="logradouro" required></label>
+     <label for="logradouro"><strong>Logradouro: </strong><input class="perfilCampo" type="text" name="logradouro" placeholder="Digite o logradouro..." id="logradouro" required value="{{dados.logradouro}}"></label>
      
-     <label for="numero"><strong>Número:</strong> <input class="perfilCampo" type="text" name="numero" placeholder="Digite o número do endereço...." id="numero" required></label>
+     <label for="numero"><strong>Número:</strong> <input class="perfilCampo" type="text" name="numero" placeholder="Digite o número do endereço...." id="numero" required value="{{dados.numero}}"></label>
 
-     <label style="margin-bottom: 20px"><strong>CEP:</strong> <input class="perfilCampo" type="text" name="cep" placeholder="Digite o CEP...." id="cep" required></label>
+     <label style="margin-bottom: 20px"><strong>CEP:</strong> <input class="perfilCampo" type="text" name="cep" placeholder="Digite o CEP...." id="cep" required value="{{dados.cep}}"></label>
 
     <div class="secao-contatos">
         <strong class="titulo-secao">Canais de Atendimento ao Doador:</strong>
@@ -66,7 +74,7 @@
                     <option value="instagram">Instagram</option>
                 </select>
 
-                <input class="perfilCampo input-contato" type="tel" name="contatoValor[]" placeholder="(00) 00000-0000" required>
+                <input class="perfilCampo input-contato" type="text" name="contatoValor[]" placeholder="(00) 00000-0000" required>
 
                 <button type="button" class="btn-remover oculto" title="Remover contato">
                     X
