@@ -1,7 +1,6 @@
 function logar(req,res) {
     res.render("doador_logado", {
         title: "Início",
-        loggedInDoador: true,
         nomeDoador: "Artur",
         cssExtra: "homepageDoador"
     })

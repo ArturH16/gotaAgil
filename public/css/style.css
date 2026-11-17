@@ -71,6 +71,20 @@ nav a {
     color: #CA4325;
 }
 
+.navLinksLogado form {
+    display: flex;
+    margin: 0;
+}
+
+.navLinksLogado button {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    color: #CA4325;
+    display: flex;
+}
+
 /* === Autenticação: usado em escolha, cadastro doador/hemocentro e login === */
 #boxCadastroGeral {
     display: flex;
