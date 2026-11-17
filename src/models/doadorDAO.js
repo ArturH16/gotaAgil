@@ -25,6 +25,14 @@ class doadorDAO {
       return result.rows[0] || null;
 }
 
+//buscar por id
+
+  static async buscarPorId(id_) {
+    const sql = `SELECT id_doador, nome, tipo_sanguineo,cpf, data_nascimento, peso, cidade, estado`
+    const {rows } = await pool.query(sql,[id])
+    return rows[0] || null
+  }
+
 }
 
 module.exports = doadorDAO
