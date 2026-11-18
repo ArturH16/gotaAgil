@@ -87,6 +87,8 @@ function logout(req, res) {
     })
 }
 
+
+
 module.exports = {
     exibirLoginDoador,
     logarGeral,
