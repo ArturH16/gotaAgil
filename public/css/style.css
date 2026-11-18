@@ -147,6 +147,93 @@ nav a {
     margin: 6px;
 }
 
+.secao-contatos {
+    margin-top: 20px;
+    margin-bottom: 24px;
+    border-top: 1px solid #e5e7eb;
+    padding-top: 16px;
+}
+
+.titulo-secao {
+    display: block;
+    margin-bottom: 12px;
+}
+
+.contato-item {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 10px;
+    align-items: stretch;
+}
+
+.contato-item select.select-tipo {
+    margin: 0;
+    width: auto;
+    min-width: 145px;
+    flex-shrink: 0;
+}
+
+.contato-item input.input-contato {
+    margin: 0;
+    flex: 1;
+    min-width: 0;
+}
+
+
+.oculto {
+    display: none;
+}
+
+.btn-remover {
+    background-color: #dc2626;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 0 14px;
+    cursor: pointer;
+    font-weight: bold;
+    flex-shrink: 0;
+    transition: background-color 0.2s;
+}
+
+.btn-remover:hover {
+    background-color: #b91c1c;
+}
+
+.btn-adicionar {
+    background-color: #e5e7eb;
+    color: #1f2937;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    margin-top: 4px;
+    transition: background-color 0.2s;
+}
+
+.btn-adicionar:hover {
+    background-color: #d1d5db;
+}
+
+.btn-submit {
+    background-color: #059669;
+    color: white;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    display: block;
+    margin: 0 auto;
+    transition: background-color 0.2s;
+}
+
+.btn-submit:hover {
+    background-color: #047857;
+}
+
+
 
 /* === Boas-vindas: usado na home do doador e do hemocentro === */
 #boasVindas {

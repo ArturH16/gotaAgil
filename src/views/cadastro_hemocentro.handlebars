@@ -1,58 +1,86 @@
 <h2 style="margin-bottom: 16px;">Seja bem vindo, Hemocentro!</h2>
-<form action="" style="background-color: white; padding: 20px; border-radius: 6px;">
-    
-    <p><strong>Nome:</strong> <input class="perfilCampo" type="text" name="nome" placeholder="Digite seu nome..."></p>
-    
-     <p><strong>Email:</strong> <input class="perfilCampo" type="email" name="email" placeholder="Digite seu email..."></p>
 
-     <p><strong>Senha:</strong> <input class="perfilCampo" type="password" name="senha_hash" placeholder="Defina sua senha..."></p> 
+{{#if erros}}
+  <ul class="listaErros">
+    {{#each erros}}
+      <li>{{this}}</li>
+    {{/each}}
+  </ul>
+{{/if}}
 
-     <p><strong>Código CNES</strong>: <input class="perfilCampo" type="number" name="codigo_cnes" placeholder="Digite o código CNES..."></p>
+<form action="/cadastro/hemocentro" style="background-color: white; padding: 20px; border-radius: 6px;" class="formCadastro" method="post">
+    <label for="nome"><strong>Nome:</strong> <input class="perfilCampo" type="text" name="nome" placeholder="Digite seu nome..." id="nome" required value="{{dados.nome}}"></label>
+    
+     <label for="email"><strong>Email:</strong> <input class="perfilCampo" type="email" name="email" placeholder="Digite seu email..." id="email" required value="{{dados.email}}"></label>
+
+     <label for="senha"><strong>Senha:</strong> <input class="perfilCampo" type="password" name="senha" placeholder="Defina sua senha..." id="senha" minlength="8" maxlength="16" required></label> 
+
+     <label for="codigoCnes"><strong>Código CNES</strong>: <input class="perfilCampo" type="number" name="codigoCnes" placeholder="Digite o código CNES..." id="codigoCnes" maxlength="7" required value="{{dados.codigoCnes}}"></label>
      
-     <p><strong>CNPJ:</strong> <input class="perfilCampo" type="text" name="cnpj" placeholder="Sem traços e pontos"></p> 
+     <label for="cnpj"><strong>CNPJ:</strong> <input class="perfilCampo" type="text" name="cnpj" placeholder="Sem traços e pontos" id="cnpj" required value="{{dados.cnpj}}"></label> 
     
-    <p>
-        <strong>Estado: </strong>
-         <select name="estado" id="">
-            <option value="AC">Acre</option>
-            <option value="AP">Amapá</option>
-            <option value="AM">Amazonas</option>
-            <option value="PA">Pará</option>
-            <option value="RO">Rondônia</option>
-            <option value="RR">Roraima</option>
-            <option value="TO">Tocatins</option>
-            <option value="AL">Alagoas</option>
-            <option value="BA">Bahia</option><option value="CE">Ceará</option>
-            <option value="MA">Maranhão</option>
-            <option value="PB">Paraíba</option>
-            <option value="PE">Pernambuco</option>
-            <option value="PI">Piauí</option>
-            <option value="RN">Rio Grande do Norte</option>
-            <option value="SE">Sergipe</option>
-            <option value="DF">Distrito Federal</option>
-            <option value="GO">Goiás</option>
-            <option value="MT">Mato Grosso</option>
-            <option value="MS">Mato Grosso do Sul</option>
-            <option value="ES">Espírito Santo</option>
-            <option value="MG">Minas Gerais</option>
-            <option value="RJ">Rio de Janeiro</option>
-            <option value="SP">São Paulo</option>
-            <option value="PR">Paraná</option>
-            <option value="RS">Rio Grande do Sul</option>
-            <option value="SC">Santa Catarina</option>
+    <label for="estado"> 
+        <strong>Estado: </strong> </label>
+         <select name="estado" id="estado" required>
+            <option {{selecionado dados.estado "AC"}} value="AC" >Acre</option>
+            <option {{selecionado dados.estado "AP"}} value="AP">Amapá</option>
+            <option {{selecionado dados.estado "AM"}} value="AM">Amazonas</option>
+            <option {{selecionado dados.estado "PA"}} value="PA">Pará</option>
+            <option {{selecionado dados.estado "RO"}} value="RO">Rondônia</option>
+            <option {{selecionado dados.estado "RR"}} value="RR">Roraima</option>
+            <option {{selecionado dados.estado "TO"}} value="TO">Tocantins</option>
+            <option {{selecionado dados.estado "AL"}} value="AL">Alagoas</option>
+            <option {{selecionado dados.estado "BA"}} value="BA">Bahia</option><option {{selecionado dados.estado "CE"}} value="CE">Ceará</option>
+            <option {{selecionado dados.estado "MA"}} value="MA">Maranhão</option>
+            <option {{selecionado dados.estado "PB"}} value="PB">Paraíba</option>
+            <option {{selecionado dados.estado "PE"}} value="PE">Pernambuco</option>
+            <option {{selecionado dados.estado "PI"}} value="PI">Piauí</option>
+            <option {{selecionado dados.estado "RN"}} value="RN">Rio Grande do Norte</option>
+            <option {{selecionado dados.estado "SE"}} value="SE">Sergipe</option>
+            <option {{selecionado dados.estado "DF"}} value="DF">Distrito Federal</option>
+            <option {{selecionado dados.estado "GO"}} value="GO">Goiás</option>
+            <option {{selecionado dados.estado "MT"}} value="MT">Mato Grosso</option>
+            <option {{selecionado dados.estado "MS"}} value="MS">Mato Grosso do Sul</option>
+            <option {{selecionado dados.estado "ES"}} value="ES">Espírito Santo</option>
+            <option {{selecionado dados.estado "MG"}} value="MG">Minas Gerais</option>
+            <option {{selecionado dados.estado "RJ"}} value="RJ">Rio de Janeiro</option>
+            <option {{selecionado dados.estado "SP"}} value="SP">São Paulo</option>
+            <option {{selecionado dados.estado "PR"}} value="PR">Paraná</option>
+            <option {{selecionado dados.estado "RS"}} value="RS">Rio Grande do Sul</option>
+            <option {{selecionado dados.estado "SC"}} value="SC">Santa Catarina</option>
          </select>
-     </p>
+    
 
-     <p><strong>Cidade:</strong> <input class="perfilCampo" type="text" name="cidade" placeholder="Digite sua cidade..."></p> 
+     <label for="cidade"><strong>Cidade:</strong> <input class="perfilCampo" type="text" name="cidade" placeholder="Digite sua cidade..." id="cidade" required value="{{dados.cidade}}"></label> 
 
-    <p><strong>Bairro:</strong> <input class="perfilCampo" type="text" name="bairro" placeholder="Digite o bairro..."></p>
+    <label for="bairro"><strong>Bairro:</strong> <input class="perfilCampo" type="text" name="bairro" placeholder="Digite o bairro..." id="bairro" required value="{{dados.cidade}}"></label>
 
-     <p><strong>Logradouro: </strong><input class="perfilCampo" type="text" name="logradouro" placeholder="Digite o logradouro..."></p>
+     <label for="logradouro"><strong>Logradouro: </strong><input class="perfilCampo" type="text" name="logradouro" placeholder="Digite o logradouro..." id="logradouro" required value="{{dados.logradouro}}"></label>
      
-     <p><strong>Número:</strong> <input class="perfilCampo" type="text" name="numero" placeholder="Digite o número do endereço...."></p>
+     <label for="numero"><strong>Número:</strong> <input class="perfilCampo" type="text" name="numero" placeholder="Digite o número do endereço...." id="numero" required value="{{dados.numero}}"></label>
 
-     <p style="margin-bottom: 20px"><strong>CEP:</strong> <input class="perfilCampo" type="text" name="numero" placeholder="Digite o CEP...."></p>
+     <label style="margin-bottom: 20px"><strong>CEP:</strong> <input class="perfilCampo" type="text" name="cep" placeholder="Digite o CEP...." id="cep" maxlength="9" required value="{{dados.cep}}"></label>
+
+    <div class="secao-contatos">
+        <strong class="titulo-secao">Canais de Atendimento ao Doador:</strong>
+        
+        <div id="lista-contatos">
+            {{#each dados.contatos}}
+            {{> contatoItem}}
+        {{/each}}
+    </div>
+
+    <template id="modelo-contato">
+        {{> contatoItem tipo="whatsapp" valor=""}}
+    </template>
+
+        <button type="button" class="btn-adicionar">
+            + Adicionar outro contato
+        </button>
+    </div>
+    
 
      <button style="background-color: #059669; color: white; 
      margin: auto; display: block; padding: 10px; border-radius: 6px" type="submit">Cadastrar-se!</button>
 </form>
+<script src="/js/cadastroHemocentro.js"></script>

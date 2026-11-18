@@ -26,8 +26,10 @@ router.get("/doador",cadastroController.exibirCadastroDoador)
 //         title: "Cadastro Hemocentro"
 //     })
 // })
-router.post("/doador",cadastroController.cadastrarDoador)
+router.post("/doador",cadastroController.exibirCadastroDoador)
 
-router.get("/hemocentro",cadastroController.cadastrarHemocentro)
+router.get("/hemocentro",cadastroController.exibirCadastroHemocentro)
+
+router.post("/hemocentro",cadastroController.cadastrarHemocentro)
 
 module.exports = router
