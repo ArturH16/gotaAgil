@@ -18,6 +18,8 @@
      <label for="codigoCnes"><strong>Código CNES</strong>: <input class="perfilCampo" type="number" name="codigoCnes" placeholder="Digite o código CNES..." id="codigoCnes" maxlength="7" required value="{{dados.codigoCnes}}"></label>
      
      <label for="cnpj"><strong>CNPJ:</strong> <input class="perfilCampo" type="text" name="cnpj" placeholder="Sem traços e pontos" id="cnpj" required value="{{dados.cnpj}}"></label> 
+     <!--Acessibilidade Leitor de Tela para mudança no status do CNPJ -->
+     <small id="cnpj-status" aria-live="polite"></small>
     
     <label for="estado"> 
         <strong>Estado: </strong> </label>
@@ -84,3 +86,4 @@
      margin: auto; display: block; padding: 10px; border-radius: 6px" type="submit">Cadastrar-se!</button>
 </form>
 <script src="/js/cadastroHemocentro.js"></script>
+<script src="/js/consultaCnpj.js"></script>
