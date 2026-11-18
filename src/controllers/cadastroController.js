@@ -1,6 +1,6 @@
 const bcrypt = require("bcrypt")
 const doadorDAO = require("../models/doadorDAO")
-const { cpf: validadorCPF} = require("cpf-cnpj-validator")
+const { cpf: validadorCPF, cnpj: validadorCNPJ} = require("cpf-cnpj-validator")
 
 function cadastrarGeral(req,res) {
     res.render("cadastro", {
@@ -100,10 +100,13 @@ async function cadastrarHemocentro(req,res) {
     }))
     const nomeNormalizado = (nome || "").trim()
     const emailNormalizado = (email || "").trim().toLowerCase()
+    const cnpjNormalizado = (cnpj || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
     const erros = []
     if (!nomeNormalizado) erros.push("Informe o nome.")
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailNormalizado)) erros.push("E-mail inválido.");
     if (!req.body.senha || req.body.senha.length < 8) erros.push("A senha precisa de pelo menos 8 caracteres.")
+    if (!codigoCnes || codigoCnes.length < 7 || codigoCnes >= 16)
+    if (!validadorCNPJ.isValid(cnpjNormalizado)) erros.push("CNPJ inválido")
     if (erros.length) {
         req.body.senha = ""
         return res.status(400).render("cadastro_hemocentro", {
