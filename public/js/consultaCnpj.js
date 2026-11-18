@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
             // resposta atrasada: o campo mudou enquanto consultava
             if (campo.value.replace(/[^A-Za-z0-9]/g, "").toUpperCase() !== cnpj) return
 
-            if (resp.status === 404) { status.textContent = "CNPJ não encontrado na Receita."; return }
+            if (resp.status === 404) { status.textContent = "CNPJ não encontrado na Receita. Tente novamente."; return }
             if (!resp.ok) { status.textContent = "Não foi possível consultar agora."; return }
 
             const dados = await resp.json()
