@@ -20,6 +20,10 @@
      <label for="cnpj"><strong>CNPJ:</strong> <input class="perfilCampo" type="text" name="cnpj" placeholder="Sem traços e pontos" id="cnpj" required value="{{dados.cnpj}}"></label> 
      <!--Acessibilidade Leitor de Tela para mudança no status do CNPJ -->
      <small id="cnpj-status" aria-live="polite"></small>
+
+    <label style="margin-bottom: 20px"><strong>CEP:</strong> <input class="perfilCampo" type="text" name="cep" placeholder="Digite o CEP...." id="cep" maxlength="9" required value="{{dados.cep}}"></label>
+    <!--Acessibilidade Leitor de Tela para mudança no status do CEP -->
+    <small id="cep-status" aria-live="polite"></small>
     
     <label for="estado"> 
         <strong>Estado: </strong> </label>
@@ -61,7 +65,7 @@
      
      <label for="numero"><strong>Número:</strong> <input class="perfilCampo" type="text" name="numero" placeholder="Digite o número do endereço...." id="numero" required value="{{dados.numero}}"></label>
 
-     <label style="margin-bottom: 20px"><strong>CEP:</strong> <input class="perfilCampo" type="text" name="cep" placeholder="Digite o CEP...." id="cep" maxlength="9" required value="{{dados.cep}}"></label>
+
 
     <div class="secao-contatos">
         <strong class="titulo-secao">Canais de Atendimento ao Doador:</strong>
@@ -87,3 +91,4 @@
 </form>
 <script src="/js/cadastroHemocentro.js"></script>
 <script src="/js/consultaCnpj.js"></script>
+<script src="/js/consultaCep.js"></script>
