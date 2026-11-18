@@ -120,7 +120,6 @@ async function cadastrarHemocentro(req,res) {
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailNormalizado)) erros.push("E-mail inválido.");
     if (!/^\d{7}$/.test(codigoCnesNormalizado)) erros.push("Código CNES inválido.")
     if (!req.body.senha || req.body.senha.length < 8) erros.push("A senha precisa de pelo menos 8 caracteres.")
-    if (!codigoCnes || codigoCnes.length != 7) erros.push("Código CNES inválido")
     if (!validadorCNPJ.isValid(cnpjNormalizado)) erros.push("CNPJ inválido")
     if(!numeroNormalizado) erros.push("Informe o número do endereço do hemocentro.")
     if (!cepNormalizado || cepNormalizado.length !=8) erros.push("CEP inválido")
@@ -157,7 +156,9 @@ async function cadastrarHemocentro(req,res) {
                 : "Já existe um cadastro com esses dados."
 
             return renderErroHemocentro(req, res, 400, [msg], contatos)
-}
+        }
+        return renderErroHemocentro(req, res, 500, ["Erro interno. Tente novamente."], contatos)
+
 }
 }
 
