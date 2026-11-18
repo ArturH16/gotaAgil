@@ -1,6 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
     const listaContatos = document.getElementById('lista-contatos');
     const btnAdicionar = document.querySelector('.btn-adicionar');
+    const modelo = document.getElementById('modelo-contato');
+
 
    
     function atualizarCampoContato(select) {
@@ -23,36 +25,40 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // 1. Evento para adicionar nova linha
-    btnAdicionar.addEventListener('click', () => {
-        const primeiraLinha = listaContatos.querySelector('.contato-item');
-        const novaLinha = primeiraLinha.cloneNode(true);
+function atualizarBotoesRemover() {
+        const linhas = listaContatos.querySelectorAll('.contato-item');
+        linhas.forEach((linha) => {
+            linha.querySelector('.btn-remover')
+                .classList.toggle('oculto', linhas.length === 1);
+        });
+    }
+listaContatos.querySelectorAll('select[name="contatoTipo[]"]').forEach(atualizarCampoContato);
+atualizarBotoesRemover();
 
-        const select = novaLinha.querySelector('select');
-        select.value = 'whatsapp';
+
+// 1. Evento para adicionar nova linha
+btnAdicionar.addEventListener('click', () => {
+        const fragmento = modelo.content.cloneNode(true);
+        const select = fragmento.querySelector('select');
+        const input = fragmento.querySelector('input');
+
         atualizarCampoContato(select);
-
-        const input = novaLinha.querySelector('input');
-        input.value = '';
-
-        const btnRemover = novaLinha.querySelector('.btn-remover');
-        btnRemover.classList.remove('oculto');
-
-        listaContatos.appendChild(novaLinha);
+        listaContatos.appendChild(fragmento);
+        atualizarBotoesRemover();
         input.focus();
     });
 
-    listaContatos.addEventListener('change', (evento) => {
-        if (evento.target.matches('select[name="contatoTipo[]"]')) {
-            atualizarCampoContato(evento.target);
-        }
-    });
+listaContatos.addEventListener('change', (evento) => {
+if (evento.target.matches('select[name="contatoTipo[]"]')) {
+    atualizarCampoContato(evento.target);
+}
+});
 
 
-    listaContatos.addEventListener('click', (evento) => {
-        if (evento.target.matches('.btn-remover')) {
-            const linha = evento.target.closest('.contato-item');
-            linha.remove();
-        }
-    });
+listaContatos.addEventListener('click', (evento) => {
+if (evento.target.matches('.btn-remover')) {
+    const linha = evento.target.closest('.contato-item').remove();
+    atualizarBotoesRemover()
+}
+});
 });

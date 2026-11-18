@@ -65,22 +65,14 @@
         <strong class="titulo-secao">Canais de Atendimento ao Doador:</strong>
         
         <div id="lista-contatos">
-            <div class="contato-item">
-                <select name="contatoTipo[]" class="perfilCampo select-tipo"/>
-                    <option value="whatsapp">WhatsApp</option>
-                    <option value="telefone">Telefone Fixo</option>
-                    <option value="0800">0800</option>
-                    <option value="email">E-mail de Atendimento</option>
-                    <option value="instagram">Instagram</option>
-                </select>
+            {{#each dados.contatos}}
+            {{> contatoItem}}
+        {{/each}}
+    </div>
 
-                <input class="perfilCampo input-contato" type="text" name="contatoValor[]" placeholder="(00) 00000-0000" required>
-
-                <button type="button" class="btn-remover oculto" title="Remover contato">
-                    X
-                </button>
-            </div>
-        </div>
+    <template id="modelo-contato">
+        {{> contatoItem tipo="whatsapp" valor=""}}
+    </template>
 
         <button type="button" class="btn-adicionar">
             + Adicionar outro contato

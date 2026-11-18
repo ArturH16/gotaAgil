@@ -1,0 +1,11 @@
+<div class="contato-item">
+    <select name="contatoTipo[]" class="perfilCampo select-tipo">
+        <option value="whatsapp" {{selecionado tipo "whatsapp"}}>WhatsApp</option>
+        <option value="telefone" {{selecionado tipo "telefone"}}>Telefone Fixo</option>
+        <option value="0800" {{selecionado tipo "0800"}}>0800</option>
+        <option value="email" {{selecionado tipo "email"}}>E-mail de Atendimento</option>
+        <option value="instagram" {{selecionado tipo "instagram"}}>Instagram</option>
+    </select>
+    <input class="perfilCampo input-contato" type="text" name="contatoValor[]" value="{{valor}}" required>
+    <button type="button" class="btn-remover" title="Remover contato">X</button>
+</div>
