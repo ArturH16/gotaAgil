@@ -110,6 +110,7 @@ async function cadastrarHemocentro(req,res) {
     }))
     const nomeNormalizado = (nome || "").trim()
     const emailNormalizado = (email || "").trim().toLowerCase()
+    const codigoCnesNormalizado = (codigoCnes || "").replace(/\D/g, "")
     const cnpjNormalizado = (cnpj || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
     const numeroNormalizado = (numero || "").trim()
     const cepNormalizado = (cep || "").replace(/\D/g,"")
@@ -117,6 +118,7 @@ async function cadastrarHemocentro(req,res) {
     const erros = []
     if (!nomeNormalizado) erros.push("Informe o nome.")
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailNormalizado)) erros.push("E-mail inválido.");
+    if (!/^\d{7}$/.test(codigoCnesNormalizado)) erros.push("Código CNES inválido.")
     if (!req.body.senha || req.body.senha.length < 8) erros.push("A senha precisa de pelo menos 8 caracteres.")
     if (!codigoCnes || codigoCnes.length != 7) erros.push("Código CNES inválido")
     if (!validadorCNPJ.isValid(cnpjNormalizado)) erros.push("CNPJ inválido")
@@ -132,7 +134,7 @@ async function cadastrarHemocentro(req,res) {
             nome: nomeNormalizado,
             email: emailNormalizado,
             senhaHash,
-            codigoCnes,
+            codigoCnes: codigoCnesNormalizado,
             cnpj: cnpjNormalizado,
             cep: cepNormalizado,
             cidade,
@@ -148,11 +150,14 @@ async function cadastrarHemocentro(req,res) {
         console.log(err)
 
         if (err.code === "23505") {
-            const campo = err.constraint?.includes("cnpj") ? "CNPJ" : "E-mail"
-            return renderErroHemocentro(req,res,400,`[${campo} já cadastrado]`,contatos)
-        }
+            const coluna = (err.detail || "").match(/\((\w+)\)=/)?.[1]
+            const rotulos = { cnpj: "CNPJ", codigo_cnes: "Código CNES", email: "E-mail" }
+            const msg = rotulos[coluna]
+                ? `${rotulos[coluna]} já cadastrado.`
+                : "Já existe um cadastro com esses dados."
 
-        return renderErroHemocentro(req,res,500,["Erro interno. Tente novamente."],contatos)
+            return renderErroHemocentro(req, res, 400, [msg], contatos)
+}
 }
 }
 
