@@ -13,9 +13,9 @@
     
      <label for="email"><strong>Email:</strong> <input class="perfilCampo" type="email" name="email" placeholder="Digite seu email..." id="email" required value="{{dados.email}}"></label>
 
-     <label for="senhaHash"><strong>Senha:</strong> <input class="perfilCampo" type="password" name="senhaHash" placeholder="Defina sua senha..." id="senhaHash" minlength="8" maxlength="16" required></label> 
+     <label for="senha"><strong>Senha:</strong> <input class="perfilCampo" type="password" name="senha" placeholder="Defina sua senha..." id="senha" minlength="8" maxlength="16" required></label> 
 
-     <label for="codigoCnes"><strong>Código CNES</strong>: <input class="perfilCampo" type="number" name="codigoCnes" placeholder="Digite o código CNES..." id="codigoCnes" required value="{{dados.codigoCnes}}"></label>
+     <label for="codigoCnes"><strong>Código CNES</strong>: <input class="perfilCampo" type="number" name="codigoCnes" placeholder="Digite o código CNES..." id="codigoCnes" maxlength="7" required value="{{dados.codigoCnes}}"></label>
      
      <label for="cnpj"><strong>CNPJ:</strong> <input class="perfilCampo" type="text" name="cnpj" placeholder="Sem traços e pontos" id="cnpj" required value="{{dados.cnpj}}"></label> 
     
@@ -59,7 +59,7 @@
      
      <label for="numero"><strong>Número:</strong> <input class="perfilCampo" type="text" name="numero" placeholder="Digite o número do endereço...." id="numero" required value="{{dados.numero}}"></label>
 
-     <label style="margin-bottom: 20px"><strong>CEP:</strong> <input class="perfilCampo" type="text" name="cep" placeholder="Digite o CEP...." id="cep" maxlength="7" required value="{{dados.cep}}"></label>
+     <label style="margin-bottom: 20px"><strong>CEP:</strong> <input class="perfilCampo" type="text" name="cep" placeholder="Digite o CEP...." id="cep" maxlength="9" required value="{{dados.cep}}"></label>
 
     <div class="secao-contatos">
         <strong class="titulo-secao">Canais de Atendimento ao Doador:</strong>

@@ -1,5 +1,6 @@
 const bcrypt = require("bcrypt")
 const doadorDAO = require("../models/doadorDAO")
+const hemocentroDAO = require("../models/hemocentroDAO")
 const { cpf: validadorCPF, cnpj: validadorCNPJ} = require("cpf-cnpj-validator")
 
 function cadastrarGeral(req,res) {
@@ -91,9 +92,10 @@ function exibirCadastroHemocentro(req,res) {
 }
 
 async function cadastrarHemocentro(req,res) {
-    const {nome,email,senhaHash,codigoCnes,cnpj,estado,cidade,bairro,logradouro,numero,cep,contatoTipo,contatoValor} = req.body
-    const tipos = [].concat(req.body.contatoTipo || [])
-    const valores = [].concat(req.body.contatoValor || [])
+    const {nome,email,senha,codigoCnes,cnpj,estado,cidade,bairro,logradouro,numero,cep,contatoTipo,contatoValor} = req.body
+    
+    const tipos = [].concat(contatoTipo || [])
+    const valores = [].concat(contatoValor || [])
     const contatos = tipos.map((tipo,i) => ( {
         tipo,
         valor: (valores[i] || "").trim()
@@ -101,12 +103,18 @@ async function cadastrarHemocentro(req,res) {
     const nomeNormalizado = (nome || "").trim()
     const emailNormalizado = (email || "").trim().toLowerCase()
     const cnpjNormalizado = (cnpj || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
+    const numeroNormalizado = (numero || "").trim()
+    const cepNormalizado = (cep || "").replace(/\D/g,"")
+
     const erros = []
     if (!nomeNormalizado) erros.push("Informe o nome.")
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailNormalizado)) erros.push("E-mail inválido.");
     if (!req.body.senha || req.body.senha.length < 8) erros.push("A senha precisa de pelo menos 8 caracteres.")
-    if (!codigoCnes || codigoCnes.length < 7 || codigoCnes >= 16)
+    if (!codigoCnes || codigoCnes.length != 7) erros.push("Código CNES inválido")
     if (!validadorCNPJ.isValid(cnpjNormalizado)) erros.push("CNPJ inválido")
+    if(!numeroNormalizado) erros.push("Informe o número do endereço do hemocentro.")
+    if (!cepNormalizado || cepNormalizado.length !=8) erros.push("CEP inválido")
+    
     if (erros.length) {
         req.body.senha = ""
         return res.status(400).render("cadastro_hemocentro", {
@@ -116,11 +124,51 @@ async function cadastrarHemocentro(req,res) {
             title: "Cadastro Hemocentro"
         })
     }
+    try {
+        const senhaHash = await bcrypt.hash(senha,10)
+        await hemocentroDAO.insertHemocentro({
+            nome: nomeNormalizado,
+            email: emailNormalizado,
+            senhaHash,
+            codigoCnes,
+            cnpj: cnpjNormalizado,
+            cep: cepNormalizado,
+            cidade,
+            estado,
+            bairro,
+            logradouro,
+            numero: numeroNormalizado,
+            contatos
+        })
+        console.log("Dados enviados com sucesso!")
+        res.redirect("/login/hemocentro")
+    } catch (err) {
+        console.log(err)
+
+        if (err.code === "23505") {
+            const campo = err.constraint?.includes("cnpj") ? "CNPJ" : "E-mail"
+            req.body.senha = ""
+            return res.status(400).render("cadastro_hemocentro", {
+                layout: "auth",
+                erros: [`${campo} já cadastrado.`],
+                dados: req.body,
+                title: "Cadastro Hemocentro"
+            })
+        }
+
+        res.status(500).render("cadastro_hemocentro", {
+            layout: "auth",
+            erros: ["Erro interno. Tente novamente."],
+            dados: req.body,
+            title: "Cadastro Hemocentro"
+        })
+}
 }
 
 module.exports = {
     cadastrarGeral,
     exibirCadastroDoador,
     cadastrarDoador,
-    exibirCadastroHemocentro
+    exibirCadastroHemocentro,
+    cadastrarHemocentro
 }

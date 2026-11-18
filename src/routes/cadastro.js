@@ -30,4 +30,6 @@ router.post("/doador",cadastroController.exibirCadastroDoador)
 
 router.get("/hemocentro",cadastroController.exibirCadastroHemocentro)
 
+router.post("/hemocentro",cadastroController.cadastrarHemocentro)
+
 module.exports = router
