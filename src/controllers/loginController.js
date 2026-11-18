@@ -72,7 +72,7 @@ async function logarDoador(req,res) {
     }
 }
 
-function logarHemocentro(req,res) {
+function exibirLoginHemocentro(req,res) {
     res.render("login_hemocentro", {
         layout: "auth",
         title: "Login  Hemocentro"
@@ -91,6 +91,6 @@ module.exports = {
     exibirLoginDoador,
     logarGeral,
     logarDoador,
-    logarHemocentro,
+    exibirLoginHemocentro,
     logout
 }

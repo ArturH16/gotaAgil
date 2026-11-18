@@ -28,6 +28,6 @@ router.get("/doador",login.exibirLoginDoador)
 
 router.post("/doador",login.logarDoador)
 
-router.get("/hemocentro",login.logarHemocentro)
+router.get("/hemocentro",login.exibirLoginHemocentro)
 
 module.exports = router
