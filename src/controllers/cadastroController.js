@@ -3,6 +3,14 @@ const doadorDAO = require("../models/doadorDAO")
 const hemocentroDAO = require("../models/hemocentroDAO")
 const { cpf: validadorCPF, cnpj: validadorCNPJ} = require("cpf-cnpj-validator")
 
+const renderErroHemocentro = (req,res,status, erros,contatos) =>
+    res.status(status).render("cadastro_hemocentro", {
+        layout: "auth",
+        title: "Cadastro Hemocentro",
+        erros,
+        dados: { ...req.body, senha: "", contatos }
+    })
+
 function cadastrarGeral(req,res) {
     res.render("cadastro", {
         layout: "auth",
@@ -116,13 +124,7 @@ async function cadastrarHemocentro(req,res) {
     if (!cepNormalizado || cepNormalizado.length !=8) erros.push("CEP inválido")
     
     if (erros.length) {
-        req.body.senha = ""
-        return res.status(400).render("cadastro_hemocentro", {
-            layout: "auth",
-            erros,
-            dados: req.body,
-            title: "Cadastro Hemocentro"
-        })
+        return renderErroHemocentro(req,res,400,erros,contatos)
     }
     try {
         const senhaHash = await bcrypt.hash(senha,10)
@@ -147,21 +149,10 @@ async function cadastrarHemocentro(req,res) {
 
         if (err.code === "23505") {
             const campo = err.constraint?.includes("cnpj") ? "CNPJ" : "E-mail"
-            req.body.senha = ""
-            return res.status(400).render("cadastro_hemocentro", {
-                layout: "auth",
-                erros: [`${campo} já cadastrado.`],
-                dados: req.body,
-                title: "Cadastro Hemocentro"
-            })
+            return renderErroHemocentro(req,res,400,`[${campo} já cadastrado]`,contatos)
         }
 
-        res.status(500).render("cadastro_hemocentro", {
-            layout: "auth",
-            erros: ["Erro interno. Tente novamente."],
-            dados: req.body,
-            title: "Cadastro Hemocentro"
-        })
+        return renderErroHemocentro(req,res,500,["Erro interno. Tente novamente."],contatos)
 }
 }
 
