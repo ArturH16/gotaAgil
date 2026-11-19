@@ -7,7 +7,7 @@ class ContatosDAO {
         WHERE id_hemocentro = $1`
         const idHemocentro = [idHemocentro_]
         const result = await pool.query(sql, idHemocentro)
-        return result.rows[0] || null;
+        return result.rows || null;
     }
 }
 

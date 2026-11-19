@@ -47,7 +47,7 @@ async function listarDoadoresCampanha(req,res) {
                 { nome: "César Olavo", email: "olavocesar@gmail.com" },
                 { nome: "Sávio Sobreira Alves", email: "savio.alves06@aluno.ifce.edu.br" }
             ],
-            contatos: [contatos.tipo_contato,contatos.contato]
+            contatos: contatos
         },
         title: "Lista de Interessados",
         loggedInHemocentro: true,
