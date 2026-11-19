@@ -1,4 +1,5 @@
 const hemocentroDAO = require("../models/hemocentroDAO")
+const contatosDAO = require("../models/contatosDAO")
 
 async function logar(req,res) {
     const rotulos = {
@@ -25,8 +26,10 @@ async function logar(req,res) {
 
 }
 
-function listarDoadoresCampanha(req,res) {
-    const dadosCampanha = {
+async function listarDoadoresCampanha(req,res) {
+    try {
+        const contatos = await contatosDAO.buscarPorIdHemocentro(req.session.userID)
+        const dadosCampanha = {
         campanha: {
             imagem: "/images/WhatsApp-Image-2022-11-04-at-07.43.34-600x619.jpeg",
             titulo: "Campanha Emergencial de Verão",
@@ -43,13 +46,20 @@ function listarDoadoresCampanha(req,res) {
                 { nome: "José Roberto", email: "jbr@gmail.com" },
                 { nome: "César Olavo", email: "olavocesar@gmail.com" },
                 { nome: "Sávio Sobreira Alves", email: "savio.alves06@aluno.ifce.edu.br" }
-            ]
+            ],
+            contatos: [contatos.tipo_contato,contatos.contato]
         },
         title: "Lista de Interessados",
         loggedInHemocentro: true,
         cssExtra: "listaInteressados"
     }
     res.render("lista_doadores", dadosCampanha)
+    }
+    catch(err) {
+        console.log(err)
+        res.status(500).send("Erro ao carregar a página.")
+    }
+    
 }
 
 function criarCampanha(req,res) {
