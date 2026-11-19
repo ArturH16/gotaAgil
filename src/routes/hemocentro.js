@@ -49,5 +49,5 @@ router.get("/listaCampanha",hemocentroController.listarDoadoresCampanha)
 //     })
 // })
 
-router.get("/campanha/nova",hemocentroController.criarCampanha)
+router.get("/campanha/nova",hemocentroController.exibirCriacaoCampanha)
 module.exports = router

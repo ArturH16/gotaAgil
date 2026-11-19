@@ -63,7 +63,7 @@ async function listarDoadoresCampanha(req,res) {
     
 }
 
-function criarCampanha(req,res) {
+function exibirCriacaoCampanha(req,res) {
      res.render("criacao_campanhas",{
         title: "Criação Campanha",
         loggedInHemocentro: true,
@@ -74,5 +74,5 @@ function criarCampanha(req,res) {
 module.exports = {
     logar,
     listarDoadoresCampanha,
-    criarCampanha
+    exibirCriacaoCampanha
 }
