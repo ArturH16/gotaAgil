@@ -33,7 +33,7 @@ class hemocentroDAO {
         const sql = `SELECT id_hemocentro, nome,codigo_cnes,email, senha_hash, cidade, estado 
         FROM tb_hemocentro 
         WHERE email = $1`
-        const email = email_
+        const email = [email_]
         const result = await pool.query(sql, email)
       return result.rows[0] || null;
     }
