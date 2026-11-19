@@ -337,6 +337,13 @@ nav a {
     font-weight: 600;
 }
 
+.btn-desativado {
+  pointer-events: none !important;
+  opacity: 0.4 !important;
+  cursor: not-allowed !important;
+}
+
+
 /* === Tela de detalhe de campanha: usada por doador e hemocentro === */
 .detalheCampanha {
     max-width: 1000px;
@@ -347,6 +354,7 @@ nav a {
 .voltar {
     display: inline-flex;
     align-items: center;
+    align-self: flex-start; 
     gap: 6px;
     color: #C14025;
     text-decoration: none;

@@ -1,18 +1,36 @@
-function logar(req,res) {
-    const hemocentroMockado = {
-        title: "Início",
-        loggedInHemocentro: true,
-        cssExtra: "homepageHemocentro",
-        hemocentro: {
-            nome: "Hemocentro Regional Fortaleza",
-            aprovado: false
-        }
+const hemocentroDAO = require("../models/hemocentroDAO")
+const contatosDAO = require("../models/contatosDAO")
+
+async function logar(req,res) {
+    const rotulos = {
+        pendente: "Aguardando validação",
+        recusado: "Cadastro recusado"
     }
-    res.render("hemocentro_logado",hemocentroMockado)
+    try {
+        const hemocentro = await hemocentroDAO.buscarPorId(req.session.userID)
+        if (!hemocentro) {
+            return req.session.destroy(() => res.redirect("/login/hemocentro"))
+        }
+        req.session.statusHemocentro = hemocentro.status
+        const bloqueadoBotoes = ["pendente","recusado"].includes(hemocentro.status)
+         res.render("hemocentro_logado", {
+            title: "Início",
+            cssExtra: "homepageHemocentro",
+            hemocentro,
+            statusRotulo: rotulos[hemocentro.status] || hemocentro.status,
+            bloqueadoBotoes
+        })
+    } catch(err) {
+        console.log(err)
+        res.status(500).send("Erro ao carregar a pagina.")
+    }
+
 }
 
-function listarDoadoresCampanha(req,res) {
-    const dadosCampanha = {
+async function listarDoadoresCampanha(req,res) {
+    try {
+        const contatos = await contatosDAO.buscarPorIdHemocentro(req.session.userID)
+        const dadosCampanha = {
         campanha: {
             imagem: "/images/WhatsApp-Image-2022-11-04-at-07.43.34-600x619.jpeg",
             titulo: "Campanha Emergencial de Verão",
@@ -29,13 +47,20 @@ function listarDoadoresCampanha(req,res) {
                 { nome: "José Roberto", email: "jbr@gmail.com" },
                 { nome: "César Olavo", email: "olavocesar@gmail.com" },
                 { nome: "Sávio Sobreira Alves", email: "savio.alves06@aluno.ifce.edu.br" }
-            ]
+            ],
+            contatos: contatos
         },
         title: "Lista de Interessados",
         loggedInHemocentro: true,
         cssExtra: "listaInteressados"
     }
     res.render("lista_doadores", dadosCampanha)
+    }
+    catch(err) {
+        console.log(err)
+        res.status(500).send("Erro ao carregar a página.")
+    }
+    
 }
 
 function criarCampanha(req,res) {

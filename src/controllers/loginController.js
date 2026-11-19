@@ -1,5 +1,6 @@
 const bcrypt = require("bcrypt")
 const doadorDAO = require("../models/doadorDAO")
+const hemocentroDAO = require("../models/hemocentroDAO")
 
 function logarGeral(req,res) {
     res.render("login", {
@@ -72,7 +73,7 @@ async function logarDoador(req,res) {
     }
 }
 
-function logarHemocentro(req,res) {
+function exibirLoginHemocentro(req,res) {
     res.render("login_hemocentro", {
         layout: "auth",
         title: "Login  Hemocentro"
@@ -87,10 +88,68 @@ function logout(req, res) {
     })
 }
 
+async function logarHemocentro(req,res) {
+    const {email,senha} = req.body
+    const emailNormalizado = (email || "").trim().toLowerCase()
+    const erros = []
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailNormalizado)) erros.push("E-mail inválido.");
+    if (!senha) erros.push("Informe a senha.")
+
+    if (erros.length) {
+        req.body.senha = ""
+        return res.status(400).render("login_hemocentro", {
+            layout: "auth",
+            erros,
+            dados: req.body,
+            title: "Login Hemocentro"
+        })
+    }
+    try {
+        const hemocentro = await hemocentroDAO.buscarPorEmail(emailNormalizado)
+         if (!hemocentro) {
+            return res.status(400).render("login_hemocentro", {
+                layout: "auth",
+                erros: ["Email ou senha incorretos."],
+                dados: req.body,
+                title: "Login Hemocentro"
+
+            })
+        }
+        const senhaReal = await bcrypt.compare(senha,hemocentro.senha_hash)
+        
+        if (!senhaReal) {
+            return res.status(400).render("login_hemocentro", {
+                layout: "auth",
+                erros: ["Email ou senha incorretos."],
+                dados: req.body,
+                title: "Login Hemocentro"
+            })
+        }
+
+        //Sessão no Supabase
+        req.session.userID = hemocentro.id_hemocentro
+        req.session.userName = hemocentro.nome
+        req.session.userType = "hemocentro"
+        return res.redirect("/hemocentro")
+    }
+    catch(err) {
+        console.log(err)
+        res.status(500).render("cadastro_hemocentro", {
+            layout: "auth",
+            erros: ["Erro interno. Tente novamente."],
+            dados: req.body,
+            title: "Cadastro Hemocentro"
+        })
+    }
+    }
+
+
+
 module.exports = {
     exibirLoginDoador,
     logarGeral,
     logarDoador,
+    exibirLoginHemocentro,
     logarHemocentro,
     logout
 }

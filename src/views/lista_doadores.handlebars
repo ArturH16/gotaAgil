@@ -5,8 +5,18 @@
     </a>
 
     <div class="detalheGrid">
+        <div class="colunaEsquerda">
         <img src="{{campanha.imagem}}" alt="{{campanha.titulo}}" class="detalheImagem">
 
+        <div class="lista-contatos">
+            {{#each campanha.contatos}}
+            <div class="item-contato">
+                <h3>{{this.contato}}</h3>
+                <p>{{this.tipo_contato}}</p>
+            </div>
+            {{/each}}
+        </div>
+        </div>
         <div class="detalheInfo">
             <div class="cardCampanhaTopo">
                 <span class="badgeUrgencia">{{campanha.urgencia}}</span>

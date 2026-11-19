@@ -30,18 +30,18 @@ class hemocentroDAO {
     }
 
     static async buscarPorEmail(email_) {
-        const sql = `SELECT id_hemocentro, nome,codigo_cnes,email, senha_hash, cidade, estado 
-        FROM tb_doador 
+        const sql = `SELECT id_hemocentro, nome,codigo_cnes,email, senha_hash, cidade, estado
+        FROM tb_hemocentro 
         WHERE email = $1`
-        const email = email_
+        const email = [email_]
         const result = await pool.query(sql, email)
       return result.rows[0] || null;
     }
 
     static async buscarPorId(id_) {
-        const sql = `SELECT id_hemocentro, nome,codigo_cnes,email,cnpj,cidade, estado,logradouro,numero,cep,bairro
-    FROM tb_doador
-    WHERE id_doador = $1`
+        const sql = `SELECT id_hemocentro, nome,codigo_cnes,email,cnpj,cidade, estado,logradouro,numero,cep,bairro,status
+    FROM tb_hemocentro
+    WHERE id_hemocentro = $1`
     const id = id_
     const {rows} = await pool.query(sql,[id])
     return rows[0] || null
