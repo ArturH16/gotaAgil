@@ -26,6 +26,20 @@
     background-color: #FDF3E3;
     color: #B87A1E;
 }
+.avisoStatus {
+    padding: 12px 16px;
+    margin: 20px;
+    border-radius: 6px;
+    font-weight: 600;
+}
+
+.avisoStatus--pendente {
+    background-color: #E8A33D;
+}
+
+.avisoStatus--recusado {
+    background-color: #C14025;
+} 
 
 .campanhasCabecalho {
     display: flex;

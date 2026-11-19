@@ -1,9 +1,12 @@
+{{!-- {{#if aviso}}
+    <div class="avisoStatus avisoStatus--{{aviso.tipo}}" role="status">
+        {{aviso.aviso}}
+    </div>
+{{/if}} --}}
 <div id="homeHemocentro">
     <section id="boasVindas">
         <h1>{{hemocentro.nome}}</h1>
-        <p class="statusHemocentro {{#if hemocentro.aprovado}}aprovado{{else}}pendente{{/if}}">
-            {{#if hemocentro.aprovado}}✓ Cadastro aprovado{{else}} Aguardando validação{{/if}}
-        </p>
+        <p class="statusHemocentro {{hemocentro.status}}">{{statusRotulo}}</p>
     </section>
 
     <section id="minhasCampanhas">
@@ -21,13 +24,13 @@
         <div id="listaCampanhasHemocentro">
             <div class="cardCampanhaHemocentro" data-status="ativa">
                 <img src="/images/WhatsApp-Image-2022-11-04-at-07.43.34-600x619.jpeg" class="cardCampanhaImagem" alt="">
-                 <div class="cardCampanhaTopo">
+                <div class="cardCampanhaTopo">
                     <span class="badgeUrgencia urgente">Urgente</span>
                     <span class="badgeTipoSanguineo">O-</span>
                 </div>
                 <h3>Campanha Emergencial de Verão</h3>
                 <p class="cardCampanhaData">Encerra em 12/10/2026 · 8 interessados</p>
-                <a href="hemocentro/listaCampanha" class="linkSecundario">Ver detalhes</a>
+                <a href="/hemocentro/listaCampanha" class="linkSecundario">Ver detalhes</a>
             </div>
 
             <div class="cardCampanhaHemocentro" data-status="ativa">
@@ -38,7 +41,7 @@
                 </div>
                 <h3>Reposição de Estoque Regular</h3>
                 <p class="cardCampanhaData">Encerra em 20/10/2026 · 3 interessados</p>
-                <a href="hemocentro/listaCampanha" class="linkSecundario">Ver detalhes</a>
+                <a href="/hemocentro/listaCampanha" class="linkSecundario">Ver detalhes</a>
             </div>
 
             <div class="cardCampanhaHemocentro encerrada" data-status="encerrada">
@@ -49,7 +52,7 @@
                 </div>
                 <h3>Doação Preventiva Setembro</h3>
                 <p class="cardCampanhaData">Encerrou em 05/09/2026 · 15 interessados</p>
-                <a href="hemocentro/listaCampanha" class="linkSecundario">Ver detalhes</a>
+                <a href="/hemocentro/listaCampanha" class="linkSecundario">Ver detalhes</a>
             </div>
         </div>
     </section>

@@ -1,14 +1,26 @@
-function logar(req,res) {
-    const hemocentroMockado = {
-        title: "Início",
-        loggedInHemocentro: true,
-        cssExtra: "homepageHemocentro",
-        hemocentro: {
-            nome: "Hemocentro Regional Fortaleza",
-            aprovado: false
-        }
+const hemocentroDAO = require("../models/hemocentroDAO")
+
+async function logar(req,res) {
+    const rotulos = {
+        pendente: "Aguardando validação",
+        recusado: "Cadastro recusado"
     }
-    res.render("hemocentro_logado",hemocentroMockado)
+    try {
+        const hemocentro = await hemocentroDAO.buscarPorId(req.session.userID)
+        if (!hemocentro) {
+            return req.session.destroy(() => res.redirect("/login/hemocentro"))
+        }
+         res.render("hemocentro_logado", {
+            title: "Início",
+            cssExtra: "homepageHemocentro",
+            hemocentro,
+            statusRotulo: rotulos[hemocentro.status] || hemocentro.status
+        })
+    } catch(err) {
+        console.log(err)
+        res.status(500).send("Erro ao carregar a pagina.")
+    }
+
 }
 
 function listarDoadoresCampanha(req,res) {

@@ -30,7 +30,7 @@ class hemocentroDAO {
     }
 
     static async buscarPorEmail(email_) {
-        const sql = `SELECT id_hemocentro, nome,codigo_cnes,email, senha_hash, cidade, estado 
+        const sql = `SELECT id_hemocentro, nome,codigo_cnes,email, senha_hash, cidade, estado
         FROM tb_hemocentro 
         WHERE email = $1`
         const email = [email_]
@@ -39,7 +39,7 @@ class hemocentroDAO {
     }
 
     static async buscarPorId(id_) {
-        const sql = `SELECT id_hemocentro, nome,codigo_cnes,email,cnpj,cidade, estado,logradouro,numero,cep,bairro
+        const sql = `SELECT id_hemocentro, nome,codigo_cnes,email,cnpj,cidade, estado,logradouro,numero,cep,bairro,status
     FROM tb_hemocentro
     WHERE id_hemocentro = $1`
     const id = id_
