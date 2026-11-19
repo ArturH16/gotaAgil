@@ -11,6 +11,7 @@ async function logar(req,res) {
         if (!hemocentro) {
             return req.session.destroy(() => res.redirect("/login/hemocentro"))
         }
+        req.session.statusHemocentro = hemocentro.status
         const bloqueadoBotoes = ["pendente","recusado"].includes(hemocentro.status)
          res.render("hemocentro_logado", {
             title: "Início",

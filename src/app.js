@@ -51,6 +51,7 @@ app.use((req, res, next) => {
     res.locals.userName = req.session.userName
     res.locals.loggedInDoador = req.session.userType === "doador"
     res.locals.loggedInHemocentro = req.session.userType === "hemocentro"
+    res.locals.bloqueadoBotoes = ["pendente", "recusado"].includes(req.session.statusHemocentro)
     res.locals.loggedInAdmin = req.session.userType === "admin"
     next()
 })
