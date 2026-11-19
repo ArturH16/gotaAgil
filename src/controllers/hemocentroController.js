@@ -1,5 +1,6 @@
 const hemocentroDAO = require("../models/hemocentroDAO")
 const contatosDAO = require("../models/contatosDAO")
+const campanhaDAO = require("../models/campanhaDAO")
 
 async function logar(req,res) {
     const rotulos = {
@@ -69,6 +70,36 @@ function exibirCriacaoCampanha(req,res) {
         loggedInHemocentro: true,
         cssExtra: "campanhaNova"
     })
+}
+
+async function criarCampanha(req,res) {
+    const idHemocentro = req.session.userID
+    const {nome,descricao,tipoSanguineo,urgencia,dataFechamento,foto} = req.body
+    const nomeNormalizado = (nome || "").trim()
+    const descricaoNormalizada = (descricao || "").trim()
+
+    const erros = []
+    if (!nomeNormalizado) erros.push("Informe o nome.")
+    if (!descricaoNormalizada) erros.push("Informe uma descrição.")
+    
+    if (erros.length) {
+        return res.status(400).render("criacao_campanhas", {
+            title: "Criação Campanha",
+            loggedInHemocentro: true,
+            cssExtra: "campanhaNova",
+            dados: req.body
+        })
+    }
+    try {
+        const campanha = await campanhaDAO.insertCampanha({nome: nomeNormalizado,
+            descricao: descricaoNormalizada,tipoSanguineo,urgencia,dataFechamento,foto,idHemocentro})
+        console.log("Campanha criada com sucesso!")
+        res.redirect("/hemocentro")
+
+    } catch(err){
+        console.log(err)
+        res.status(500).send("Erro interno.")
+    }
 }
 
 module.exports = {
