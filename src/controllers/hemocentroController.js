@@ -10,11 +10,13 @@ async function logar(req,res) {
         if (!hemocentro) {
             return req.session.destroy(() => res.redirect("/login/hemocentro"))
         }
+        const bloqueadoBotoes = ["pendente","recusado"].includes(hemocentro.status)
          res.render("hemocentro_logado", {
             title: "Início",
             cssExtra: "homepageHemocentro",
             hemocentro,
-            statusRotulo: rotulos[hemocentro.status] || hemocentro.status
+            statusRotulo: rotulos[hemocentro.status] || hemocentro.status,
+            bloqueadoBotoes
         })
     } catch(err) {
         console.log(err)
