@@ -16,6 +16,7 @@ class campanhaDAO {
                 c.data_inicio::text AS data_inicio,
                 c.data_fechamento::text AS data_fechamento,
                 c.foto,
+                c_encerrada_em::text AS encerrada_em,
                 COUNT(i.id_interesse)::int AS interessados
                 FROM tb_campanha c
                 LEFT JOIN tb_interesse i ON i.id_campanha = c.id_campanha
@@ -32,6 +33,7 @@ class campanhaDAO {
                 c.data_inicio::text AS data_inicio,
                 c.data_fechamento::text AS data_fechamento,
                 c.foto,
+                c.encerrada_em::text AS encerrada_em,
                 COUNT(i.id_interesse)::int AS interessados
                 FROM tb_campanha c
                 LEFT JOIN tb_interesse i ON i.id_campanha = c.id_campanha
@@ -51,6 +53,30 @@ class campanhaDAO {
             ORDER BY i.data DESC`
         const { rows } = await pool.query(sql, [idCampanha, idHemocentro])
         return rows
+}
+
+        static async atualizarCampanha({ id, idHemocentro, nome, descricao, tipoSanguineo, urgencia, dataInicio, dataFechamento, foto }) {
+        const sql = `
+            UPDATE tb_campanha
+            SET nome = $3, descricao = $4, tipo_sanguineo_necessario = $5, urgencia = $6,
+                data_inicio = $7, data_fechamento = $8,
+                foto = COALESCE($9, foto)
+            WHERE id_campanha = $1 AND id_hemocentro = $2 AND encerrada_em IS NULL
+            RETURNING id_campanha`
+        const valores = [id, idHemocentro, nome, descricao, tipoSanguineo, urgencia, dataInicio, dataFechamento, foto]
+        const { rows } = await pool.query(sql, valores)
+        return rows[0] || null
+    }
+
+    static async encerrarCampanha(id, idHemocentro, hoje) {
+        const sql = `
+            UPDATE tb_campanha
+            SET encerrada_em = $3
+            WHERE id_campanha = $1 AND id_hemocentro = $2
+            AND encerrada_em IS NULL AND data_fechamento >= $3
+            RETURNING id_campanha`
+        const { rows } = await pool.query(sql, [id, idHemocentro, hoje])
+        return rows[0] || null
 }
 }
 

@@ -53,42 +53,64 @@ async function removerFoto(nome) {
         console.error("Falha ao apagar foto órfã:", nome, e.message)
     }
 }
+const TIPOS_SANGUINEOS = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"]
+const URGENCIAS = ["urgente", "moderada", "regular"]
 
-function validarDataInicio(valor) {
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(valor || "")) return "Data de início inválida."
+function dataValida(valor) {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(valor || "")) return false
     const [ano, mes, dia] = valor.split("-").map(Number)
     const data = new Date(ano, mes - 1, dia)
-    if (data.getFullYear() !== ano || data.getMonth() !== mes - 1 || data.getDate() !== dia) {
-        return "Data de início inválida."
-    }
-    return null
+    return data.getFullYear() === ano && data.getMonth() === mes - 1 && data.getDate() === dia
 }
 
+function validarCamposCampanha(body, { edicao = false } = {}) {
+    const nome = (body.nome || "").trim()
+    const descricao = (body.descricao || "").trim()
+    const urgencia = (body.urgencia || "").toLowerCase()
+    const { tipoSanguineo, dataInicio, dataFechamento } = body
+    const hoje = hojeFortaleza()
+    const erros = []
 
-function validarDataFechamento(valor) {
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(valor || "")) return "Data de fechamento inválida."
-    const [ano, mes, dia] = valor.split("-").map(Number)
-    const data = new Date(ano, mes - 1, dia)
-    if (data.getFullYear() !== ano || data.getMonth() !== mes - 1 || data.getDate() !== dia) {
-        return "Data de fechamento inválida."
+    if (!nome) erros.push("Informe o nome.")
+    else if (nome.length > 100) erros.push("O nome deve ter até 100 caracteres.")            // confira o tamanho real da coluna
+    if (!descricao) erros.push("Informe uma descrição.")
+    else if (descricao.length > 1000) erros.push("A descrição deve ter até 1000 caracteres.") // idem
+    if (!TIPOS_SANGUINEOS.includes(tipoSanguineo)) erros.push("Selecione o tipo sanguíneo.")
+    if (!URGENCIAS.includes(urgencia)) erros.push("Selecione a urgência.")
+
+    if (!dataValida(dataInicio)) erros.push("Data de início inválida.")
+    else if (!edicao && dataInicio < hoje) erros.push("A data de início não pode estar no passado.")
+
+    if (!dataValida(dataFechamento)) erros.push("Data de fechamento inválida.")
+    else if (dataFechamento < hoje) erros.push("A data de fechamento não pode estar no passado.")
+
+    if (dataValida(dataInicio) && dataValida(dataFechamento) && dataFechamento < dataInicio) {
+        erros.push("A data de encerramento não pode ser anterior à de início.")
     }
-    const hoje = new Date()
-    hoje.setHours(0, 0, 0, 0)
-    if (data < hoje) return "Data de fechamento inválida."
-    return null
+
+    return { erros, valores: { nome, descricao, tipoSanguineo, urgencia, dataInicio, dataFechamento } }
 }
 
 const hoje = new Date().toLocaleDateString("sv-SE", { timeZone: "America/Fortaleza" })  // AAAA-MM-DD
 const formatarData = (iso) => iso.split("-").reverse().join("/")                         // dd/mm/aaaa
 
-function renderErroCampanha(req, res, status, erros) {
+function renderErroCampanha(req, res, status, erros, campanhaEdicao = null) {
     const lista = req.file ? [...erros, "Selecione a foto novamente."] : erros
     return res.status(status).render("criacao_campanhas", {
-        title: "Criação Campanha",
+        title: campanhaEdicao ? "Editar Campanha" : "Criação Campanha",
         cssExtra: "campanhaNova",
-        ...configFormCampanha(),
+        ...configFormCampanha(campanhaEdicao),
+        fotoAtualUrl: campanhaEdicao && campanhaEdicao.foto ? urlFoto(campanhaEdicao.foto) : null,
         erros: lista,
         dados: req.body
+    })
+}
+
+function redirecionarComAviso(req, res, tipo, texto, destino) {
+    req.session.flash = { tipo, texto }
+    req.session.save((err) => {
+        if (err) console.error(err)
+        res.redirect(destino)
     })
 }
 
@@ -177,38 +199,13 @@ function exibirCriacaoCampanha(req,res) {
 }
 
 async function criarCampanha(req,res) {
-    const idHemocentro = req.session.userID
-    const {nome,descricao,tipoSanguineo,urgencia,dataInicio,dataFechamento} = req.body
-    const nomeNormalizado = (nome || "").trim()
-    const descricaoNormalizada = (descricao || "").trim()
+     if (req.erroUpload) return renderErroCampanha(req, res, 400, [req.erroUpload])
 
-    const erros = []
-    if (req.erroUpload) return renderErroCampanha(req, res, 400, [req.erroUpload])
-    if (!nomeNormalizado) erros.push("Informe o nome.")
-    if (!descricaoNormalizada) erros.push("Informe uma descrição.")
-    const erroDataInicio = validarDataInicio(dataInicio)
-    if (erroDataInicio) erros.push(erroDataInicio)
-    const erroDataFechamento = validarDataFechamento(dataFechamento)
-    if (erroDataFechamento) erros.push(erroDataFechamento)
-    if (!erroDataInicio && !erroDataFechamento && dataFechamento < dataInicio) {
-    erros.push("A data de encerramento não pode ser anterior à de início.")
-    }
+    const { erros, valores } = validarCamposCampanha(req.body)
     if (erros.length) return renderErroCampanha(req, res, 400, erros)
-    let foto = null
-    if (req.file) {
-    try {
-        foto = await salvarFoto(req.file.buffer)
-    } catch (err) {
-        console.error(err)
-        return err.message === "IMAGEM_INVALIDA"
-            ? renderErroCampanha(req, res, 400, ["O arquivo enviado não é uma imagem válida (use JPG, PNG ou WebP)."])
-            : renderErroCampanha(req, res, 500, ["Não foi possível salvar a imagem agora. Tente novamente."])
-    }
-}
 
     try {
-        const campanha = await campanhaDAO.insertCampanha({nome: nomeNormalizado,
-            descricao: descricaoNormalizada,tipoSanguineo,urgencia,dataInicio,dataFechamento,foto,idHemocentro})
+        const campanha = await campanhaDAO.insertCampanha({...valores,foto,idHemocentro: req.session.userID})
         req.session.flash = { tipo: "sucesso", texto: "Campanha criada com sucesso!" }
         req.session.save((err) => {
             if (err) console.error(err)
@@ -243,6 +240,57 @@ function exibirEdicaoCampanha(req, res) {
             dataFechamento: campanha.data_fechamento
         }
     })
+}
+
+async function editarCampanha(req, res) {
+    const campanha = req.campanha
+    const idHemocentro = req.session.userID
+    const destinoDetalhe = `/hemocentro/campanha/${campanha.id_campanha}`
+
+    if (req.erroUpload) return renderErroCampanha(req, res, 400, [req.erroUpload], campanha)
+
+    if (estaEncerrada(campanha)) {
+        return redirecionarComAviso(req, res, "erro", "Campanhas encerradas não podem ser editadas.", destinoDetalhe)
+    }
+
+    const { erros, valores } = validarCamposCampanha(req.body, { edicao: true })
+    if (erros.length) return renderErroCampanha(req, res, 400, erros, campanha)
+
+    let fotoNova = null
+    if (req.file) {
+        try {
+            fotoNova = await salvarFoto(req.file.buffer)
+        } catch (err) {
+            console.error(err)
+            return err.message === "IMAGEM_INVALIDA"
+                ? renderErroCampanha(req, res, 400, ["O arquivo enviado não é uma imagem válida (use JPG, PNG ou WebP)."], campanha)
+                : renderErroCampanha(req, res, 500, ["Não foi possível salvar a imagem agora. Tente novamente."], campanha)
+        }
+    }
+
+   
+    try {
+        const atualizada = await campanhaDAO.atualizarCampanha({
+            id: campanha.id_campanha,
+            idHemocentro,
+            ...valores,
+            foto: fotoNova
+        })
+
+        if (!atualizada) {
+            await removerFoto(fotoNova)   
+            return redirecionarComAviso(req, res, "erro", "Não foi possível atualizar esta campanha.", destinoDetalhe)
+        }
+
+       
+        if (fotoNova && campanha.foto) await removerFoto(campanha.foto)
+
+        redirecionarComAviso(req, res, "sucesso", "Campanha atualizada com sucesso!", destinoDetalhe)
+    } catch (err) {
+        console.error(err)
+        await removerFoto(fotoNova)       // nunca apague a antiga aqui
+        renderErroCampanha(req, res, 500, ["Erro interno. Tente novamente."], campanha)
+    }
 }
 
 module.exports = {
