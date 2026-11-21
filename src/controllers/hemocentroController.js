@@ -92,7 +92,7 @@ async function logar(req,res) {
             status: encerrada ? "encerrada" : "ativa",
             dataFechamentoFormatada: formatarData(c.data_fechamento),
             interessadosTexto: `${c.interessados} ${c.interessados === 1 ? "interessado" : "interessados"}`,
-            fotoUrl: `${process.env.SUPABASE_URL}/storage/v1/object/public/campanhas/${c.foto}`,
+            fotoUrl:  c.foto ? `${process.env.SUPABASE_URL}/storage/v1/object/public/campanhas/${c.foto}`  : "/images/image-off.png",
             urgenciaLower: c.urgencia.toLowerCase()
         }
     })
