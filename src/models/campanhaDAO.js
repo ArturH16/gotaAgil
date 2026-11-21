@@ -40,6 +40,18 @@ class campanhaDAO {
         const { rows } = await pool.query(sql, [id, idHemocentro])
         return rows[0] || null
 }
+
+    static async listarInteressados(idCampanha, idHemocentro) {
+        const sql = `
+            SELECT d.id_doador, d.nome, d.email, d.tipo_sanguineo, d.cidade, d.estado
+            FROM tb_interesse i
+            JOIN tb_doador d ON d.id_doador = i.id_doador
+            JOIN tb_campanha c ON c.id_campanha = i.id_campanha
+            WHERE i.id_campanha = $1 AND c.id_hemocentro = $2
+            ORDER BY i.data DESC`
+        const { rows } = await pool.query(sql, [idCampanha, idHemocentro])
+        return rows
+}
 }
 
 module.exports = campanhaDAO
