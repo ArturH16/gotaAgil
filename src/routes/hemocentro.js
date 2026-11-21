@@ -52,5 +52,8 @@ router.get("/",hemocentroController.logar)
 router.get("/campanha/nova",hemocentroController.exibirCriacaoCampanha)
 router.post("/campanha/nova",receberFoto,hemocentroController.criarCampanha)
 router.get("/listaCampanha/:id",hemocentroController.listarDoadoresCampanha)
+router.post("/campanha/:id/editar")
+router.post("/campanha/:id/encerrar")
+router.post("/campanha/:id/excluir")
 
 module.exports = router
