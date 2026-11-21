@@ -42,9 +42,6 @@ function validarDataInicio(valor) {
     if (data.getFullYear() !== ano || data.getMonth() !== mes - 1 || data.getDate() !== dia) {
         return "Data de início inválida."
     }
-    const hoje = new Date()
-    hoje.setHours(0, 0, 0, 0)
-    if (data < hoje) return "Data de início inválida."
     return null
 }
 
