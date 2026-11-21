@@ -4,6 +4,7 @@ const campanhaDAO = require("../models/campanhaDAO")
 const crypto = require("crypto")
 const sharp = require("sharp")
 const supabase = require("../supabase")
+const { urlFoto } = require("../utils/fotos")
 
 async function salvarFoto(buffer) {
     let imagem
@@ -92,7 +93,7 @@ async function logar(req,res) {
             status: encerrada ? "encerrada" : "ativa",
             dataFechamentoFormatada: formatarData(c.data_fechamento),
             interessadosTexto: `${c.interessados} ${c.interessados === 1 ? "interessado" : "interessados"}`,
-            fotoUrl:  c.foto ? `${process.env.SUPABASE_URL}/storage/v1/object/public/campanhas/${c.foto}`  : "/images/image-off.png",
+            fotoUrl:  urlFoto(c.foto),
             urgenciaLower: c.urgencia.toLowerCase()
         }
     })
@@ -111,40 +112,43 @@ async function logar(req,res) {
 
 }
 
-async function listarDoadoresCampanha(req,res) {
+async function listarDoadoresCampanha(req, res) {
+    const id = Number(req.params.id)
+    if (!Number.isInteger(id) || id <= 0) {
+        return res.status(404).send("Campanha não encontrada.")
+    }
+
     try {
-        const contatos = await contatosDAO.buscarPorIdHemocentro(req.session.userID)
-        const dadosCampanha = {
-        campanha: {
-            imagem: "/images/WhatsApp-Image-2022-11-04-at-07.43.34-600x619.jpeg",
-            titulo: "Campanha Emergencial de Verão",
-            urgencia: "Urgente",
-            tipoSanguineo: "O-",
-            interessados: [
-                { nome: "Artur Holanda", email: "holandaartur163@gmail.com" },
-                { nome: "Axl Rose", email: "roseaxl@gmail.com" },
-                { nome: "Pedro Assaad", email: "assaadpedro@gmail.com" },
-                { nome: "Daniel Assaad", email: "assaad.daniel@gmail.com" },
-                { nome: "Pedro Hélios", email: "heliospedro2701@gmail.com" },
-                { nome: "Pedro Paulo", email: "paulopedro@gmail.com" },
-                { nome: "Sylvester Stallone", email: "stallone@gmail.com" },
-                { nome: "José Roberto", email: "jbr@gmail.com" },
-                { nome: "César Olavo", email: "olavocesar@gmail.com" },
-                { nome: "Sávio Sobreira Alves", email: "savio.alves06@aluno.ifce.edu.br" }
-            ],
-            contatos: contatos
-        },
-        title: "Lista de Interessados",
-        loggedInHemocentro: true,
-        cssExtra: "listaInteressados"
-    }
-    res.render("lista_doadores", dadosCampanha)
-    }
-    catch(err) {
-        console.log(err)
+        const idHemocentro = req.session.userID
+        const campanha = await campanhaDAO.buscarPorId(id, idHemocentro)
+
+        // não existe OU é de outro hemocentro: mesma resposta, sem revelar qual
+        if (!campanha) return res.status(404).send("Campanha não encontrada.")
+
+        const [interessados, contatos] = await Promise.all([
+            campanhaDAO.listarInteressados(id, idHemocentro),
+            contatosDAO.buscarPorIdHemocentro(idHemocentro)
+        ])
+
+        res.render("lista_doadores", {
+            title: "Lista de Interessados",
+            cssExtra: "listaInteressados",
+            campanha: {
+                imagem: urlFoto(campanha.foto),
+                titulo: campanha.nome,
+                descricao: campanha.descricao,
+                urgencia: campanha.urgencia,
+                tipoSanguineo: campanha.tipo_sanguineo_necessario,
+                dataInicio: formatarData(campanha.data_inicio),
+                dataFechamento: formatarData(campanha.data_fechamento),
+                interessados,
+                contatos
+            }
+        })
+    } catch (err) {
+        console.error(err)
         res.status(500).send("Erro ao carregar a página.")
     }
-    
 }
 
 function exibirCriacaoCampanha(req,res) {

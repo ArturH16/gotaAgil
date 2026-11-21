@@ -41,7 +41,6 @@ router.get("/",hemocentroController.logar)
 //     res.render("lista_doadores", dadosCampanha)
 // })
 
-router.get("/listaCampanha",hemocentroController.listarDoadoresCampanha)
 
 // router.get("/campanha/nova",(req,res)=> {
 //     res.render("criacao_campanhas",{
@@ -52,4 +51,6 @@ router.get("/listaCampanha",hemocentroController.listarDoadoresCampanha)
 
 router.get("/campanha/nova",hemocentroController.exibirCriacaoCampanha)
 router.post("/campanha/nova",receberFoto,hemocentroController.criarCampanha)
+router.get("/listaCampanha/:id",hemocentroController.listarDoadoresCampanha)
+
 module.exports = router
