@@ -59,6 +59,9 @@ function validarDataFechamento(valor) {
     return null
 }
 
+const hoje = new Date().toLocaleDateString("sv-SE", { timeZone: "America/Fortaleza" })  // AAAA-MM-DD
+const formatarData = (iso) => iso.split("-").reverse().join("/")                         // dd/mm/aaaa
+
 function renderErroCampanha(req, res, status, erros) {
     const lista = req.file ? [...erros, "Selecione a foto novamente."] : erros
     return res.status(status).render("criacao_campanhas", {
@@ -82,13 +85,24 @@ async function logar(req,res) {
         req.session.statusHemocentro = hemocentro.status
         const bloqueadoBotoes = ["pendente","recusado"].includes(hemocentro.status)
         const campanhas = await campanhaDAO.listarPorHemocentro(req.session.userID)
+       const campanhasComFoto = campanhas.map((c) => {
+       const encerrada = c.data_fechamento < hoje
+       return {
+            ...c,
+            status: encerrada ? "encerrada" : "ativa",
+            dataFechamentoFormatada: formatarData(c.data_fechamento),
+            interessadosTexto: `${c.interessados} ${c.interessados === 1 ? "interessado" : "interessados"}`,
+            fotoUrl: `${process.env.SUPABASE_URL}/storage/v1/object/public/campanhas/${c.foto}`,
+            urgenciaLower: c.urgencia.toLowerCase()
+        }
+    })
          res.render("hemocentro_logado", {
             title: "Início",
             cssExtra: "homepageHemocentro",
             hemocentro,
             statusRotulo: rotulos[hemocentro.status] || hemocentro.status,
             bloqueadoBotoes,
-            campanhas
+            campanhas: campanhasComFoto
         })
     } catch(err) {
         console.log(err)
