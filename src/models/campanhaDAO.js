@@ -9,6 +9,37 @@ class campanhaDAO {
         const rows = await pool.query(sql,valores)
         return rows[0]
     }
+
+    static async listarPorHemocentro(idHemocentro) {
+        const sql = `
+            SELECT c.id_campanha, c.nome, c.descricao, c.tipo_sanguineo_necessario, c.urgencia,
+                c.data_inicio::text AS data_inicio,
+                c.data_fechamento::text AS data_fechamento,
+                c.foto,
+                COUNT(i.id_interesse)::int AS interessados
+                FROM tb_campanha c
+                LEFT JOIN tb_interesse i ON i.id_campanha = c.id_campanha
+                WHERE c.id_hemocentro = $1
+                GROUP BY c.id_campanha
+                ORDER BY c.data_fechamento DESC`
+        const { rows } = await pool.query(sql, [idHemocentro])
+        return rows
+}
+
+    static async buscarPorId(id, idHemocentro) {
+        const sql = `
+            SELECT c.id_campanha, c.nome, c.descricao, c.tipo_sanguineo_necessario, c.urgencia,
+                c.data_inicio::text AS data_inicio,
+                c.data_fechamento::text AS data_fechamento,
+                c.foto,
+                COUNT(i.id_interesse)::int AS interessados
+                FROM tb_campanha c
+                LEFT JOIN tb_interesse i ON i.id_campanha = c.id_campanha
+                WHERE c.id_campanha = $1 AND c.id_hemocentro = $2
+                GROUP BY c.id_campanha`
+        const { rows } = await pool.query(sql, [id, idHemocentro])
+        return rows[0] || null
+}
 }
 
 module.exports = campanhaDAO
