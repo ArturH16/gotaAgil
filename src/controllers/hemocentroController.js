@@ -1,6 +1,29 @@
 const hemocentroDAO = require("../models/hemocentroDAO")
 const contatosDAO = require("../models/contatosDAO")
 const campanhaDAO = require("../models/campanhaDAO")
+const crypto = require("crypto")
+const sharp = require("sharp")
+const supabase = require("../supabase")
+
+async function salvarFoto(buffer) {
+    let imagem
+    try {
+        imagem = await sharp(buffer)
+            .rotate()
+            .resize({ width: 1200, withoutEnlargement: true })
+            .webp({ quality: 80 })
+            .toBuffer()
+    } catch {
+        throw new Error("IMAGEM_INVALIDA")
+    }
+
+    const nome = `${crypto.randomUUID()}.webp`
+    const { error } = await supabase.storage
+        .from("campanhas")
+        .upload(nome, imagem, { contentType: "image/webp" })
+    if (error) throw error
+    return nome
+}
 
 function validarDataFechamento(valor) {
     if (!/^\d{4}-\d{2}-\d{2}$/.test(valor || "")) return "Data de fechamento inválida."
@@ -16,10 +39,11 @@ function validarDataFechamento(valor) {
 }
 
 function renderErroCampanha(req, res, status, erros) {
+    const lista = req.file ? [...erros, "Selecione a foto novamente."] : erros
     return res.status(status).render("criacao_campanhas", {
         title: "Criação Campanha",
         cssExtra: "campanhaNova",
-        erros,
+        erros: lista,
         dados: req.body
     })
 }
@@ -106,7 +130,17 @@ async function criarCampanha(req,res) {
     const erroData = validarDataFechamento(dataFechamento)
     if (erroData) erros.push(erroData)
     if (erros.length) return renderErroCampanha(req, res, 400, erros)
-    const foto = null
+    let foto = null
+    if (req.file) {
+    try {
+        foto = await salvarFoto(req.file.buffer)
+    } catch (err) {
+        console.error(err)
+        return err.message === "IMAGEM_INVALIDA"
+            ? renderErroCampanha(req, res, 400, ["O arquivo enviado não é uma imagem válida (use JPG, PNG ou WebP)."])
+            : renderErroCampanha(req, res, 500, ["Não foi possível salvar a imagem agora. Tente novamente."])
+    }
+}
 
     try {
         const campanha = await campanhaDAO.insertCampanha({nome: nomeNormalizado,
@@ -116,7 +150,8 @@ async function criarCampanha(req,res) {
 
     } catch(err){
         console.log(err)
-        res.status(500).send("Erro interno.")
+        await removerFoto(foto) 
+        renderErroCampanha(req, res, 500, ["Erro interno. Tente novamente."])
     }
 }
 

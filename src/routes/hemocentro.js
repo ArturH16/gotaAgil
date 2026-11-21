@@ -1,7 +1,7 @@
 const express = require("express")
 const router = express.Router()
 const hemocentroController = require("../controllers/hemocentroController")
-const receberFoto = require("../middlewares/upload")
+const { receberFoto }= require("../middlewares/upload")
 // router.get("/",(req,res)=> {
 //     const hemocentroMockado = {
 //         title: "Início",
