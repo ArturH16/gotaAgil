@@ -2,6 +2,28 @@ const hemocentroDAO = require("../models/hemocentroDAO")
 const contatosDAO = require("../models/contatosDAO")
 const campanhaDAO = require("../models/campanhaDAO")
 
+function validarDataFechamento(valor) {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(valor || "")) return "Data de fechamento inválida."
+    const [ano, mes, dia] = valor.split("-").map(Number)
+    const data = new Date(ano, mes - 1, dia)
+    if (data.getFullYear() !== ano || data.getMonth() !== mes - 1 || data.getDate() !== dia) {
+        return "Data de fechamento inválida."
+    }
+    const hoje = new Date()
+    hoje.setHours(0, 0, 0, 0)
+    if (data < hoje) return "Data de fechamento inválida."
+    return null
+}
+
+function renderErroCampanha(req, res, status, erros) {
+    return res.status(status).render("criacao_campanhas", {
+        title: "Criação Campanha",
+        cssExtra: "campanhaNova",
+        erros,
+        dados: req.body
+    })
+}
+
 async function logar(req,res) {
     const rotulos = {
         pendente: "Aguardando validação",
@@ -74,22 +96,18 @@ function exibirCriacaoCampanha(req,res) {
 
 async function criarCampanha(req,res) {
     const idHemocentro = req.session.userID
-    const {nome,descricao,tipoSanguineo,urgencia,dataFechamento,foto} = req.body
+    const {nome,descricao,tipoSanguineo,urgencia,dataFechamento} = req.body
     const nomeNormalizado = (nome || "").trim()
     const descricaoNormalizada = (descricao || "").trim()
 
     const erros = []
     if (!nomeNormalizado) erros.push("Informe o nome.")
     if (!descricaoNormalizada) erros.push("Informe uma descrição.")
-    
-    if (erros.length) {
-        return res.status(400).render("criacao_campanhas", {
-            title: "Criação Campanha",
-            loggedInHemocentro: true,
-            cssExtra: "campanhaNova",
-            dados: req.body
-        })
-    }
+    const erroData = validarDataFechamento(dataFechamento)
+    if (erroData) erros.push(erroData)
+    if (erros.length) return renderErroCampanha(req, res, 400, erros)
+    const foto = null
+
     try {
         const campanha = await campanhaDAO.insertCampanha({nome: nomeNormalizado,
             descricao: descricaoNormalizada,tipoSanguineo,urgencia,dataFechamento,foto,idHemocentro})
