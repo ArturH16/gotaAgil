@@ -173,6 +173,8 @@ async function listarDoadoresCampanha(req, res) {
             cssExtra: "listaInteressados",
             campanha: {
                 id: campanha.id_campanha,
+                encerrada: estaEncerrada(campanha),
+                podeExcluir: interessados.length===0,
                 imagem: urlFoto(campanha.foto),
                 titulo: campanha.nome,
                 descricao: campanha.descricao,
@@ -309,6 +311,26 @@ async function editarCampanha(req, res) {
         redirecionarComAviso(req, res, "erro", "Erro interno. Tente novamente.", destinoDetalhe)
     }
 }
+}
+
+async function excluirCampanha(req, res) {
+    const campanha = req.campanha
+    const destinoDetalhe = `/hemocentro/campanha/${campanha.id_campanha}`
+    const msgBloqueio = "Não foi possível excluir. Campanhas com interessados devem ser encerradas."
+
+    try {
+        const excluida = await campanhaDAO.excluirCampanha(campanha.id_campanha, req.session.userID)
+
+        if (!excluida) return redirecionarComAviso(req, res, "erro", msgBloqueio, destinoDetalhe)
+
+        await removerFoto(excluida.foto)
+        redirecionarComAviso(req, res, "sucesso", "Campanha excluída.", "/hemocentro")
+    } catch (err) {
+        console.error(err)
+        // 23503: um interesse entrou entre a checagem e o DELETE; a chave estrangeira barrou
+        const msg = err.code === "23503" ? msgBloqueio : "Erro interno. Tente novamente."
+        redirecionarComAviso(req, res, "erro", msg, destinoDetalhe)
+    }
 }
 
 module.exports = {

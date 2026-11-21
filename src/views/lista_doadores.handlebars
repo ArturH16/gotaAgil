@@ -27,9 +27,22 @@
             <p>Data Início: {{campanha.dataInicio}}</p>
             <p>Data Fechamento: {{campanha.dataFechamento}}</p>
             <div class="acoesCampanha">
+            {{#unless campanha.encerrada}}
                 <a href="/hemocentro/campanha/{{campanha.id}}/editar" class="btn-secundario btnEditar">Editar campanha</a>
-                <button class="btn-secundario btnEncerrar">Encerrar campanha</button>
-            </div>
+
+                <form method="post" action="/hemocentro/campanha/{{campanha.id}}/encerrar"
+                    onsubmit="return confirm('Encerrar esta campanha agora? Essa ação não pode ser desfeita.')">
+                    <button type="submit" class="btn-secundario">Encerrar campanha</button>
+                </form>
+            {{/unless}}
+
+            {{#if campanha.podeExcluir}}
+                <form method="post" action="/hemocentro/campanha/{{campanha.id}}/excluir"
+                    onsubmit="return confirm('Excluir esta campanha definitivamente?')">
+                    <button type="submit" class="btn-secundario btnExcluir">Excluir campanha</button>
+                </form>
+            {{/if}}
+        </div>
 
             <div class="listaInteressados">
                 <h2>{{campanha.interessados.length}} interessados</h2>

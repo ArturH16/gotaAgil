@@ -128,3 +128,19 @@
     height: 48px;
     color: #9ca3af;
 }
+
+.acoesCampanha { 
+    display: flex; 
+    flex-wrap: wrap; 
+    gap: 12px; 
+    margin-top: 16px; 
+}
+
+.acoesCampanha form { 
+    margin: 0; 
+}
+
+.btnExcluir { 
+    color: #FFFFFF; 
+    background-color: #C14025; 
+}

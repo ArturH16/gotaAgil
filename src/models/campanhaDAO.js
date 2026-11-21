@@ -78,6 +78,16 @@ class campanhaDAO {
         const { rows } = await pool.query(sql, [id, idHemocentro, hoje])
         return rows[0] || null
 }
+
+    static async excluirCampanha(id, idHemocentro) {
+        const sql = `
+            DELETE FROM tb_campanha c
+            WHERE c.id_campanha = $1 AND c.id_hemocentro = $2
+            AND NOT EXISTS (SELECT 1 FROM tb_interesse i WHERE i.id_campanha = c.id_campanha)
+            RETURNING c.foto`
+        const { rows } = await pool.query(sql, [id, idHemocentro])
+        return rows[0] || null    // com foto nula devolve { foto: null }, que ainda é "apagou"
+    }
 }
 
 module.exports = campanhaDAO
