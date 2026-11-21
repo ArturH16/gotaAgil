@@ -25,6 +25,30 @@ async function salvarFoto(buffer) {
     return nome
 }
 
+async function removerFoto(nome) {
+    if (!nome) return
+    try {
+        const { error } = await supabase.storage.from("campanhas").remove([nome])
+        if (error) console.error("Falha ao apagar foto órfã:", nome, error.message)
+    } catch (e) {
+        console.error("Falha ao apagar foto órfã:", nome, e.message)
+    }
+}
+
+function validarDataInicio(valor) {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(valor || "")) return "Data de início inválida."
+    const [ano, mes, dia] = valor.split("-").map(Number)
+    const data = new Date(ano, mes - 1, dia)
+    if (data.getFullYear() !== ano || data.getMonth() !== mes - 1 || data.getDate() !== dia) {
+        return "Data de início inválida."
+    }
+    const hoje = new Date()
+    hoje.setHours(0, 0, 0, 0)
+    if (data < hoje) return "Data de início inválida."
+    return null
+}
+
+
 function validarDataFechamento(valor) {
     if (!/^\d{4}-\d{2}-\d{2}$/.test(valor || "")) return "Data de fechamento inválida."
     const [ano, mes, dia] = valor.split("-").map(Number)
@@ -120,15 +144,21 @@ function exibirCriacaoCampanha(req,res) {
 
 async function criarCampanha(req,res) {
     const idHemocentro = req.session.userID
-    const {nome,descricao,tipoSanguineo,urgencia,dataFechamento} = req.body
+    const {nome,descricao,tipoSanguineo,urgencia,dataInicio,dataFechamento} = req.body
     const nomeNormalizado = (nome || "").trim()
     const descricaoNormalizada = (descricao || "").trim()
 
     const erros = []
+    if (req.erroUpload) return renderErroCampanha(req, res, 400, [req.erroUpload])
     if (!nomeNormalizado) erros.push("Informe o nome.")
     if (!descricaoNormalizada) erros.push("Informe uma descrição.")
-    const erroData = validarDataFechamento(dataFechamento)
-    if (erroData) erros.push(erroData)
+    const erroDataInicio = validarDataInicio(dataInicio)
+    if (erroDataInicio) erros.push(erroDataInicio)
+    const erroDataFechamento = validarDataFechamento(dataFechamento)
+    if (erroDataFechamento) erros.push(erroDataFechamento)
+    if (!erroDataInicio && !erroDataFechamento && dataFechamento < dataInicio) {
+    erros.push("A data de encerramento não pode ser anterior à de início.")
+    }
     if (erros.length) return renderErroCampanha(req, res, 400, erros)
     let foto = null
     if (req.file) {
@@ -144,7 +174,7 @@ async function criarCampanha(req,res) {
 
     try {
         const campanha = await campanhaDAO.insertCampanha({nome: nomeNormalizado,
-            descricao: descricaoNormalizada,tipoSanguineo,urgencia,dataFechamento,foto,idHemocentro})
+            descricao: descricaoNormalizada,tipoSanguineo,urgencia,dataInicio,dataFechamento,foto,idHemocentro})
         req.session.flash = { tipo: "sucesso", texto: "Campanha criada com sucesso!" }
         req.session.save((err) => {
             if (err) console.error(err)

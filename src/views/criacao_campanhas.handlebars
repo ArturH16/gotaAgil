@@ -1,3 +1,11 @@
+{{#if erros}}
+    <ul class="listaErros">
+        {{#each erros}}
+            <li>{{this}}</li>
+        {{/each}}
+    </ul>
+{{/if}}
+
 <div class="formCampanhaContainer">
     <a href="/hemocentro" class="voltar" title="Voltar">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
@@ -15,7 +23,7 @@
 
         <div class="campoForm">
             <label for="descricao">Descrição</label>
-            <textarea id="descricao" name="descricao" rows="4" placeholder="Explique o objetivo da campanha, requisitos específicos, etc." required value="{{dados.descricao}}"></textarea>
+            <textarea id="descricao" name="descricao" rows="4" placeholder="Explique o objetivo da campanha, requisitos específicos, etc." required>{{dados.descricao}}</textarea>
         </div>
 
         <div class="campoFormLinha">
@@ -24,13 +32,13 @@
                 <select id="tipoSanguineo" name="tipoSanguineo" required>
                     <option value="">Selecione</option>
                     <option value="A+" {{selecionado dados.tipoSanguineo "A+"}}>A+</option>
-                    <option value="A-"{{selecionado dados.tipoSanguineo "A-"}}>A-</option>
-                    <option value="B+"{{selecionado dados.tipoSanguineo "B+"}}>B+</option>
-                    <option value="B-"{{selecionado dados.tipoSanguineo "B-"}}>B-</option>
-                    <option value="AB+"{{selecionado dados.tipoSanguineo "AB+"}}>AB+</option>
-                    <option value="AB-"{{selecionado dados.tipoSanguineo "AB-"}}>AB-</option>
-                    <option value="O+"{{selecionado dados.tipoSanguineo "O+"}}>O+</option>
-                    <option value="O-"{{selecionado dados.tipoSanguineo "O-"}}>O-</option>
+                    <option value="A-" {{selecionado dados.tipoSanguineo "A-"}}>A-</option>
+                    <option value="B+" {{selecionado dados.tipoSanguineo "B+"}}>B+</option>
+                    <option value="B-" {{selecionado dados.tipoSanguineo "B-"}}>B-</option>
+                    <option value="AB+" {{selecionado dados.tipoSanguineo "AB+"}}>AB+</option>
+                    <option value="AB-" {{selecionado dados.tipoSanguineo "AB-"}}>AB-</option>
+                    <option value="O+" {{selecionado dados.tipoSanguineo "O+"}}>O+</option>
+                    <option value="O-" {{selecionado dados.tipoSanguineo "O-"}}>O-</option>
                 </select>
             </div>
 
@@ -38,16 +46,21 @@
                 <label for="urgencia">Urgência</label>
                 <select id="urgencia" name="urgencia" required>
                     <option value="">Selecione</option>
-                    <option value="Urgente">Urgente</option>
-                    <option value="Moderada">Moderada</option>
-                    <option value="Regular">Regular</option>
+                    <option value="Urgente" {{selecionado dados.urgencia "Urgente"}}>Urgente</option>
+                    <option value="Moderada" {{selecionado dados.urgencia "Moderada"}}>Moderada</option>
+                    <option value="Regular" {{selecionado dados.urgencia "Regular"}}>Regular</option>
                 </select>
             </div>
         </div>
 
+         <div class="campoForm">
+            <label for="dataInicio">Data de início</label>
+            <input type="date" id="dataInicio" name="dataInicio" required value="{{dados.dataInicio}}">
+        </div>
+
         <div class="campoForm">
             <label for="dataFechamento">Data de encerramento</label>
-            <input type="date" id="dataFechamento" name="dataFechamento" required>
+            <input type="date" id="dataFechamento" name="dataFechamento" required value="{{dados.dataFechamento}}">
         </div>
 
         <div class="campoForm">
