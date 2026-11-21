@@ -16,7 +16,7 @@ class campanhaDAO {
                 c.data_inicio::text AS data_inicio,
                 c.data_fechamento::text AS data_fechamento,
                 c.foto,
-                c_encerrada_em::text AS encerrada_em,
+                c.encerrada_em::text AS encerrada_em,
                 COUNT(i.id_interesse)::int AS interessados
                 FROM tb_campanha c
                 LEFT JOIN tb_interesse i ON i.id_campanha = c.id_campanha

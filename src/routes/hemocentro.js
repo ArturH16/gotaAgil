@@ -55,7 +55,8 @@ router.get("/campanha/nova",hemocentroController.exibirCriacaoCampanha)
 router.post("/campanha/nova",receberFoto,hemocentroController.criarCampanha)
 router.get("/listaCampanha/:id",carregarCampanha,hemocentroController.listarDoadoresCampanha)
 router.get("/campanha/:id/editar",carregarCampanha,hemocentroController.exibirEdicaoCampanha)
-router.post("/campanha/:id/encerrar",carregarCampanha)
-router.post("/campanha/:id/excluir",carregarCampanha)
+router.post("/campanha/:id/editar",carregarCampanha,receberFoto,hemocentroController.editarCampanha)
+router.post("/campanha/:id/encerrar",carregarCampanha,hemocentroController.encerrarCampanha)
+router.post("/campanha/:id/excluir",carregarCampanha,hemocentroController.excluirCampanha)
 
 module.exports = router

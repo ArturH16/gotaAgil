@@ -10,6 +10,10 @@
     font-size: 1em;
 }
 
+.descricaoCampanha {
+  margin-bottom: 20px;
+}
+
 .listaInteressados h2 {
     font-size: 1rem;
     color: #2B2B2B;

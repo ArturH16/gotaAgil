@@ -5,7 +5,8 @@ const crypto = require("crypto")
 const sharp = require("sharp")
 const supabase = require("../supabase")
 const { urlFoto } = require("../utils/fotos")
-const { estaEncerrada } = require("../utils/campanhas")
+const { estaEncerrada, rotuloUrgencia } = require("../utils/campanhas")
+const hoje = require("../utils/data")
 
 function configFormCampanha(campanha) {
     if (!campanha) {
@@ -68,7 +69,6 @@ function validarCamposCampanha(body, { edicao = false } = {}) {
     const descricao = (body.descricao || "").trim()
     const urgencia = (body.urgencia || "").toLowerCase()
     const { tipoSanguineo, dataInicio, dataFechamento } = body
-    const hoje = hojeFortaleza()
     const erros = []
 
     if (!nome) erros.push("Informe o nome.")
@@ -79,10 +79,9 @@ function validarCamposCampanha(body, { edicao = false } = {}) {
     if (!URGENCIAS.includes(urgencia)) erros.push("Selecione a urgência.")
 
     if (!dataValida(dataInicio)) erros.push("Data de início inválida.")
-    else if (!edicao && dataInicio < hoje) erros.push("A data de início não pode estar no passado.")
 
     if (!dataValida(dataFechamento)) erros.push("Data de fechamento inválida.")
-    else if (dataFechamento < hoje) erros.push("A data de fechamento não pode estar no passado.")
+    else if (dataFechamento < hoje.hojeFortaleza()) erros.push("A data de fechamento não pode estar no passado.")
 
     if (dataValida(dataInicio) && dataValida(dataFechamento) && dataFechamento < dataInicio) {
         erros.push("A data de encerramento não pode ser anterior à de início.")
@@ -91,8 +90,6 @@ function validarCamposCampanha(body, { edicao = false } = {}) {
     return { erros, valores: { nome, descricao, tipoSanguineo, urgencia, dataInicio, dataFechamento } }
 }
 
-const hoje = new Date().toLocaleDateString("sv-SE", { timeZone: "America/Fortaleza" })  // AAAA-MM-DD
-const formatarData = (iso) => iso.split("-").reverse().join("/")                         // dd/mm/aaaa
 
 function renderErroCampanha(req, res, status, erros, campanhaEdicao = null) {
     const lista = req.file ? [...erros, "Selecione a foto novamente."] : erros
@@ -128,15 +125,18 @@ async function logar(req,res) {
         const bloqueadoBotoes = ["pendente","recusado"].includes(hemocentro.status)
         const campanhas = await campanhaDAO.listarPorHemocentro(req.session.userID)
        const campanhasComFoto = campanhas.map((c) => {
-        const encerrada = estaEncerrada(c,hoje)
+        const encerrada = estaEncerrada(c,hoje.hojeFortaleza()
+        )
        return {
             ...c,
-            status: encerrada ? "encerrada" : "ativa",
-            dataFechamentoFormatada: formatarData(c.data_fechamento),
+            status: encerrada ? "encerrada" : "ativa",encerrada,
+            dataFechamentoFormatada: hoje.formatarData(c.data_fechamento),
             interessadosTexto: `${c.interessados} ${c.interessados === 1 ? "interessado" : "interessados"}`,
+            dataEncerramentoFormatada: hoje.formatarData(c.encerrada_em || c.data_fechamento),
             fotoUrl:  urlFoto(c.foto),
             urgenciaLower: c.urgencia.toLowerCase(),
-            dataEncerramentoFormatada: formatarData(c.encerrada_em || c.data_fechamento)
+            urgenciaRotulo: rotuloUrgencia(c.urgencia),
+            dataEncerramentoFormatada: hoje.formatarData(c.encerrada_em || c.data_fechamento)
         }
     })
          res.render("hemocentro_logado", {
@@ -178,10 +178,10 @@ async function listarDoadoresCampanha(req, res) {
                 imagem: urlFoto(campanha.foto),
                 titulo: campanha.nome,
                 descricao: campanha.descricao,
-                urgencia: campanha.urgencia,
+                urgencia: rotuloUrgencia(campanha.urgencia),
                 tipoSanguineo: campanha.tipo_sanguineo_necessario,
-                dataInicio: formatarData(campanha.data_inicio),
-                dataFechamento: formatarData(campanha.data_fechamento),
+                dataInicio: hoje.formatarData(campanha.data_inicio),
+                dataFechamento: hoje.formatarData(campanha.data_fechamento),
                 interessados,
                 contatos
             }
@@ -201,23 +201,30 @@ function exibirCriacaoCampanha(req,res) {
     })
 }
 
-async function criarCampanha(req,res) {
-     if (req.erroUpload) return renderErroCampanha(req, res, 400, [req.erroUpload])
+async function criarCampanha(req, res) {
+    if (req.erroUpload) return renderErroCampanha(req, res, 400, [req.erroUpload])
 
     const { erros, valores } = validarCamposCampanha(req.body)
     if (erros.length) return renderErroCampanha(req, res, 400, erros)
 
+    let foto = null   // declarada fora do try, pra o catch enxergar
+    if (req.file) {
+        try {
+            foto = await salvarFoto(req.file.buffer)
+        } catch (err) {
+            console.error(err)
+            return err.message === "IMAGEM_INVALIDA"
+                ? renderErroCampanha(req, res, 400, ["O arquivo enviado não é uma imagem válida (use JPG, PNG ou WebP)."])
+                : renderErroCampanha(req, res, 500, ["Não foi possível salvar a imagem agora. Tente novamente."])
+        }
+    }
+
     try {
-        const campanha = await campanhaDAO.insertCampanha({...valores,foto,idHemocentro: req.session.userID})
-        req.session.flash = { tipo: "sucesso", texto: "Campanha criada com sucesso!" }
-        req.session.save((err) => {
-            if (err) console.error(err)
-            res.redirect("/hemocentro")
-        })
-        
-    } catch(err){
-        console.log(err)
-        await removerFoto(foto) 
+        await campanhaDAO.insertCampanha({ ...valores, foto, idHemocentro: req.session.userID })
+        redirecionarComAviso(req, res, "sucesso", "Campanha criada com sucesso!", "/hemocentro")
+    } catch (err) {
+        console.error(err)
+        await removerFoto(foto)   // o INSERT falhou, então a foto já enviada fica órfã
         renderErroCampanha(req, res, 500, ["Erro interno. Tente novamente."])
     }
 }
@@ -248,7 +255,7 @@ function exibirEdicaoCampanha(req, res) {
 async function editarCampanha(req, res) {
     const campanha = req.campanha
     const idHemocentro = req.session.userID
-    const destinoDetalhe = `/hemocentro/campanha/${campanha.id_campanha}`
+    const destinoDetalhe = `/hemocentro/listaCampanha/${campanha.id_campanha}`
 
     if (req.erroUpload) return renderErroCampanha(req, res, 400, [req.erroUpload], campanha)
 
@@ -295,12 +302,14 @@ async function editarCampanha(req, res) {
         renderErroCampanha(req, res, 500, ["Erro interno. Tente novamente."], campanha)
     }
 
-    async function encerrarCampanha(req, res) {
+}
+
+async function encerrarCampanha(req, res) {
     const campanha = req.campanha
-    const destinoDetalhe = `/hemocentro/campanha/${campanha.id_campanha}`
+    const destinoDetalhe = `/hemocentro/listaCampanha/${campanha.id_campanha}`
 
     try {
-        const ok = await campanhaDAO.encerrarCampanha(campanha.id_campanha, req.session.userID, hojeFortaleza())
+        const ok = await campanhaDAO.encerrarCampanha(campanha.id_campanha, req.session.userID, hoje.hojeFortaleza())
 
         if (!ok) {
             return redirecionarComAviso(req, res, "erro", "Esta campanha já está encerrada.", destinoDetalhe)
@@ -310,7 +319,6 @@ async function editarCampanha(req, res) {
         console.error(err)
         redirecionarComAviso(req, res, "erro", "Erro interno. Tente novamente.", destinoDetalhe)
     }
-}
 }
 
 async function excluirCampanha(req, res) {
@@ -338,5 +346,8 @@ module.exports = {
     listarDoadoresCampanha,
     exibirCriacaoCampanha,
     criarCampanha,
-    exibirEdicaoCampanha
+    exibirEdicaoCampanha,
+    editarCampanha,
+    encerrarCampanha,
+    excluirCampanha
 }
