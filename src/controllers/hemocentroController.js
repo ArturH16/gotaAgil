@@ -145,9 +145,12 @@ async function criarCampanha(req,res) {
     try {
         const campanha = await campanhaDAO.insertCampanha({nome: nomeNormalizado,
             descricao: descricaoNormalizada,tipoSanguineo,urgencia,dataFechamento,foto,idHemocentro})
-        console.log("Campanha criada com sucesso!")
-        res.redirect("/hemocentro")
-
+        req.session.flash = { tipo: "sucesso", texto: "Campanha criada com sucesso!" }
+        req.session.save((err) => {
+            if (err) console.error(err)
+            res.redirect("/hemocentro")
+        })
+        
     } catch(err){
         console.log(err)
         await removerFoto(foto) 

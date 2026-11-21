@@ -1,0 +1,12 @@
+{{#if flash}}
+    <div class="flash flash--{{flash.tipo}}" role="status" data-auto-fechar="9000">
+        <svg class="flash-icone icone-sucesso" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/>
+        </svg>
+        <svg class="flash-icone icone-erro" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/>
+        </svg>
+        <span class="flash-texto">{{flash.texto}}</span>
+        <button type="button" class="flash-fechar" aria-label="Fechar aviso">&times;</button>
+    </div>
+{{/if}}
