@@ -135,7 +135,8 @@ async function logar(req,res) {
             dataFechamentoFormatada: formatarData(c.data_fechamento),
             interessadosTexto: `${c.interessados} ${c.interessados === 1 ? "interessado" : "interessados"}`,
             fotoUrl:  urlFoto(c.foto),
-            urgenciaLower: c.urgencia.toLowerCase()
+            urgenciaLower: c.urgencia.toLowerCase(),
+            dataEncerramentoFormatada: formatarData(c.encerrada_em || c.data_fechamento)
         }
     })
          res.render("hemocentro_logado", {
@@ -291,6 +292,23 @@ async function editarCampanha(req, res) {
         await removerFoto(fotoNova)       // nunca apague a antiga aqui
         renderErroCampanha(req, res, 500, ["Erro interno. Tente novamente."], campanha)
     }
+
+    async function encerrarCampanha(req, res) {
+    const campanha = req.campanha
+    const destinoDetalhe = `/hemocentro/campanha/${campanha.id_campanha}`
+
+    try {
+        const ok = await campanhaDAO.encerrarCampanha(campanha.id_campanha, req.session.userID, hojeFortaleza())
+
+        if (!ok) {
+            return redirecionarComAviso(req, res, "erro", "Esta campanha já está encerrada.", destinoDetalhe)
+        }
+        redirecionarComAviso(req, res, "sucesso", "Campanha encerrada.", destinoDetalhe)
+    } catch (err) {
+        console.error(err)
+        redirecionarComAviso(req, res, "erro", "Erro interno. Tente novamente.", destinoDetalhe)
+    }
+}
 }
 
 module.exports = {
