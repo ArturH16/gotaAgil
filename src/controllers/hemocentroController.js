@@ -105,5 +105,6 @@ async function criarCampanha(req,res) {
 module.exports = {
     logar,
     listarDoadoresCampanha,
-    exibirCriacaoCampanha
+    exibirCriacaoCampanha,
+    criarCampanha
 }
