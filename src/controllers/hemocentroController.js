@@ -5,6 +5,24 @@ const crypto = require("crypto")
 const sharp = require("sharp")
 const supabase = require("../supabase")
 const { urlFoto } = require("../utils/fotos")
+const { estaEncerrada } = require("../utils/campanhas")
+
+function configFormCampanha(campanha) {
+    if (!campanha) {
+        return {
+            tituloForm: "Nova campanha",
+            action: "/hemocentro/campanha/nova",
+            textoBotao: "Criar campanha",
+            voltarHref: "/hemocentro"
+        }
+    }
+    return {
+        tituloForm: "Editar campanha",
+        action: `/hemocentro/campanha/${campanha.id_campanha}/editar`,
+        textoBotao: "Salvar alterações",
+        voltarHref: `/hemocentro/listaCampanha/${campanha.id_campanha}`
+    }
+}
 
 async function salvarFoto(buffer) {
     let imagem
@@ -68,6 +86,7 @@ function renderErroCampanha(req, res, status, erros) {
     return res.status(status).render("criacao_campanhas", {
         title: "Criação Campanha",
         cssExtra: "campanhaNova",
+        ...configFormCampanha(),
         erros: lista,
         dados: req.body
     })
@@ -87,7 +106,7 @@ async function logar(req,res) {
         const bloqueadoBotoes = ["pendente","recusado"].includes(hemocentro.status)
         const campanhas = await campanhaDAO.listarPorHemocentro(req.session.userID)
        const campanhasComFoto = campanhas.map((c) => {
-       const encerrada = c.data_fechamento < hoje
+        const encerrada = estaEncerrada(c,hoje)
        return {
             ...c,
             status: encerrada ? "encerrada" : "ativa",
@@ -113,20 +132,16 @@ async function logar(req,res) {
 }
 
 async function listarDoadoresCampanha(req, res) {
-    const id = Number(req.params.id)
-    if (!Number.isInteger(id) || id <= 0) {
-        return res.status(404).send("Campanha não encontrada.")
-    }
 
     try {
+        const campanha = req.campanha
         const idHemocentro = req.session.userID
-        const campanha = await campanhaDAO.buscarPorId(id, idHemocentro)
 
         // não existe OU é de outro hemocentro: mesma resposta, sem revelar qual
         if (!campanha) return res.status(404).send("Campanha não encontrada.")
 
         const [interessados, contatos] = await Promise.all([
-            campanhaDAO.listarInteressados(id, idHemocentro),
+            campanhaDAO.listarInteressados(campanha.id_campanha, idHemocentro),
             contatosDAO.buscarPorIdHemocentro(idHemocentro)
         ])
 
@@ -134,6 +149,7 @@ async function listarDoadoresCampanha(req, res) {
             title: "Lista de Interessados",
             cssExtra: "listaInteressados",
             campanha: {
+                id: campanha.id_campanha,
                 imagem: urlFoto(campanha.foto),
                 titulo: campanha.nome,
                 descricao: campanha.descricao,
@@ -155,7 +171,8 @@ function exibirCriacaoCampanha(req,res) {
      res.render("criacao_campanhas",{
         title: "Criação Campanha",
         loggedInHemocentro: true,
-        cssExtra: "campanhaNova"
+        cssExtra: "campanhaNova",
+        ...configFormCampanha()
     })
 }
 
@@ -205,9 +222,33 @@ async function criarCampanha(req,res) {
     }
 }
 
+function exibirEdicaoCampanha(req, res) {
+    const campanha = req.campanha
+
+    if (estaEncerrada(campanha)) {
+        req.session.flash = { tipo: "erro", texto: "Campanhas encerradas não podem ser editadas." }
+        return req.session.save(() => res.redirect(`/hemocentro/campanha/${campanha.id_campanha}`))
+    }
+    res.render("criacao_campanhas", {
+        title: "Editar Campanha",
+        cssExtra: "campanhaNova",
+        ...configFormCampanha(campanha),
+        fotoAtualUrl: campanha.foto ? urlFoto(campanha.foto) : null,
+        dados: {
+            nome: campanha.nome,
+            descricao: campanha.descricao,
+            tipoSanguineo: campanha.tipo_sanguineo_necessario,
+            urgencia: (campanha.urgencia || "").toLowerCase(),
+            dataInicio: campanha.data_inicio,          // já chega como AAAA-MM-DD (::text)
+            dataFechamento: campanha.data_fechamento
+        }
+    })
+}
+
 module.exports = {
     logar,
     listarDoadoresCampanha,
     exibirCriacaoCampanha,
-    criarCampanha
+    criarCampanha,
+    exibirEdicaoCampanha
 }

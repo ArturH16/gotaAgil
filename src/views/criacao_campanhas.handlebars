@@ -7,14 +7,14 @@
 {{/if}}
 
 <div class="formCampanhaContainer">
-    <a href="/hemocentro" class="voltar" title="Voltar">
+    <a href="{{voltarHref}}" class="voltar" title="Voltar">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
         <span>Voltar</span>
     </a>
 
-    <h1>Nova Campanha</h1>
+    <h1>{{tituloForm}}</h1>
 
-    <form method="POST" action="/hemocentro/campanha/nova" enctype="multipart/form-data" class="formCampanha">
+    <form method="POST" action="{{action}}" enctype="multipart/form-data" class="formCampanha">
 
         <div class="campoForm">
             <label for="nome">Nome da campanha</label>
@@ -46,9 +46,9 @@
                 <label for="urgencia">Urgência</label>
                 <select id="urgencia" name="urgencia" required>
                     <option value="">Selecione</option>
-                    <option value="Urgente" {{selecionado dados.urgencia "Urgente"}}>Urgente</option>
-                    <option value="Moderada" {{selecionado dados.urgencia "Moderada"}}>Moderada</option>
-                    <option value="Regular" {{selecionado dados.urgencia "Regular"}}>Regular</option>
+                    <option value="Urgente" {{selecionado dados.urgencia "urgente"}}>Urgente</option>
+                    <option value="Moderada" {{selecionado dados.urgencia "moderada"}}>Moderada</option>
+                    <option value="Regular" {{selecionado dados.urgencia "regular"}}>Regular</option>
                 </select>
             </div>
         </div>
@@ -65,11 +65,15 @@
 
         <div class="campoForm">
             <label for="foto">Foto / flyer da campanha</label>
+            {{#if fotoAtualUrl}}
+                <img src="{{fotoAtualUrl}}" class="fotoAtual" alt="Foto atual da campanha">
+                <small>Envie uma nova imagem se quiser trocar a atual.</small>
+            {{/if}}
             <input type="file" id="foto" name="foto" accept="image/*">
             <img id="previewFoto" class="previewFoto" hidden alt="Pré-visualização da imagem">
         </div>
 
-        <button type="submit" class="btn-interesse">Criar campanha</button>
+        <button type="submit" class="btn-interesse">{{textoBotao}}</button>
     </form>
 </div>
 

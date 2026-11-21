@@ -2,6 +2,8 @@ const express = require("express")
 const router = express.Router()
 const hemocentroController = require("../controllers/hemocentroController")
 const { receberFoto }= require("../middlewares/upload")
+const { carregarCampanha } = require("../middlewares/campanha")
+
 // router.get("/",(req,res)=> {
 //     const hemocentroMockado = {
 //         title: "Início",
@@ -51,9 +53,9 @@ router.get("/",hemocentroController.logar)
 
 router.get("/campanha/nova",hemocentroController.exibirCriacaoCampanha)
 router.post("/campanha/nova",receberFoto,hemocentroController.criarCampanha)
-router.get("/listaCampanha/:id",hemocentroController.listarDoadoresCampanha)
-router.post("/campanha/:id/editar")
-router.post("/campanha/:id/encerrar")
-router.post("/campanha/:id/excluir")
+router.get("/listaCampanha/:id",carregarCampanha,hemocentroController.listarDoadoresCampanha)
+router.get("/campanha/:id/editar",carregarCampanha,hemocentroController.exibirEdicaoCampanha)
+router.post("/campanha/:id/encerrar",carregarCampanha)
+router.post("/campanha/:id/excluir",carregarCampanha)
 
 module.exports = router
