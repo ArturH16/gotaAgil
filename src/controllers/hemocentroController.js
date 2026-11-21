@@ -81,12 +81,14 @@ async function logar(req,res) {
         }
         req.session.statusHemocentro = hemocentro.status
         const bloqueadoBotoes = ["pendente","recusado"].includes(hemocentro.status)
+        const campanhas = await campanhaDAO.listarPorHemocentro(req.session.userID)
          res.render("hemocentro_logado", {
             title: "Início",
             cssExtra: "homepageHemocentro",
             hemocentro,
             statusRotulo: rotulos[hemocentro.status] || hemocentro.status,
-            bloqueadoBotoes
+            bloqueadoBotoes,
+            campanhas
         })
     } catch(err) {
         console.log(err)
