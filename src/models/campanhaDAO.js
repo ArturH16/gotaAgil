@@ -88,6 +88,28 @@ class campanhaDAO {
         const { rows } = await pool.query(sql, [id, idHemocentro])
         return rows[0] || null    // com foto nula devolve { foto: null }, que ainda é "apagou"
     }
+
+    static async listarAbertas({ hoje, tipo = null, estado = null }) {
+        const sql = `
+            SELECT c.id_campanha, c.nome, c.tipo_sanguineo_necessario, c.urgencia,
+                c.data_fechamento::text AS data_fechamento,
+                c.foto,
+                h.nome AS hemocentro, h.cidade, h.estado
+            FROM tb_campanha c
+            JOIN tb_hemocentro h ON h.id_hemocentro = c.id_hemocentro
+            WHERE h.status = 'aprovado'
+            AND c.encerrada_em IS NULL
+            AND c.data_inicio <= $1::date
+            AND c.data_fechamento >= $1::date
+            AND ($2::text IS NULL OR c.tipo_sanguineo_necessario = $2)
+            AND ($3::text IS NULL OR h.estado = $3)
+            ORDER BY CASE lower(c.urgencia) WHEN 'urgente' THEN 1 WHEN 'moderada' THEN 2 ELSE 3 END,
+                    c.data_fechamento ASC,
+                    c.id_campanha ASC
+            LIMIT 60`
+        const { rows } = await pool.query(sql, [hoje, tipo, estado])
+        return rows
+}
 }
 
 module.exports = campanhaDAO
