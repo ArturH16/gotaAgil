@@ -53,3 +53,27 @@
     font-size: 0.9rem;
     margin-top: 4px;
 }
+
+.listaVaziaDoador {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    width: 100%;
+    padding: 64px 20px;
+    margin: 24px 0;
+    text-align: center;
+    font-size: 1.15rem;
+    font-weight: 500;
+    color: #6b7280;
+    background-color: #f9fafb;
+    border: 1px dashed #d1d5db;
+    border-radius: 12px;
+}
+
+.listaVaziaDoador svg {
+    width: 48px;
+    height: 48px;
+    color: #9ca3af;
+}
