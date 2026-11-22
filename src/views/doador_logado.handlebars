@@ -1,27 +1,24 @@
-<section id="boasVindas">
-    <h1>Olá, {{userName}}!</h1>
-</section>
-
+{{#if campanhas.length}}
 <section id="listaCampanhas">
-    {{#if cards.length}}
-    <div class="cardCampanha urgencia-alta">
-        {{#each cards}}
-            <img src="{{cards.fotoURL}}" alt="" class="cardCampanhaImagem">
-
+    {{#each campanhas}}
+    <div class="cardCampanha urgencia-{{urgenciaClasse}}">
+        <img src="{{fotoUrl}}" alt="" class="cardCampanhaImagem" loading="lazy">
         <div class="cardCampanhaConteudo">
             <div class="cardCampanhaTopo">
-                <span class="badgeUrgencia {{cards.urgenciaClasse}}">{{cards.urgenciaRotulo}}</span>
-                <span class="badgeTipoSanguineo">{{cards.tipoSanguineo}}</span>
+            {{#if seuTipo}}<span class="selo">Seu tipo</span>{{/if}}
+                <span class="badgeUrgencia {{urgenciaClasse}}">{{urgenciaRotulo}}</span>
+                <span class="badgeTipoSanguineo">{{tipoSanguineo}}</span>
             </div>
-            <h3>{{cards.nome}}</h3>
-            <p class="cardCampanhaHemocentro">{{cards.hemocentro}}</p>
-            <p class="cardCampanhaData">Encerra em {{cards.dataFechamento}}</p>
-            <a href="usuario/detalhesCampanha" class="btn-interesse">Ver Campanha</a>
+            <h3>{{nome}}</h3>
+            <p class="cardCampanhaHemocentro">{{hemocentro}} · {{local}}</p>
+            <p class="cardCampanhaData">Encerra em {{dataFechamento}}</p>
+            <a href="/usuario/campanha/{{id}}" class="btn-interesse">Ver campanha</a>
         </div>
-        {{/each}}
     </div>
-    {{else}}
-     <p class="listaVaziaDoador"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-archive-x preview-icon"><rect width="20" height="5" x="2" y="3" rx="1"/><path d="M4 8v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8"/><path d="m9.5 17 5-5"/><path d="m9.5 12 5 5"/></svg>Nenhuma campanha até o momento.</p>
-    {{/if}}
-
+    {{/each}}
 </section>
+{{else}}
+<p class="listaVaziaDoador">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-archive-x preview-icon"><rect width="20" height="5" x="2" y="3" rx="1"/><path d="M4 8v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8"/><path d="m9.5 17 5-5"/><path d="m9.5 12 5 5"/></svg>Nenhuma campanha aberta em {{estadoDoador}} no momento.
+</p>
+{{/if}}

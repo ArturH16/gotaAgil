@@ -4,6 +4,7 @@ const ESTADOS = require("../utils/estados")
 const { hojeFortaleza,formatarData } = require("../utils/data")
 const {rotuloUrgencia} = require("../utils/campanhas")
 const {urlFoto} = require("../utils/fotos")
+const estados = require("../utils/estados")
 const TIPOS_SANGUINEOS =  ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"]
 const SIGLAS = ESTADOS.map((e) => e.sigla)
 function lerFiltro(valor,permitidos) {
@@ -11,43 +12,38 @@ function lerFiltro(valor,permitidos) {
     return permitidos.includes(v) ? v : null
 }
 
-async function logar(req,res) {
-    try{
+async function logar(req, res) {
+    try {
         const doador = await doadorDAO.buscarPorId(req.session.userID)
         if (!doador) {
             return req.session.destroy(() => res.redirect("/login/doador"))
         }
-        // primeira visita (sem parâmetros): padrão é o estado do doador
-        // depois que o formulário de filtros é enviado, vale o que veio na URL
-        const enviouFiltros = "tipo" in req.query || "estado" in req.query
-        const tipo = enviouFiltros ? lerFiltro(req.query.tipo, TIPOS_SANGUINEOS) : doador.tipo_sanguineo
-        const estado = enviouFiltros ? lerFiltro(req.query.estado, SIGLAS) : doador.estado
-        const campanhas = await campanhaDAO.listarAbertas(
-            {hoje: hojeFortaleza(),
-            tipo: doador.tipo_sanguineo,
-            estado: doador.estado
-        })
-        const cards = campanhas.map((c) => ({
-                id: c.id_campanha,
-                nome: c.nome,
-                tipoSanguineo: c.tipo_sanguineo_necessario,
-                urgenciaRotulo: rotuloUrgencia(c.urgencia),
-                urgenciaClasse: (c.urgencia || "").toLowerCase(),
-                dataFechamento: formatarData(c.data_fechamento),
-                hemocentro: c.hemocentro,
-                local: `${c.cidade} - ${c.estado}`,
-                fotoUrl: urlFoto(c.foto)
-            }))
 
-            res.render("doador_logado", {
-                title: "Início",
-                cssExtra: "homepageDoador",
-                campanhas: cards,
-                filtros: { tipo, estado },
-                temFiltro: Boolean(tipo || estado),
-                tiposSanguineos: TIPOS_SANGUINEOS,
-                estados: ESTADOS
-            })
+        const campanhas = await campanhaDAO.listarAbertas({
+            hoje: hojeFortaleza(),
+            estado: doador.estado,
+            tipoSanguineo: doador.tipo_sanguineo
+        })
+
+        const cards = campanhas.map((c) => ({
+            id: c.id_campanha,
+            nome: c.nome,
+            tipoSanguineo: c.tipo_sanguineo_necessario,
+            seuTipo: c.tipo_sanguineo_necessario === doador.tipo_sanguineo,
+            urgenciaRotulo: rotuloUrgencia(c.urgencia),
+            urgenciaClasse: (c.urgencia || "").toLowerCase(),
+            dataFechamento: formatarData(c.data_fechamento),
+            hemocentro: c.hemocentro,
+            local: `${c.cidade} - ${c.estado}`,
+            fotoUrl: urlFoto(c.foto)
+        }))
+
+        res.render("doador_logado", {
+            title: "Início",
+            cssExtra: "homepageDoador",
+            campanhas: cards,
+            estadoDoador: doador.estado
+        })
     } catch (err) {
         console.error(err)
         res.status(500).send("Erro ao carregar a página.")

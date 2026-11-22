@@ -34,15 +34,15 @@
     padding: 20px;
 }
 
-.cardCampanha.urgencia-alta {
+.cardCampanha.urgencia-urgente {
     border-left-color: #C14025;
 }
 
-.cardCampanha.urgencia-media {
+.cardCampanha.urgencia-moderada {
     border-left-color: #E8A33D;
 }
 
-.cardCampanha.urgencia-baixa {
+.cardCampanha.urgencia-regular {
     border-left-color: #6B9E78;
 }
 
