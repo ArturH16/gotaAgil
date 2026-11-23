@@ -6,6 +6,7 @@ const { hojeFortaleza,formatarData } = require("../utils/data")
 const {estaEncerrada,rotuloUrgencia} = require("../utils/campanhas")
 const {urlFoto} = require("../utils/fotos")
 const estados = require("../utils/estados")
+const interesseDAO = require("../models/interesseDAO")
 
 const TIPOS_SANGUINEOS =  ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"]
 const SIGLAS = ESTADOS.map((e) => e.sigla)
@@ -108,6 +109,7 @@ async function mostrarCampanha(req,res) {
         const campanha = req.campanha
         const contatos = await contatosDAO.buscarPorIdHemocentro(campanha.id_hemocentro)
         const encerrada = estaEncerrada(campanha)
+        const interesse = await interesseDAO.verificarInteresse(req.session.userID,campanha.id_campanha)
 
         res.render("detalhes_campanha", {          
             title: campanha.nome,
@@ -131,7 +133,8 @@ async function mostrarCampanha(req,res) {
                 cidadeEstado: `${campanha.cidade} - ${campanha.estado}`,
                 cep: formatarCep(campanha.cep)
             },
-            contatos: contatos.map(prepararContato)
+            contatos: contatos.map(prepararContato),
+            interesse: interesse
         })
     } catch (err) {
         console.error(err)
