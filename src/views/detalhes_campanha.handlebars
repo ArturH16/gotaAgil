@@ -40,7 +40,9 @@
            {{#if campanha.encerrada}}
             <p class="campanhaEncerrada">Campanha encerrada em {{campanha.dataEncerramento}}.</p>
         {{else}}
-            <button type="button" class="btn-interesse" disabled>Tenho interesse</button>
+            <form action="/usuario/interesse/">
+                <button type="button" class="btn-interesse">Tenho interesse</button>
+            </form>
         {{/if}}
         </div>
     </div>
