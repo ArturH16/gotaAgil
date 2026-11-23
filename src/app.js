@@ -53,6 +53,8 @@ app.use((req, res, next) => {
     res.locals.loggedInHemocentro = req.session.userType === "hemocentro"
     res.locals.bloqueadoBotoes = ["pendente", "recusado"].includes(req.session.statusHemocentro)
     res.locals.loggedInAdmin = req.session.userType === "admin"
+    res.locals.flash = req.session.flash
+    delete req.session.flash
     next()
 })
 

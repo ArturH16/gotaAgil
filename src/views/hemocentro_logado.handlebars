@@ -1,3 +1,4 @@
+{{>flash}}
 <div id="homeHemocentro">
     <section id="boasVindas">
         <h1>{{hemocentro.nome}}</h1>
@@ -16,40 +17,30 @@
             <button class="filtroBtn {{#if bloqueadoBotoes}}btn-desativado{{/if}}" data-status="encerrada" {{#if bloqueadoBotoes}}disabled{{/if}}>Encerradas</button>
         </div>
 
-        <div id="listaCampanhasHemocentro">
-            <div class="cardCampanhaHemocentro" data-status="ativa">
-                <img src="/images/WhatsApp-Image-2022-11-04-at-07.43.34-600x619.jpeg" class="cardCampanhaImagem" alt="">
-                <div class="cardCampanhaTopo">
-                    <span class="badgeUrgencia urgente">Urgente</span>
-                    <span class="badgeTipoSanguineo">O-</span>
+        {{#if campanhas.length}}
+            <div id="listaCampanhasHemocentro">
+                {{#each campanhas}}
+                <div class="cardCampanhaHemocentro" data-status="{{this.status}}">
+                    <img src="{{this.fotoUrl}}" class="cardCampanhaImagem" alt="{{this.nome}}">
+                    <div class="cardCampanhaTopo">
+                        <span class="badgeUrgencia {{this.urgenciaLower}}">{{this.urgenciaRotulo}}</span>
+                        <span class="badgeTipoSanguineo">{{this.tipo_sanguineo_necessario}}</span>
+                    </div>
+                    <h3>{{this.nome}}</h3>
+                    <p class="cardCampanhaData">
+                        {{#if encerrada}}Encerrou em {{dataEncerramentoFormatada}}{{else}}Encerra em {{dataFechamentoFormatada}}{{/if}} · {{interessadosTexto}}
+                    </p>
+                    <a href="/hemocentro/listaCampanha/{{id_campanha}}" class="linkSecundario {{#if ../bloqueadoBotoes}}btn-desativado{{/if}}">Ver detalhes</a>
                 </div>
-                <h3>Campanha Emergencial de Verão</h3>
-                <p class="cardCampanhaData">Encerra em 12/10/2026 · 8 interessados</p>
-                <a href="/hemocentro/listaCampanha" class="linkSecundario {{#if bloqueadoBotoes}}btn-desativado{{/if}}">Ver detalhes</a>
-            </div>
 
-            <div class="cardCampanhaHemocentro" data-status="ativa">
-                <img src="/images/WhatsApp-Image-2022-11-04-at-07.43.34-600x619.jpeg" class="cardCampanhaImagem" alt="">
-                <div class="cardCampanhaTopo">
-                    <span class="badgeUrgencia moderada">Moderada</span>
-                    <span class="badgeTipoSanguineo">A+</span>
-                </div>
-                <h3>Reposição de Estoque Regular</h3>
-                <p class="cardCampanhaData">Encerra em 20/10/2026 · 3 interessados</p>
-                <a href="/hemocentro/listaCampanha" class="linkSecundario  {{#if bloqueadoBotoes}}btn-desativado{{/if}}">Ver detalhes</a>
+                {{/each}}
             </div>
+        {{else}}
+            <p class="listaVaziaHemocentro"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-archive-x preview-icon"><rect width="20" height="5" x="2" y="3" rx="1"/><path d="M4 8v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8"/><path d="m9.5 17 5-5"/><path d="m9.5 12 5 5"/></svg>Nenhuma campanha até o momento.</p>
+        {{/if}}
 
-            <div class="cardCampanhaHemocentro encerrada" data-status="encerrada">
-                <img src="/images/WhatsApp-Image-2022-11-04-at-07.43.34-600x619.jpeg" class="cardCampanhaImagem" alt="">
-                <div class="cardCampanhaTopo">
-                    <span class="badgeEncerrado">Encerrada</span>
-                    <span class="badgeTipoSanguineo">O+</span>
-                </div>
-                <h3>Doação Preventiva Setembro</h3>
-                <p class="cardCampanhaData">Encerrou em 05/09/2026 · 15 interessados</p>
-                <a href="/hemocentro/listaCampanha" class="linkSecundario  {{#if bloqueadoBotoes}}btn-desativado{{/if}}">Ver detalhes</a>
-            </div>
-        </div>
+        
     </section>
 </div>
 <script src="/js/hemocentro.js"></script>
+<script src="/js/flash.js"></script>

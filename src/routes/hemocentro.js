@@ -1,6 +1,9 @@
 const express = require("express")
 const router = express.Router()
 const hemocentroController = require("../controllers/hemocentroController")
+const { receberFoto }= require("../middlewares/upload")
+const { carregarCampanha } = require("../middlewares/campanha")
+
 // router.get("/",(req,res)=> {
 //     const hemocentroMockado = {
 //         title: "Início",
@@ -40,7 +43,6 @@ router.get("/",hemocentroController.logar)
 //     res.render("lista_doadores", dadosCampanha)
 // })
 
-router.get("/listaCampanha",hemocentroController.listarDoadoresCampanha)
 
 // router.get("/campanha/nova",(req,res)=> {
 //     res.render("criacao_campanhas",{
@@ -49,5 +51,12 @@ router.get("/listaCampanha",hemocentroController.listarDoadoresCampanha)
 //     })
 // })
 
-router.get("/campanha/nova",hemocentroController.criarCampanha)
+router.get("/campanha/nova",hemocentroController.exibirCriacaoCampanha)
+router.post("/campanha/nova",receberFoto,hemocentroController.criarCampanha)
+router.get("/listaCampanha/:id",carregarCampanha,hemocentroController.listarDoadoresCampanha)
+router.get("/campanha/:id/editar",carregarCampanha,hemocentroController.exibirEdicaoCampanha)
+router.post("/campanha/:id/editar",carregarCampanha,receberFoto,hemocentroController.editarCampanha)
+router.post("/campanha/:id/encerrar",carregarCampanha,hemocentroController.encerrarCampanha)
+router.post("/campanha/:id/excluir",carregarCampanha,hemocentroController.excluirCampanha)
+
 module.exports = router

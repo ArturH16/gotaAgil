@@ -10,6 +10,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@supabase/supabase-js": "^2.109.0",
     "bcrypt": "^6.0.0",
     "connect-pg-simple": "^10.0.0",
     "cpf-cnpj-validator": "^2.1.2",
@@ -17,6 +18,8 @@
     "express": "^5.2.1",
     "express-handlebars": "^8.0.1",
     "express-session": "^1.19.0",
-    "pg": "^8.23.1"
+    "multer": "^2.5.0",
+    "pg": "^8.23.1",
+    "sharp": "^0.35.5"
   }
 }

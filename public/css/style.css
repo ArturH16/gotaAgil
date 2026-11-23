@@ -343,6 +343,51 @@ nav a {
   cursor: not-allowed !important;
 }
 
+.flash {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    max-width: 300px;
+    margin: 16px 20px;
+    padding: 14px 18px;
+    border-radius: 8px;
+    color: #1F2933;
+    font-size: 0.95rem;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    max-height: 200px;
+    overflow: hidden;
+    transition: opacity .5s ease, max-height .5s ease,
+                margin .5s ease, padding .5s ease;
+}
+
+.flash--sucesso { background-color: #E4F7EB; }
+.flash--erro    { background-color: #FDECE8; }
+
+.flash-icone { flex-shrink: 0; }
+.flash--sucesso .icone-erro,
+.flash--erro .icone-sucesso { display: none; }
+
+.flash-texto { flex: 1; font-weight: 500; }
+
+.flash-fechar {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.4rem;
+    line-height: 1;
+    color: #6B7280;
+    padding: 0 4px;
+}
+.flash-fechar:hover { color: #1F2933; }
+
+.flash.some {
+    opacity: 0;
+    max-height: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+}
 
 /* === Tela de detalhe de campanha: usada por doador e hemocentro === */
 .detalheCampanha {

@@ -9,7 +9,7 @@
 
         <div class="detalheInfo">
             <div class="cardCampanhaTopo">
-                <span class="badgeUrgencia">{{campanha.urgencia}}</span>
+                <span class="badgeUrgencia {{campanha.urgenciaClasse}}">{{campanha.urgenciaRotulo}}</span>
                 <span class="badgeTipoSanguineo">{{campanha.tipoSanguineo}}</span>
             </div>
 
@@ -21,15 +21,15 @@
 
             <dl class="detalheLista">
                 <dt>Hemocentro</dt>
-                <dd>{{campanha.hemocentro}}</dd>
+                <dd>{{hemocentro.nome}}</dd>
 
                 <dt>Endereço</dt>
-                <dd>{{campanha.endereco}}</dd>
+                <dd>{{hemocentro.endereco}}</dd>
 
                 <dt>Contatos</dt>
                 <dd>
                     {{#each contatos}}
-                        <span>{{this}}</span>
+                        <span>{{rotulo}}: {{#if href}}<a href="{{href}}">{{valor}}</a>{{else}}{{valor}}{{/if}}
                     {{/each}}
                 </dd>
 
@@ -37,15 +37,13 @@
                 <dd>{{campanha.dataFechamento}}</dd>
             </dl>
 
-            {{#if campanha.encerrada}}
-                <button class="btn-interesse" disabled>Campanha encerrada</button>
-            {{else if jaDemonstrouInteresse}}
-                <button class="btn-interesse interesse" disabled>Interesse registrado ✓</button>
-            {{else}}
-                <form method="POST" action="/campanha/{{campanha.id}}/interesse">
-                    <button type="submit" class="btn-interesse">Tenho interesse</button>
-                </form>
-            {{/if}}
+           {{#if campanha.encerrada}}
+            <p class="campanhaEncerrada">Campanha encerrada em {{campanha.dataEncerramento}}.</p>
+        {{else}}
+            <form action="/usuario/interesse/">
+                <button type="button" class="btn-interesse">Tenho interesse</button>
+            </form>
+        {{/if}}
         </div>
     </div>
 </div>

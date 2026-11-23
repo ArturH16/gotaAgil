@@ -1,49 +1,27 @@
 <section id="boasVindas">
     <h1>Olá, {{userName}}!</h1>
 </section>
-
+{{#if campanhas.length}}
 <section id="listaCampanhas">
-    <div class="cardCampanha urgencia-alta">
-            <img src="/images/WhatsApp-Image-2022-11-04-at-07.43.34-600x619.jpeg" alt="Campanha Emergencial de Verão" class="cardCampanhaImagem">
-
+    {{#each campanhas}}
+    <div class="cardCampanha urgencia-{{urgenciaClasse}}">
+        <img src="{{fotoUrl}}" alt="" class="cardCampanhaImagem" loading="lazy">
         <div class="cardCampanhaConteudo">
             <div class="cardCampanhaTopo">
-                <span class="badgeUrgencia urgente">Urgente</span>
-                <span class="badgeTipoSanguineo">O-</span>
+            {{#if seuTipo}}<span class="selo">Seu tipo</span>{{/if}}
+                <span class="badgeUrgencia {{urgenciaClasse}}">{{urgenciaRotulo}}</span>
+                <span class="badgeTipoSanguineo">{{tipoSanguineo}}</span>
             </div>
-            <h3>Campanha Emergencial de Verão</h3>
-            <p class="cardCampanhaHemocentro">Hemocentro Regional Fortaleza</p>
-            <p class="cardCampanhaData">Encerra em 12/10/2026</p>
-            <a href="usuario/detalhesCampanha" class="btn-interesse">Ver Campanha</a>
+            <h3>{{nome}}</h3>
+            <p class="cardCampanhaHemocentro">{{hemocentro}} · {{local}}</p>
+            <p class="cardCampanhaData">Encerra em {{dataFechamento}}</p>
+            <a href="/usuario/detalhesCampanha/{{id}}" class="btn-interesse">Ver campanha</a>
         </div>
     </div>
-
-    <div class="cardCampanha urgencia-media">
-        <img src="/images/WhatsApp-Image-2022-11-04-at-07.43.34-600x619.jpeg" alt="Campanha Emergencial de Verão" class="cardCampanhaImagem">
-        <div class="cardCampanhaConteudo">
-            <div class="cardCampanhaTopo">
-                <span class="badgeUrgencia moderada">Moderada</span>
-                <span class="badgeTipoSanguineo">A+</span>
-            </div>
-            <h3>Reposição de Estoque Regular</h3>
-            <p class="cardCampanhaHemocentro">Hemocentro Central Fortaleza</p>
-            <p class="cardCampanhaData">Encerra em 20/10/2026</p>
-            <a href="usuario/detalhesCampanha" class="btn-interesse">Ver Campanha</a>
-        </div>
-    </div>
-
-    <div class="cardCampanha urgencia-baixa">
-        <img src="/images/WhatsApp-Image-2022-11-04-at-07.43.34-600x619.jpeg" alt="Campanha Emergencial de Verão" class="cardCampanhaImagem">
-
-        <div class="cardCampanhaConteudo">
-            <div class="cardCampanhaTopo">
-                <span class="badgeUrgencia regular">Regular</span>
-                <span class="badgeTipoSanguineo">O-</span>
-            </div>
-            <h3>Doação Preventiva Outubro</h3>
-            <p class="cardCampanhaHemocentro">Hemocentro Regional Fortaleza</p>
-            <p class="cardCampanhaData">Encerra em 30/10/2026</p>
-            <a href="usuario/detalhesCampanha" class="btn-interesse">Ver Campanha</a>
-        </div>
-    </div>
+    {{/each}}
 </section>
+{{else}}
+<p class="listaVaziaDoador">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-archive-x preview-icon"><rect width="20" height="5" x="2" y="3" rx="1"/><path d="M4 8v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8"/><path d="m9.5 17 5-5"/><path d="m9.5 12 5 5"/></svg>Nenhuma campanha aberta em {{estadoDoador}} no momento.
+</p>
+{{/if}}
