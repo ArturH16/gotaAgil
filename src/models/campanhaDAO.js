@@ -110,6 +110,23 @@ class campanhaDAO {
         const { rows } = await pool.query(sql, [hoje, estado, tipoSanguineo])
         return rows
     }
+    static async buscarPublicaPorId(id, hoje) {
+        const sql = `
+            SELECT c.id_campanha, c.nome, c.descricao, c.tipo_sanguineo_necessario, c.urgencia,
+                c.data_inicio::text AS data_inicio,
+                c.data_fechamento::text AS data_fechamento,
+                c.encerrada_em::text AS encerrada_em,
+                c.foto,
+                h.id_hemocentro, h.nome AS hemocentro,
+                h.logradouro, h.numero, h.bairro, h.cidade, h.estado, h.cep
+            FROM tb_campanha c
+            JOIN tb_hemocentro h ON h.id_hemocentro = c.id_hemocentro
+            WHERE c.id_campanha = $1
+            AND h.status = 'aprovado'
+            AND c.data_inicio <= $2::date`
+        const { rows } = await pool.query(sql, [id, hoje])
+        return rows[0] || null
+}
 }
 
 module.exports = campanhaDAO

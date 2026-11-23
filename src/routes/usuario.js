@@ -1,6 +1,7 @@
 const express = require("express")
 const router = express.Router()
 const usuarioController = require("../controllers/usuarioController")
+const {carregarCampanhaPublica } = require("../middlewares/campanha")
 
 // router.get("/", (req, res) => {
 //     res.render("doador_logado", {
@@ -52,5 +53,5 @@ router.get("/perfil",usuarioController.mostrarPerfil)
 //     res.render("detalhes_campanha",dadosCampanha )
 // })
 
-router.get("/detalhesCampanha",usuarioController.mostrarCampanha)
+router.get("/detalhesCampanha/:id",carregarCampanhaPublica,usuarioController.mostrarCampanha)
 module.exports = router

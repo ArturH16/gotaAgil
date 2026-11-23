@@ -1,4 +1,11 @@
 <h2 style="margin-bottom: 16px;">Seja bem vindo, Hemocentro!</h2>
+{{#if erros}}
+  <ul class="listaErros">
+    {{#each erros}}
+      <li>{{this}}</li>
+    {{/each}}
+  </ul>
+{{/if}}
 <form action="/login/hemocentro" method="post">
         <p><strong>Email:</strong> <input class="perfilCampo campos" type="text" name="email" placeholder="Digite o email..."></p>
         <p><strong>Senha:</strong> <input style="margin-bottom: 20px;" class="perfilCampo campos" type="password" name="senha" placeholder="Sua senha .."></p>

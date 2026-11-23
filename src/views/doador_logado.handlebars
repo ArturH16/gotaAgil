@@ -1,3 +1,6 @@
+<section id="boasVindas">
+    <h1>Olá, {{userName}}!</h1>
+</section>
 {{#if campanhas.length}}
 <section id="listaCampanhas">
     {{#each campanhas}}
@@ -12,7 +15,7 @@
             <h3>{{nome}}</h3>
             <p class="cardCampanhaHemocentro">{{hemocentro}} · {{local}}</p>
             <p class="cardCampanhaData">Encerra em {{dataFechamento}}</p>
-            <a href="/usuario/campanha/{{id}}" class="btn-interesse">Ver campanha</a>
+            <a href="/usuario/detalhesCampanha/{{id}}" class="btn-interesse">Ver campanha</a>
         </div>
     </div>
     {{/each}}

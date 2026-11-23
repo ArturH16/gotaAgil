@@ -1,12 +1,16 @@
 const doadorDAO = require("../models/doadorDAO")
 const campanhaDAO = require("../models/campanhaDAO")
+const contatosDAO = require("../models/contatosDAO")
 const ESTADOS = require("../utils/estados")
 const { hojeFortaleza,formatarData } = require("../utils/data")
-const {rotuloUrgencia} = require("../utils/campanhas")
+const {estaEncerrada,rotuloUrgencia} = require("../utils/campanhas")
 const {urlFoto} = require("../utils/fotos")
 const estados = require("../utils/estados")
+
 const TIPOS_SANGUINEOS =  ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"]
 const SIGLAS = ESTADOS.map((e) => e.sigla)
+const formatarCep =   (cep) => (cep || "").replace(/^(\d{5})(\d{3})$/, "$1-$2")
+
 function lerFiltro(valor,permitidos) {
     const v = Array.isArray(valor) ? valor[0]: valor
     return permitidos.includes(v) ? v : null
@@ -28,6 +32,7 @@ async function logar(req, res) {
         const cards = campanhas.map((c) => ({
             id: c.id_campanha,
             nome: c.nome,
+            id_hemocentro: c.id_hemocentro,
             tipoSanguineo: c.tipo_sanguineo_necessario,
             seuTipo: c.tipo_sanguineo_necessario === doador.tipo_sanguineo,
             urgenciaRotulo: rotuloUrgencia(c.urgencia),
@@ -78,25 +83,42 @@ async function mostrarPerfil(req,res) {
 
 }
 
-function mostrarCampanha(req,res) {
-    const dadosCampanha = {campanha: {
-    id: 1,
-    imagem: "/images/WhatsApp-Image-2022-11-04-at-07.43.34-600x619.jpeg",
-    titulo: "Campanha Emergencial de Verão",
-    urgencia: "Urgente",
-    tipoSanguineo: "O-",
-    descricao: "Estoque crítico de O negativo. Traga documento com foto.",
-    hemocentro: "Hemocentro Regional Fortaleza",
-    endereco: "Av. Exemplo, 1000 - Centro, Fortaleza - CE",
-    contatos: ["(85) 3101-2305", "(85) 99681-7597"],
-    dataFechamento: "12/10/2026",
-    encerrada: false
-},
-jaDemonstrouInteresse: true,
-title: "Campanha",
-cssExtra: "campanhaDetalhe" }
-    res.render("detalhes_campanha",dadosCampanha )
+async function mostrarCampanha(req,res) {
+     try {
+        const campanha = req.campanha
+        const contatos = await contatosDAO.buscarPorIdHemocentro(campanha.id_hemocentro)
+        const encerrada = estaEncerrada(campanha)
+
+        res.render("detalhes_campanha", {          
+            title: campanha.nome,
+            cssExtra: "detalhes_campanha",
+            campanha: {
+                id: campanha.id_campanha,
+                imagem: urlFoto(campanha.foto),
+                titulo: campanha.nome,
+                descricao: campanha.descricao,
+                tipoSanguineo: campanha.tipo_sanguineo_necessario,
+                urgenciaRotulo: rotuloUrgencia(campanha.urgencia),
+                urgenciaClasse: (campanha.urgencia || "").toLowerCase(),
+                dataInicio: formatarData(campanha.data_inicio),
+                dataFechamento: formatarData(campanha.data_fechamento),
+                encerrada,
+                dataEncerramento: formatarData(campanha.encerrada_em || campanha.data_fechamento)
+            },
+            hemocentro: {
+                nome: campanha.hemocentro,
+                endereco: `${campanha.logradouro}, ${campanha.numero} - ${campanha.bairro}`,
+                cidadeEstado: `${campanha.cidade} - ${campanha.estado}`,
+                cep: formatarCep(campanha.cep)
+            },
+            contatos
+        })
+    } catch (err) {
+        console.error(err)
+        res.status(500).send("Erro ao carregar a página.")
+    }
 }
+
 module.exports = {
     logar,
     mostrarPerfil,

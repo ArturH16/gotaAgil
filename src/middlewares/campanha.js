@@ -19,4 +19,19 @@ async function carregarCampanha(req, res, next) {
     }
 }
 
-module.exports = { carregarCampanha }
+async function carregarCampanhaPublica(req, res, next) {
+    const id = Number(req.params.id)
+    if (!Number.isInteger(id) || id <= 0) {
+        return res.status(404).send("Campanha não encontrada.")
+    }
+    try {
+        const campanha = await campanhaDAO.buscarPublicaPorId(id, hojeFortaleza())
+        if (!campanha) return res.status(404).send("Campanha não encontrada.")
+        req.campanha = campanha
+        next()
+    } catch (err) {
+        next(err)
+    }
+}
+
+module.exports = { carregarCampanha,carregarCampanhaPublica }
