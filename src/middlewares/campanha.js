@@ -1,5 +1,5 @@
 const campanhaDAO = require("../models/campanhaDAO")
-
+const { hojeFortaleza } = require("../utils/data")
 async function carregarCampanha(req, res, next) {
     const id = Number(req.params.id)
     if (!Number.isInteger(id) || id <= 0) {

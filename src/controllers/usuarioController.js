@@ -16,6 +16,26 @@ function lerFiltro(valor,permitidos) {
     return permitidos.includes(v) ? v : null
 }
 
+function prepararContato(c) {
+    const valor = String(c.contato || "").trim()
+    const digitos = valor.replace(/\D/g, "")
+    const rotulos = { whatsapp: "WhatsApp", telefone: "Telefone", "0800": "0800", email: "E-mail", instagram: "Instagram" }
+    let href = null
+
+    switch (c.tipo_contato) {
+        case "whatsapp":  href = digitos ? `https://wa.me/55${digitos}` : null; break   // assume DDD sem o 55
+        case "telefone":
+        case "0800":      href = digitos ? `tel:${digitos}` : null; break
+        case "email":     href = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(valor) ? `mailto:${valor}` : null; break
+        case "instagram": {
+            const usuario = valor.replace(/^@/, "")
+            href = /^[A-Za-z0-9._]{1,30}$/.test(usuario) ? `https://instagram.com/${usuario}` : null
+            break
+        }
+    }
+    return { rotulo: rotulos[c.tipo_contato] || "Contato", valor, href }
+}
+
 async function logar(req, res) {
     try {
         const doador = await doadorDAO.buscarPorId(req.session.userID)
@@ -91,7 +111,7 @@ async function mostrarCampanha(req,res) {
 
         res.render("detalhes_campanha", {          
             title: campanha.nome,
-            cssExtra: "detalhes_campanha",
+            cssExtra: "campanhaDetalhe",
             campanha: {
                 id: campanha.id_campanha,
                 imagem: urlFoto(campanha.foto),
@@ -111,7 +131,7 @@ async function mostrarCampanha(req,res) {
                 cidadeEstado: `${campanha.cidade} - ${campanha.estado}`,
                 cep: formatarCep(campanha.cep)
             },
-            contatos
+            contatos: contatos.map(prepararContato)
         })
     } catch (err) {
         console.error(err)
