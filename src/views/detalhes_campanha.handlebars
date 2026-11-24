@@ -38,12 +38,19 @@
             </dl>
 
            {{#if campanha.encerrada}}
-            <p class="campanhaEncerrada">Campanha encerrada em {{campanha.dataEncerramento}}.</p>
-        {{else}}
-            <form action="/usuario/interesse/">
-                <button type="button" class="btn-interesse">Tenho interesse</button>
-            </form>
-        {{/if}}
+        <p class="campanhaEncerrada">Campanha encerrada em {{campanha.dataEncerramento}}.</p>
+        {{#if campanha.jaTemInteresse}}<p class="interesseRegistrado">✓ Você demonstrou interesse nesta campanha.</p>{{/if}}
+        {{else if campanha.jaTemInteresse}}
+        <p class="interesseRegistrado">✓ Interesse registrado</p>
+        <form method="post" action="/usuario/detalhesCampanha/{{campanha.id}}/cancelar-interesse"
+            onsubmit="return confirm('Cancelar seu interesse nesta campanha?')">
+            <button type="submit" class="btn-secundario">Cancelar interesse</button>
+        </form>
+    {{else}}
+        <form method="post" action="/usuario/detalhesCampanha/{{campanha.id}}/interesse">
+            <button type="submit" class="btn-interesse">Tenho interesse</button>
+        </form>
+    {{/if}}
         </div>
     </div>
 </div>

@@ -7,6 +7,7 @@ const {estaEncerrada,rotuloUrgencia} = require("../utils/campanhas")
 const {urlFoto} = require("../utils/fotos")
 const estados = require("../utils/estados")
 const interesseDAO = require("../models/interesseDAO")
+const  {redirecionarComAviso } = require("../utils/flash")
 
 const TIPOS_SANGUINEOS =  ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"]
 const SIGLAS = ESTADOS.map((e) => e.sigla)
@@ -107,9 +108,11 @@ async function mostrarPerfil(req,res) {
 async function mostrarCampanha(req,res) {
      try {
         const campanha = req.campanha
-        const contatos = await contatosDAO.buscarPorIdHemocentro(campanha.id_hemocentro)
         const encerrada = estaEncerrada(campanha)
-        const interesse = await interesseDAO.verificarInteresse(req.session.userID,campanha.id_campanha)
+        const [contatos, interesse] = await Promise.all([
+        contatosDAO.buscarPorIdHemocentro(campanha.id_hemocentro),
+        interesseDAO.verificarInteresse(req.session.userID, campanha.id_campanha)
+    ])
 
         res.render("detalhes_campanha", {          
             title: campanha.nome,
@@ -125,7 +128,8 @@ async function mostrarCampanha(req,res) {
                 dataInicio: formatarData(campanha.data_inicio),
                 dataFechamento: formatarData(campanha.data_fechamento),
                 encerrada,
-                dataEncerramento: formatarData(campanha.encerrada_em || campanha.data_fechamento)
+                dataEncerramento: formatarData(campanha.encerrada_em || campanha.data_fechamento),
+                jaTemInteresse: Boolean(interesse)
             },
             hemocentro: {
                 nome: campanha.hemocentro,
@@ -142,8 +146,52 @@ async function mostrarCampanha(req,res) {
     }
 }
 
+async function registrarInteresse(req, res) {
+    const campanha = req.campanha
+    const destino = `/usuario/detalhesCampanha/${campanha.id_campanha}`
+
+    if (estaEncerrada(campanha)) {
+        return redirecionarComAviso(req, res, "erro", "Esta campanha já está encerrada.", destino)
+    }
+
+    try {
+        const criado = await interesseDAO.insertInteresse(req.session.userID, campanha.id_campanha, hojeFortaleza())
+
+        if (!criado) {
+            return redirecionarComAviso(req, res, "erro", "Você já demonstrou interesse nesta campanha.", destino)
+        }
+        redirecionarComAviso(req, res, "sucesso", "Interesse registrado!", destino)
+    } catch (err) {
+        console.error(err)
+        redirecionarComAviso(req, res, "erro", "Erro interno. Tente novamente.", destino)
+    }
+}
+
+async function cancelarInteresse(req, res) {
+    const campanha = req.campanha
+    const destino = `/usuario/detalhesCampanha/${campanha.id_campanha}`
+
+    if (estaEncerrada(campanha)) {
+        return redirecionarComAviso(req, res, "erro", "Campanha encerrada: o interesse não pode mais ser cancelado.", destino)
+    }
+
+    try {
+        const removido = await interesseDAO.cancelarInteresse(req.session.userID, campanha.id_campanha)
+
+        if (!removido) {
+            return redirecionarComAviso(req, res, "erro", "Não foi possível cancelar o interesse.", destino)
+        }
+        redirecionarComAviso(req, res, "sucesso", "Interesse cancelado.", destino)
+    } catch (err) {
+        console.error(err)
+        redirecionarComAviso(req, res, "erro", "Erro interno. Tente novamente.", destino)
+    }
+}
+
 module.exports = {
     logar,
     mostrarPerfil,
-    mostrarCampanha
+    mostrarCampanha,
+    registrarInteresse,
+    cancelarInteresse
 }

@@ -54,4 +54,6 @@ router.get("/perfil",usuarioController.mostrarPerfil)
 // })
 
 router.get("/detalhesCampanha/:id",carregarCampanhaPublica,usuarioController.mostrarCampanha)
+router.post("/detalhesCampanha/:id/interesse", carregarCampanhaPublica, usuarioController.registrarInteresse)
+router.post("/detalhesCampanha/:id/cancelar-interesse", carregarCampanhaPublica, usuarioController.cancelarInteresse)
 module.exports = router
