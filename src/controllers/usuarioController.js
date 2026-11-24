@@ -121,6 +121,67 @@ async function mostrarPerfil(req,res) {
 
 }
 
+
+function exibirAlterarSenha(req, res) {
+    res.render("alterar_senha", { title: "Alterar senha", cssExtra: "campanhaNova" })
+}
+
+function renderErroSenha(res, status, erros) {
+    return res.status(status).render("alterar_senha", {
+        title: "Alterar senha",
+        cssExtra: "campanhaNova",
+        erros
+    })
+}
+
+async function alterarSenha(req, res) {
+    const { senhaAtual, novaSenha, confirmarSenha } = req.body
+
+    // um campo repetido no corpo chega como array e quebraria o bcrypt
+    if ([senhaAtual, novaSenha, confirmarSenha].some((v) => typeof v !== "string")) {
+        return renderErroSenha(res, 400, ["Preencha todos os campos."])
+    }
+
+    const erros = []
+    if (!senhaAtual) erros.push("Informe a senha atual.")
+    if (novaSenha.length < 8) erros.push("A nova senha precisa de pelo menos 8 caracteres.")
+    else if (Buffer.byteLength(novaSenha, "utf8") > 72) erros.push("A nova senha é longa demais.")
+    if (novaSenha !== confirmarSenha) erros.push("A confirmação não confere com a nova senha.")
+    if (senhaAtual && senhaAtual === novaSenha) erros.push("A nova senha deve ser diferente da atual.")
+    if (erros.length) return renderErroSenha(res, 400, erros)
+
+    try {
+        const hashAtual = await doadorDAO.buscarHashPorId(req.session.userID)
+        if (!hashAtual) return req.session.destroy(() => res.redirect("/login/doador"))
+
+        const confere = await bcrypt.compare(senhaAtual, hashAtual)
+        if (!confere) return renderErroSenha(res, 400, ["Senha atual incorreta."])
+
+        const novoHash = await bcrypt.hash(novaSenha, 10)
+        await doadorDAO.atualizarSenha(req.session.userID, novoHash)
+
+        // troca o id da sessão depois de uma mudança de credencial
+        const { userID, userName, userType } = req.session
+        req.session.regenerate((err) => {
+            if (err) {
+                console.error(err)
+                return res.status(500).send("Senha alterada, mas houve um erro na sessão. Entre novamente.")
+            }
+            req.session.userID = userID
+            req.session.userName = userName
+            req.session.userType = userType
+            req.session.flash = { tipo: "sucesso", texto: "Senha alterada com sucesso!" }
+            req.session.save((err) => {
+                if (err) console.error(err)
+                res.redirect("/usuario/perfil")
+            })
+        })
+    } catch (err) {
+        console.error(err)
+        renderErroSenha(res, 500, ["Erro interno. Tente novamente."])
+    }
+}
+
 async function mostrarCampanha(req,res) {
      try {
         const campanha = req.campanha
@@ -208,6 +269,8 @@ module.exports = {
     logar,
     mostrarPerfil,
     mostrarCampanha,
+    exibirAlterarSenha,
+    alterarSenha,
     registrarInteresse,
     cancelarInteresse
 }

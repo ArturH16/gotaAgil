@@ -34,6 +34,8 @@ router.get("/",usuarioController.logar)
 // })
 
 router.get("/perfil",usuarioController.mostrarPerfil)
+router.get("/perfil/senha",usuarioController.exibirAlterarSenha)
+router.post("/perfil/senha",usuarioController.alterarSenha)
 
 // router.get("/detalhesCampanha",(req,res)=> {
 //     const dadosCampanha = {campanha: {
