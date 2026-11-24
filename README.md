@@ -46,7 +46,7 @@ vidos em cada campanha.
 ## Como executar o projeto
 1. **Clone o repositório:**
    ```bash
-   git clone https://github.com
+   git clone https://github.com/ArturH16/gotaAgil.git
    cd gotaAgil
    ```
 
@@ -58,13 +58,15 @@ vidos em cada campanha.
 3. **Configure as variáveis de ambiente:**
    Renomeie o arquivo `.env.example` para `.env` e preencha as chaves necessárias:
    ```env
-   DATABASE_URL="postgresql://usuario:senha@localhost:5432/banco"
-   PORT=3000
+   URI=postgresql://postgres:[SUA-SENHA]@db.[SEU-PROJECT-REF].supabase.co:5432/postgres
+   SESSION_SECRET=sua_chave_secreta_aleatoria_aqui
+   SUPABASE_URL=https://[SEU-PROJECT-REF].supabase.co
+   SUPABASE_SECRET_KEY=sua_chave_secreta_service_role_aqui
    ```
 
 4. **Inicie a aplicação:**
    ```bash
-   npm run dev
+   node src/app.js
    ```
 
 5. **Acesse no navegador:**
