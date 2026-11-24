@@ -38,5 +38,6 @@ vidos em cada campanha.
   <img src="https://img.shields.io/badge/POSTGRESQL-4169E1?style=for-the-badge&logo=postgresql&color=white" height="40" />
 </div>
 ## Pré-requisitos
-
+* [Git](https://git-scm.com)
+* [Node.js](https://nodejs.org) (versão 22 ou superior)
 ## Como executar o projeto
