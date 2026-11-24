@@ -31,6 +31,25 @@
     font-size: 1rem;
 }
 
+.interesseRegistrado {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+    padding: 10px;
+    margin: 0 0 8px;
+    border-radius: 6px;
+    background-color: #059669;
+    color: #FFFFFF;
+    font-weight: 600;
+}
+.interesseRegistrado + form .btn-secundario {
+    width: 100%;
+}
+
+.btn-secundario {
+    font-size: 1em;
+}
 .linkContato,
 .linkContato:visited {
     color: #C14025;

@@ -173,6 +173,7 @@ async function listarDoadoresCampanha(req, res) {
                 titulo: campanha.nome,
                 descricao: campanha.descricao,
                 urgencia: rotuloUrgencia(campanha.urgencia),
+                urgenciaClasse: (campanha.urgencia || "").toLowerCase(),
                 tipoSanguineo: campanha.tipo_sanguineo_necessario,
                 dataInicio: hoje.formatarData(campanha.data_inicio),
                 dataFechamento: hoje.formatarData(campanha.data_fechamento),
