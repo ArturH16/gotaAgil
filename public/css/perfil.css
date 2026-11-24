@@ -110,3 +110,11 @@
     font-weight: 600;
     padding: 12px;
 }
+
+a.cardCampanhaCompacto {
+    color: inherit;
+    text-decoration: none;
+}
+a.cardCampanhaCompacto:hover {
+    border-color: #C14025;
+}

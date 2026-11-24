@@ -53,24 +53,23 @@
 
     <a href="/alterar-senha" class="linkSecundario">Alterar senha</a>
 
-    <div class="perfilCampanhas">
-        <h2>Minhas campanhas de interesse</h2>
-
-        <div class="cardCampanhaCompacto">
-            <span class="badgeUrgencia">Urgente</span>
-            <div>
-                <h3>Campanha Emergencial de Verão</h3>
-                <p>Hemocentro Regional Fortaleza · Encerra em 12/10/2026</p>
-            </div>
-        </div>
-
-        <div class="cardCampanhaCompacto encerrado">
+   <div class="minhasCampanhasInteresse">
+  <h2>Minhas campanhas de interesse</h2>
+    {{#each interesses}}
+        <a href="/usuario/detalhesCampanha/{{id}}" class="cardCampanhaCompacto {{#if encerrada}}encerrada{{/if}}">
+        {{#if encerrada}}
             <span class="badgeEncerrado">Encerrada</span>
-            <div>
-                <h3>Doação Preventiva Setembro</h3>
-                <p>Hemocentro Central Fortaleza · Encerrou em 05/09/2026</p>
-            </div>
+        {{else}}
+            <span class="badgeUrgencia {{urgenciaClasse}}">{{urgenciaRotulo}}</span>
+        {{/if}}
+        <div>
+            <h3>{{nome}}</h3>
+            <p>{{hemocentro}} · {{#if encerrada}}Encerrou em {{dataEncerramento}}{{else}}Encerra em {{dataFechamento}}{{/if}}</p>
         </div>
+        </a>
+    {{else}}
+        <p class="listaVaziaDoador">Você ainda não demonstrou interesse em nenhuma campanha.</p>
+    {{/each}}
     </div>
 
 </div>

@@ -78,11 +78,26 @@ async function logar(req, res) {
 }
 
 async function mostrarPerfil(req,res) {
+    const hoje = hojeFortaleza()
     try {
-    const doador = await doadorDAO.buscarPorId(req.session.userID)
+    const [doador, interesses] = await Promise.all([
+    doadorDAO.buscarPorId(req.session.userID),
+    interesseDAO.listarPorDoador(req.session.userID)
+])
     if (!doador) {
         return req.session.destroy(() => res.redirect("/login/doador"))
     }
+    const cards = interesses.map((c) => ({
+        id: c.id_campanha,
+        nome: c.nome,
+        hemocentro: c.hemocentro,
+        encerrada: estaEncerrada(c, hoje),
+        urgenciaRotulo: rotuloUrgencia(c.urgencia),
+        urgenciaClasse: (c.urgencia || "").toLowerCase(),
+        dataFechamento: formatarData(c.data_fechamento),
+        dataEncerramento: formatarData(c.encerrada_em || c.data_fechamento)
+    }))
+    const interessesOrdenados = [...cards.filter((c) => !c.encerrada), ...cards.filter((c) => c.encerrada)]
     res.render("perfil_doador", {
     title: "Meu Perfil",
     cssExtra: "perfil",
@@ -95,8 +110,9 @@ async function mostrarPerfil(req,res) {
         dataNascimento: doador.data_nascimento.toLocaleDateString("pt-BR"),
         peso: doador.peso,
         cidade: doador.cidade,
-        estado: doador.estado
-    } 
+        estado: doador.estado,
+    },
+    interesses: interessesOrdenados
     }) 
 } catch(err) {
     console.log(err)

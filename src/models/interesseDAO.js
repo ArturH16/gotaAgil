@@ -36,6 +36,22 @@ class interesseDAO {
         const { rows } = await pool.query(sql, [idDoador, idCampanha])
         return rows[0] || null
     }
+
+    static async listarPorDoador(idDoador) {
+        const sql = `
+            SELECT c.id_campanha, c.nome, c.urgencia,
+                c.data_fechamento::text AS data_fechamento,
+                c.encerrada_em::text AS encerrada_em,
+                h.nome AS hemocentro
+            FROM tb_interesse i
+            JOIN tb_campanha c ON c.id_campanha = i.id_campanha
+            JOIN tb_hemocentro h ON h.id_hemocentro = c.id_hemocentro
+            WHERE i.id_doador = $1
+            ORDER BY i.data DESC, i.id_interesse DESC
+            LIMIT 50`
+        const { rows } = await pool.query(sql, [idDoador])
+        return rows
+}
 }
 
 module.exports = interesseDAO
