@@ -8,6 +8,7 @@ const {urlFoto} = require("../utils/fotos")
 const estados = require("../utils/estados")
 const interesseDAO = require("../models/interesseDAO")
 const  {redirecionarComAviso } = require("../utils/flash")
+const bcrypt = require("bcrypt")
 
 const TIPOS_SANGUINEOS =  ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"]
 const SIGLAS = ESTADOS.map((e) => e.sigla)
