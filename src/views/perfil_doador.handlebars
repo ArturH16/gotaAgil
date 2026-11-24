@@ -1,4 +1,10 @@
 {{>flash}}
+{{#if erros}}
+  <ul class="listaErros">
+    {{#each erros}}<li>{{this}}</li>{{/each}}
+  </ul>
+{{/if}}
+
 <div id="perfilDoador">
     <a href="/usuario" class="voltar" title="Voltar">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
@@ -10,16 +16,18 @@
         <h1>{{doador.nome}}</h1>
     </div>
 
-    <form id="formPerfil" method="POST" action="/doador/perfil">
+    <form id="formPerfil" method="POST" action="/usuario/perfil" class="{{#if editando}}editando{{/if}}">
         <div class="perfilTopo">
             <h2>Dados de cadastro</h2>
-            <button type="button" id="btnEditar" class="btn-secundario">Editar</button>
+            <button type="button" id="btnEditar" class="btn-secundario">
+                {{#if editando}}Cancelar{{else}}Editar{{/if}}
+            </button>
         </div>
 
         <div class="perfilCampo">
-            <label>Email</label>
+            <label for="email">Email</label>
             <span class="perfilValor">{{doador.email}}</span>
-            <input type="email" name="email" value="{{doador.email}}" class="perfilInput" disabled>
+            <input type="email" id="email" name="email" value="{{doador.email}}" data-original="{{doador.email}}" class="perfilInput" {{#unless editando}}disabled{{/unless}} required>
         </div>
 
         <div class="perfilCampo">
@@ -38,41 +46,40 @@
         </div>
 
         <div class="perfilCampo">
-            <label>Peso</label>
+            <label for="peso">Peso</label>
             <span class="perfilValor">{{doador.peso}} kg</span>
-            <input type="number" name="peso" value="{{doador.peso}}" class="perfilInput" disabled>
+            <input type="number" id="peso" name="peso" step="0.1" min="1" value="{{doador.peso}}" data-original="{{doador.peso}}" class="perfilInput" {{#unless editando}}disabled{{/unless}} required>
         </div>
 
         <div class="perfilCampo">
-            <label>Cidade / Estado</label>
+            <label for="cidade">Cidade / Estado</label>
             <span class="perfilValor">{{doador.cidade}} - {{doador.estado}}</span>
-            <input type="text" name="cidade" value="{{doador.cidade}}" class="perfilInput" disabled>
+            <input type="text" id="cidade" name="cidade" value="{{doador.cidade}}" data-original="{{doador.cidade}}" class="perfilInput" {{#unless editando}}disabled{{/unless}} required>
         </div>
 
-        <button type="submit" id="btnSalvar" class="btn-interesse" hidden>Salvar alterações</button>
+        <button type="submit" id="btnSalvar" class="btn-interesse" {{#unless editando}}hidden{{/unless}}>Salvar alterações</button>
     </form>
 
     <a href="/usuario/perfil/senha" class="linkSecundario">Alterar senha</a>
 
-   <div class="minhasCampanhasInteresse">
-  <h2>Minhas campanhas de interesse</h2>
-    {{#each interesses}}
-        <a href="/usuario/detalhesCampanha/{{id}}" class="cardCampanhaCompacto {{#if encerrada}}encerrada{{/if}}">
-        {{#if encerrada}}
-            <span class="badgeEncerrado">Encerrada</span>
+    <div class="minhasCampanhasInteresse">
+        <h2>Minhas campanhas de interesse</h2>
+        {{#each interesses}}
+            <a href="/usuario/detalhesCampanha/{{id}}" class="cardCampanhaCompacto {{#if encerrada}}encerrada{{/if}}">
+                {{#if encerrada}}
+                    <span class="badgeEncerrado">Encerrada</span>
+                {{else}}
+                    <span class="badgeUrgencia {{urgenciaClasse}}">{{urgenciaRotulo}}</span>
+                {{/if}}
+                <div>
+                    <h3>{{nome}}</h3>
+                    <p>{{hemocentro}} · {{#if encerrada}}Encerrou em {{dataEncerramento}}{{else}}Encerra em {{dataFechamento}}{{/if}}</p>
+                </div>
+            </a>
         {{else}}
-            <span class="badgeUrgencia {{urgenciaClasse}}">{{urgenciaRotulo}}</span>
-        {{/if}}
-        <div>
-            <h3>{{nome}}</h3>
-            <p>{{hemocentro}} · {{#if encerrada}}Encerrou em {{dataEncerramento}}{{else}}Encerra em {{dataFechamento}}{{/if}}</p>
-        </div>
-        </a>
-    {{else}}
-        <p class="listaVaziaDoador">Você ainda não demonstrou interesse em nenhuma campanha.</p>
-    {{/each}}
+            <p class="listaVaziaDoador">Você ainda não demonstrou interesse em nenhuma campanha.</p>
+        {{/each}}
     </div>
-
 </div>
 
 <script src="/js/perfilDoador.js"></script>

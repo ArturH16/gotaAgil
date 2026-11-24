@@ -34,6 +34,7 @@ router.get("/",usuarioController.logar)
 // })
 
 router.get("/perfil",usuarioController.mostrarPerfil)
+router.post("/perfil", usuarioController.atualizarPerfil)
 router.get("/perfil/senha",usuarioController.exibirAlterarSenha)
 router.post("/perfil/senha",usuarioController.alterarSenha)
 

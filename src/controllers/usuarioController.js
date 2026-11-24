@@ -121,6 +121,114 @@ async function mostrarPerfil(req,res) {
 }
 
 }
+function montarDadosPerfil(row) {
+  const cpfNumeros = String(row.cpf || "").replace(/\D/g, "")
+  const cpfMascarado = cpfNumeros.length === 11
+    ? `***.${cpfNumeros.slice(3, 6)}.${cpfNumeros.slice(6, 9)}-**`
+    : row.cpf
+
+  const dataNascimento = row.data_nascimento instanceof Date
+    ? row.data_nascimento.toLocaleDateString("pt-BR", { timeZone: "UTC" })
+    : row.data_nascimento
+
+  return {
+    ...row,
+    tipoSanguineo: row.tipo_sanguineo,
+    cpfMascarado,
+    dataNascimento
+  }
+}
+
+async function renderErroPerfil(req, res, status, erros, dadosDigitados = {}) {
+  try {
+    const doador = await doadorDAO.buscarPorId(req.session.userID)
+    if (!doador) return req.session.destroy(() => res.redirect("/login/doador"))
+
+    const doadorFormatado = montarDadosPerfil(doador)
+
+    return res.status(status).render("perfil_doador", { 
+      title: "Meu Perfil",
+      erros,
+      editando: true,
+      doador: {
+        ...doadorFormatado,
+        ...dadosDigitados
+      }
+    })
+  } catch (err) {
+    console.error(err)
+    return res.status(500).send("Erro interno. Tente novamente.")
+  }
+}
+
+async function atualizarPerfil(req, res) {
+  const { email, peso, cidade } = req.body
+
+  if ([email, peso, cidade].some((v) => typeof v !== "string")) {
+    return renderErroPerfil(req, res, 400, ["Preencha todos os campos corretamente."])
+  }
+
+  const emailLimpo = email.trim()
+  const cidadeLimpa = cidade.trim()
+  const pesoNumero = Number(peso.replace(",", "."))
+
+  const erros = []
+
+  if (!emailLimpo || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailLimpo)) {
+    erros.push("Informe um e-mail válido.")
+  }
+
+  if (!peso.trim() || Number.isNaN(pesoNumero) || pesoNumero <= 0 || pesoNumero > 500) {
+    erros.push("Informe um peso válido.")
+  }
+
+  if (!cidadeLimpa || cidadeLimpa.length < 2) {
+    erros.push("Informe a cidade.")
+  }
+
+  if (erros.length) {
+    return renderErroPerfil(req, res, 400, erros, {
+      email: emailLimpo,
+      peso,
+      cidade: cidadeLimpa
+    })
+  }
+
+  try {
+    const emailEmUso = await doadorDAO.isEmail(emailLimpo, req.session.userID)
+    if (emailEmUso) {
+      return renderErroPerfil(req, res, 400, ["Este e-mail já está em uso por outra conta."], {
+        email: emailLimpo,
+        peso,
+        cidade: cidadeLimpa
+      })
+    }
+
+    const atualizado = await doadorDAO.atualizarDados(req.session.userID, {
+      email: emailLimpo,
+      peso: pesoNumero,
+      cidade: cidadeLimpa
+    })
+
+    if (!atualizado) {
+      return req.session.destroy(() => res.redirect("/login/doador"))
+    }
+
+    req.session.flash = { tipo: "sucesso", texto: "Dados atualizados com sucesso!" }
+    req.session.save((err) => {
+      if (err) console.error(err)
+      res.redirect("/usuario/perfil")
+    })
+  } catch (err) {
+    console.error(err)
+    return renderErroPerfil(req, res, 500, ["Erro interno. Tente novamente."], {
+      email: emailLimpo,
+      peso,
+      cidade: cidadeLimpa
+    })
+  }
+}
+
 
 
 function exibirAlterarSenha(req, res) {
@@ -138,7 +246,7 @@ function renderErroSenha(res, status, erros) {
 async function alterarSenha(req, res) {
     const { senhaAtual, novaSenha, confirmarSenha } = req.body
 
-    // um campo repetido no corpo chega como array e quebraria o bcrypt
+
     if ([senhaAtual, novaSenha, confirmarSenha].some((v) => typeof v !== "string")) {
         return renderErroSenha(res, 400, ["Preencha todos os campos."])
     }
@@ -270,6 +378,7 @@ module.exports = {
     logar,
     mostrarPerfil,
     mostrarCampanha,
+    atualizarPerfil,
     exibirAlterarSenha,
     alterarSenha,
     registrarInteresse,
