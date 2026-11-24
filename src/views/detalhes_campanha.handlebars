@@ -29,7 +29,7 @@
                 <dt>Contatos</dt>
                 <dd>
                     {{#each contatos}}
-                        <span>{{rotulo}}: {{#if href}}<a href="{{href}}">{{valor}}</a>{{else}}{{valor}}{{/if}}
+                        <span>{{rotulo}}: {{#if href}}<a href="{{href}}" class="linkContato" target="_blank">{{valor}}</a>{{else}}{{valor}}{{/if}}
                     {{/each}}
                 </dd>
 
