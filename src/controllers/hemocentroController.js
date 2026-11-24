@@ -7,6 +7,7 @@ const supabase = require("../supabase")
 const { urlFoto } = require("../utils/fotos")
 const { estaEncerrada, rotuloUrgencia } = require("../utils/campanhas")
 const hoje = require("../utils/data")
+const {redirecionarComAviso} = require("../utils/flash")
 
 function configFormCampanha(campanha) {
     if (!campanha) {
@@ -103,13 +104,7 @@ function renderErroCampanha(req, res, status, erros, campanhaEdicao = null) {
     })
 }
 
-function redirecionarComAviso(req, res, tipo, texto, destino) {
-    req.session.flash = { tipo, texto }
-    req.session.save((err) => {
-        if (err) console.error(err)
-        res.redirect(destino)
-    })
-}
+
 
 async function logar(req,res) {
     const rotulos = {
@@ -179,6 +174,7 @@ async function listarDoadoresCampanha(req, res) {
                 titulo: campanha.nome,
                 descricao: campanha.descricao,
                 urgencia: rotuloUrgencia(campanha.urgencia),
+                urgenciaClasse: (campanha.urgencia || "").toLowerCase(),
                 tipoSanguineo: campanha.tipo_sanguineo_necessario,
                 dataInicio: hoje.formatarData(campanha.data_inicio),
                 dataFechamento: hoje.formatarData(campanha.data_fechamento),

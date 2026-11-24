@@ -6,6 +6,9 @@ const { hojeFortaleza,formatarData } = require("../utils/data")
 const {estaEncerrada,rotuloUrgencia} = require("../utils/campanhas")
 const {urlFoto} = require("../utils/fotos")
 const estados = require("../utils/estados")
+const interesseDAO = require("../models/interesseDAO")
+const  {redirecionarComAviso } = require("../utils/flash")
+const bcrypt = require("bcrypt")
 
 const TIPOS_SANGUINEOS =  ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"]
 const SIGLAS = ESTADOS.map((e) => e.sigla)
@@ -76,11 +79,26 @@ async function logar(req, res) {
 }
 
 async function mostrarPerfil(req,res) {
+    const hoje = hojeFortaleza()
     try {
-    const doador = await doadorDAO.buscarPorId(req.session.userID)
+    const [doador, interesses] = await Promise.all([
+    doadorDAO.buscarPorId(req.session.userID),
+    interesseDAO.listarPorDoador(req.session.userID)
+])
     if (!doador) {
         return req.session.destroy(() => res.redirect("/login/doador"))
     }
+    const cards = interesses.map((c) => ({
+        id: c.id_campanha,
+        nome: c.nome,
+        hemocentro: c.hemocentro,
+        encerrada: estaEncerrada(c, hoje),
+        urgenciaRotulo: rotuloUrgencia(c.urgencia),
+        urgenciaClasse: (c.urgencia || "").toLowerCase(),
+        dataFechamento: formatarData(c.data_fechamento),
+        dataEncerramento: formatarData(c.encerrada_em || c.data_fechamento)
+    }))
+    const interessesOrdenados = [...cards.filter((c) => !c.encerrada), ...cards.filter((c) => c.encerrada)]
     res.render("perfil_doador", {
     title: "Meu Perfil",
     cssExtra: "perfil",
@@ -93,8 +111,9 @@ async function mostrarPerfil(req,res) {
         dataNascimento: doador.data_nascimento.toLocaleDateString("pt-BR"),
         peso: doador.peso,
         cidade: doador.cidade,
-        estado: doador.estado
-    } 
+        estado: doador.estado,
+    },
+    interesses: interessesOrdenados
     }) 
 } catch(err) {
     console.log(err)
@@ -102,12 +121,184 @@ async function mostrarPerfil(req,res) {
 }
 
 }
+function montarDadosPerfil(row) {
+  const cpfNumeros = String(row.cpf || "").replace(/\D/g, "")
+  const cpfMascarado = cpfNumeros.length === 11
+    ? `***.${cpfNumeros.slice(3, 6)}.${cpfNumeros.slice(6, 9)}-**`
+    : row.cpf
+
+  const dataNascimento = row.data_nascimento instanceof Date
+    ? row.data_nascimento.toLocaleDateString("pt-BR", { timeZone: "UTC" })
+    : row.data_nascimento
+
+  return {
+    ...row,
+    tipoSanguineo: row.tipo_sanguineo,
+    cpfMascarado,
+    dataNascimento
+  }
+}
+
+async function renderErroPerfil(req, res, status, erros, dadosDigitados = {}) {
+  try {
+    const doador = await doadorDAO.buscarPorId(req.session.userID)
+    if (!doador) return req.session.destroy(() => res.redirect("/login/doador"))
+
+    const doadorFormatado = montarDadosPerfil(doador)
+
+    return res.status(status).render("perfil_doador", { 
+      title: "Meu Perfil",
+      erros,
+      editando: true,
+      doador: {
+        ...doadorFormatado,
+        ...dadosDigitados
+      }
+    })
+  } catch (err) {
+    console.error(err)
+    return res.status(500).send("Erro interno. Tente novamente.")
+  }
+}
+
+async function atualizarPerfil(req, res) {
+  const { email, peso, cidade } = req.body
+
+  if ([email, peso, cidade].some((v) => typeof v !== "string")) {
+    return renderErroPerfil(req, res, 400, ["Preencha todos os campos corretamente."])
+  }
+
+  const emailLimpo = email.trim()
+  const cidadeLimpa = cidade.trim()
+  const pesoNumero = Number(peso.replace(",", "."))
+
+  const erros = []
+
+  if (!emailLimpo || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailLimpo)) {
+    erros.push("Informe um e-mail válido.")
+  }
+
+  if (!peso.trim() || Number.isNaN(pesoNumero) || pesoNumero <= 0 || pesoNumero > 500) {
+    erros.push("Informe um peso válido.")
+  }
+
+  if (!cidadeLimpa || cidadeLimpa.length < 2) {
+    erros.push("Informe a cidade.")
+  }
+
+  if (erros.length) {
+    return renderErroPerfil(req, res, 400, erros, {
+      email: emailLimpo,
+      peso,
+      cidade: cidadeLimpa
+    })
+  }
+
+  try {
+    const emailEmUso = await doadorDAO.isEmail(emailLimpo, req.session.userID)
+    if (emailEmUso) {
+      return renderErroPerfil(req, res, 400, ["Este e-mail já está em uso por outra conta."], {
+        email: emailLimpo,
+        peso,
+        cidade: cidadeLimpa
+      })
+    }
+
+    const atualizado = await doadorDAO.atualizarDados(req.session.userID, {
+      email: emailLimpo,
+      peso: pesoNumero,
+      cidade: cidadeLimpa
+    })
+
+    if (!atualizado) {
+      return req.session.destroy(() => res.redirect("/login/doador"))
+    }
+
+    req.session.flash = { tipo: "sucesso", texto: "Dados atualizados com sucesso!" }
+    req.session.save((err) => {
+      if (err) console.error(err)
+      res.redirect("/usuario/perfil")
+    })
+  } catch (err) {
+    console.error(err)
+    return renderErroPerfil(req, res, 500, ["Erro interno. Tente novamente."], {
+      email: emailLimpo,
+      peso,
+      cidade: cidadeLimpa
+    })
+  }
+}
+
+
+
+function exibirAlterarSenha(req, res) {
+    res.render("alterar_senha", { title: "Alterar senha", cssExtra: "campanhaNova" })
+}
+
+function renderErroSenha(res, status, erros) {
+    return res.status(status).render("alterar_senha", {
+        title: "Alterar senha",
+        cssExtra: "campanhaNova",
+        erros
+    })
+}
+
+async function alterarSenha(req, res) {
+    const { senhaAtual, novaSenha, confirmarSenha } = req.body
+
+
+    if ([senhaAtual, novaSenha, confirmarSenha].some((v) => typeof v !== "string")) {
+        return renderErroSenha(res, 400, ["Preencha todos os campos."])
+    }
+
+    const erros = []
+    if (!senhaAtual) erros.push("Informe a senha atual.")
+    if (novaSenha.length < 8) erros.push("A nova senha precisa de pelo menos 8 caracteres.")
+    else if (Buffer.byteLength(novaSenha, "utf8") > 72) erros.push("A nova senha é longa demais.")
+    if (novaSenha !== confirmarSenha) erros.push("A confirmação não confere com a nova senha.")
+    if (senhaAtual && senhaAtual === novaSenha) erros.push("A nova senha deve ser diferente da atual.")
+    if (erros.length) return renderErroSenha(res, 400, erros)
+
+    try {
+        const hashAtual = await doadorDAO.buscarHashPorId(req.session.userID)
+        if (!hashAtual) return req.session.destroy(() => res.redirect("/login/doador"))
+
+        const confere = await bcrypt.compare(senhaAtual, hashAtual)
+        if (!confere) return renderErroSenha(res, 400, ["Senha atual incorreta."])
+
+        const novoHash = await bcrypt.hash(novaSenha, 10)
+        await doadorDAO.atualizarSenha(req.session.userID, novoHash)
+
+        // troca o id da sessão depois de uma mudança de credencial
+        const { userID, userName, userType } = req.session
+        req.session.regenerate((err) => {
+            if (err) {
+                console.error(err)
+                return res.status(500).send("Senha alterada, mas houve um erro na sessão. Entre novamente.")
+            }
+            req.session.userID = userID
+            req.session.userName = userName
+            req.session.userType = userType
+            req.session.flash = { tipo: "sucesso", texto: "Senha alterada com sucesso!" }
+            req.session.save((err) => {
+                if (err) console.error(err)
+                res.redirect("/usuario/perfil")
+            })
+        })
+    } catch (err) {
+        console.error(err)
+        renderErroSenha(res, 500, ["Erro interno. Tente novamente."])
+    }
+}
 
 async function mostrarCampanha(req,res) {
      try {
         const campanha = req.campanha
-        const contatos = await contatosDAO.buscarPorIdHemocentro(campanha.id_hemocentro)
         const encerrada = estaEncerrada(campanha)
+        const [contatos, interesse] = await Promise.all([
+        contatosDAO.buscarPorIdHemocentro(campanha.id_hemocentro),
+        interesseDAO.verificarInteresse(req.session.userID, campanha.id_campanha)
+    ])
 
         res.render("detalhes_campanha", {          
             title: campanha.nome,
@@ -123,7 +314,8 @@ async function mostrarCampanha(req,res) {
                 dataInicio: formatarData(campanha.data_inicio),
                 dataFechamento: formatarData(campanha.data_fechamento),
                 encerrada,
-                dataEncerramento: formatarData(campanha.encerrada_em || campanha.data_fechamento)
+                dataEncerramento: formatarData(campanha.encerrada_em || campanha.data_fechamento),
+                jaTemInteresse: Boolean(interesse)
             },
             hemocentro: {
                 nome: campanha.hemocentro,
@@ -131,7 +323,8 @@ async function mostrarCampanha(req,res) {
                 cidadeEstado: `${campanha.cidade} - ${campanha.estado}`,
                 cep: formatarCep(campanha.cep)
             },
-            contatos: contatos.map(prepararContato)
+            contatos: contatos.map(prepararContato),
+            interesse: interesse
         })
     } catch (err) {
         console.error(err)
@@ -139,8 +332,55 @@ async function mostrarCampanha(req,res) {
     }
 }
 
+async function registrarInteresse(req, res) {
+    const campanha = req.campanha
+    const destino = `/usuario/detalhesCampanha/${campanha.id_campanha}`
+
+    if (estaEncerrada(campanha)) {
+        return redirecionarComAviso(req, res, "erro", "Esta campanha já está encerrada.", destino)
+    }
+
+    try {
+        const criado = await interesseDAO.insertInteresse(req.session.userID, campanha.id_campanha, hojeFortaleza())
+
+        if (!criado) {
+            return redirecionarComAviso(req, res, "erro", "Você já demonstrou interesse nesta campanha.", destino)
+        }
+        redirecionarComAviso(req, res, "sucesso", "Interesse registrado!", destino)
+    } catch (err) {
+        console.error(err)
+        redirecionarComAviso(req, res, "erro", "Erro interno. Tente novamente.", destino)
+    }
+}
+
+async function cancelarInteresse(req, res) {
+    const campanha = req.campanha
+    const destino = `/usuario/detalhesCampanha/${campanha.id_campanha}`
+
+    if (estaEncerrada(campanha)) {
+        return redirecionarComAviso(req, res, "erro", "Campanha encerrada: o interesse não pode mais ser cancelado.", destino)
+    }
+
+    try {
+        const removido = await interesseDAO.cancelarInteresse(req.session.userID, campanha.id_campanha)
+
+        if (!removido) {
+            return redirecionarComAviso(req, res, "erro", "Não foi possível cancelar o interesse.", destino)
+        }
+        redirecionarComAviso(req, res, "sucesso", "Interesse cancelado.", destino)
+    } catch (err) {
+        console.error(err)
+        redirecionarComAviso(req, res, "erro", "Erro interno. Tente novamente.", destino)
+    }
+}
+
 module.exports = {
     logar,
     mostrarPerfil,
-    mostrarCampanha
+    mostrarCampanha,
+    atualizarPerfil,
+    exibirAlterarSenha,
+    alterarSenha,
+    registrarInteresse,
+    cancelarInteresse
 }

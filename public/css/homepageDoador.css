@@ -46,6 +46,25 @@
     border-left-color: #6B9E78;
 }
 
+.cardCampanhaBadges {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.seloSeuTipo {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 20px;
+    background-color: #E4F7EB;
+    color: #047857;
+}
+
 /* Nome do hemocentro dentro do card (renomeada de .cardCampanhaHemocentro
    pra não colidir com a div wrapper de mesmo nome na home do hemocentro) */
 .cardCampanhaNomeHemocentro {

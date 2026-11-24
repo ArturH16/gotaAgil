@@ -34,6 +34,9 @@ router.get("/",usuarioController.logar)
 // })
 
 router.get("/perfil",usuarioController.mostrarPerfil)
+router.post("/perfil", usuarioController.atualizarPerfil)
+router.get("/perfil/senha",usuarioController.exibirAlterarSenha)
+router.post("/perfil/senha",usuarioController.alterarSenha)
 
 // router.get("/detalhesCampanha",(req,res)=> {
 //     const dadosCampanha = {campanha: {
@@ -54,4 +57,6 @@ router.get("/perfil",usuarioController.mostrarPerfil)
 // })
 
 router.get("/detalhesCampanha/:id",carregarCampanhaPublica,usuarioController.mostrarCampanha)
+router.post("/detalhesCampanha/:id/interesse", carregarCampanhaPublica, usuarioController.registrarInteresse)
+router.post("/detalhesCampanha/:id/cancelar-interesse", carregarCampanhaPublica, usuarioController.cancelarInteresse)
 module.exports = router

@@ -36,6 +36,41 @@ class doadorDAO {
     return rows[0] || null
   }
 
+  static async isEmail(email, idIgnorar) {
+    const { rows } = await pool.query(
+      "SELECT id_doador FROM tb_doador WHERE LOWER(email) = LOWER($1) AND id_doador <> $2",
+      [email, idIgnorar]
+    )
+    return rows.length > 0
+  }
+
+  static async atualizarDados(id, { email,  peso, cidade }) {
+    const { rows } = await pool.query(
+      `UPDATE tb_doador
+      SET email = $2, peso = $3, cidade = $4
+      WHERE id_doador = $1
+      RETURNING id_doador`,
+      [id, email, peso, cidade]
+    )
+    return rows[0] || null
+  }
+
+  static async buscarHashPorId(id) {
+    const { rows } = await pool.query(
+        "SELECT senha_hash FROM tb_doador WHERE id_doador = $1",
+        [id]
+    )
+    return rows[0] ? rows[0].senha_hash : null
+}
+
+  static async atualizarSenha(id, senhaHash) {
+      const { rows } = await pool.query(
+          "UPDATE tb_doador SET senha_hash = $2 WHERE id_doador = $1 RETURNING id_doador",
+          [id, senhaHash]
+      )
+      return rows[0] || null
+  }
+
 }
 
 module.exports = doadorDAO
