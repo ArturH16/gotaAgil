@@ -30,5 +30,12 @@ vidos em cada campanha.
 <img width="1907" height="897" alt="Captura de tela de 2026-11-24 14-55-07" src="https://github.com/user-attachments/assets/e517d7c8-b267-4b21-b4dd-d61db8e5ca7a" />
 
 ## Tecnologias Utilizadas
+<div>
+  <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white" height="40" />
+  <img src="https://img.shields.io/badge/JAVASCRIPT-F7DF1E?style=for-the-badge&logo=javascript&logoColor=white" height="40" />
+  <img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white" height="40" />
+</div>
+<img src="https://img.shields.io/badge/Node.js-5FA04E?style=for-the-badge&logo=node.js&logoColor=white" height="40" />
+  <img src="https://img.shields.io/badge/POSTGRESQL-4169E1?style=for-the-badge&logo=postgresql&color=white" height="40" />
 ## Pré-requisitos
 ## Como executar o projeto
