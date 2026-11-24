@@ -37,7 +37,35 @@ vidos em cada campanha.
   <img src="https://img.shields.io/badge/Node.js-5FA04E?style=for-the-badge&logo=node.js&logoColor=white" height="40" />
   <img src="https://img.shields.io/badge/POSTGRESQL-4169E1?style=for-the-badge&logo=postgresql&color=white" height="40" />
 </div>
+
 ## Pré-requisitos
-* [Git](https://git-scm.com)
-* [Node.js](https://nodejs.org) (versão 22 ou superior)
+* [Git] (https://git-scm.com)
+* [Node.js] (https://nodejs.org) (versão 22 ou superior)
+* Uma conta ativa no [Supabase](https://supabase.com) (para configurar o banco de dados e autenticação)
+
 ## Como executar o projeto
+1. **Clone o repositório:**
+   ```bash
+   git clone https://github.com
+   cd gotaAgil
+   ```
+
+2. **Instale as dependências:**
+   ```bash
+   npm install
+   ```
+
+3. **Configure as variáveis de ambiente:**
+   Renomeie o arquivo `.env.example` para `.env` e preencha as chaves necessárias:
+   ```env
+   DATABASE_URL="postgresql://usuario:senha@localhost:5432/banco"
+   PORT=3000
+   ```
+
+4. **Inicie a aplicação:**
+   ```bash
+   npm run dev
+   ```
+
+5. **Acesse no navegador:**
+   Abra `http://localhost:3000/home` para visualizar o projeto rodando
