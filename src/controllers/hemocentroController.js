@@ -103,13 +103,7 @@ function renderErroCampanha(req, res, status, erros, campanhaEdicao = null) {
     })
 }
 
-function redirecionarComAviso(req, res, tipo, texto, destino) {
-    req.session.flash = { tipo, texto }
-    req.session.save((err) => {
-        if (err) console.error(err)
-        res.redirect(destino)
-    })
-}
+
 
 async function logar(req,res) {
     const rotulos = {
