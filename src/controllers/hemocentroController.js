@@ -7,6 +7,7 @@ const supabase = require("../supabase")
 const { urlFoto } = require("../utils/fotos")
 const { estaEncerrada, rotuloUrgencia } = require("../utils/campanhas")
 const hoje = require("../utils/data")
+const {redirecionarComAviso} = require("../utils/flash")
 
 function configFormCampanha(campanha) {
     if (!campanha) {
